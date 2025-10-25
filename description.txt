@@ -1,0 +1,5 @@
+Roots seeks to take Terraria back to it's roots, and reimagine what it could have become.
+
+Featuring:
+- Removed Damage Classes
+- Removed Crit Chance

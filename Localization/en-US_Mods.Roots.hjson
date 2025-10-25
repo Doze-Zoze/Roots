@@ -1,0 +1,139 @@
+Accessories: {
+	FeralClaws.Tooltip:
+		'''
+		Enables autoswing
+		Increases projectile velocity by 10%
+		'''
+	TitanGlove.Tooltip:
+		'''
+		Increases knockback dealt
+		Increases size of melee weapons
+		'''
+	PowerGlove.Tooltip:
+		'''
+		Enables autoswing and increases knockback dealt
+		Increases size of melee weapons
+		Increases projectile velocity by 10%
+		'''
+	BerserkerGlove.Tooltip:
+		'''
+		Enables autoswing and increases knockback dealt
+		Increases size of melee weapons
+		Enemies are more likely to target you
+		'''
+	MechanicalGlove.Tooltip:
+		'''
+		Enables autoswing and increases knockback dealt
+		Increases size of melee weapons
+		Increases damage and projectile velocity by 10%
+		'''
+	FireGauntlet.Tooltip:
+		'''
+		Enables autoswing and increases knockback dealt
+		Increases size of melee weapons
+		Increases damage and projectile velocity by 10%
+		All attacks inflict Hellfire
+		'''
+	MagmaStone.Tooltip: All attacks inflict Hellfire
+	WarriorEmblem.Tooltip: 15% increased damage to targets within 25 tiles
+	RangerEmblem.Tooltip: 15% increased damage to targets further than 25 tiles away
+	SorcererEmblem.Tooltip: 15% increased damage from Mana attacks
+	SummonerEmblem.Tooltip: 15% increased damage from summons
+	RifleScope.Tooltip:
+		'''
+		Allows pressing <Right> to zoom out while holding a weapon
+		This can be toggled with the accessory visibility button
+		'''
+	ReconScope.Tooltip:
+		'''
+		+10% damage and critical strike chance
+		Allows pressing <Right> to zoom out while holding a weapon
+		This can be toggled with the accessory visibility button
+		'''
+	SniperScope.Tooltip:
+		'''
+		Increases critical strike chance the further you are from your target
+		Allows pressing Right Click to zoom out while holding a weapon
+		This can be toggled with the accessory visibility button
+		'''
+	ManaFlower.Tooltip:
+		'''
+		Provides 20 mana per second, even while consuming mana
+		Mana attacks deal 0.75x damage
+		'''
+	MagnetFlower.Tooltip:
+		'''
+		Increases pickup range for mana stars
+		Provides 20 mana per second, even while consuming mana
+		Mana attacks deal 0.75x damage
+		Picking up mana stars deactivates this penalty for 5 seconds
+		'''
+	ArcaneFlower.Tooltip:
+		'''
+		Restores between 0 - 60 mana per second, even while consuming mana
+		Mana attacks deal between 1x - 0.5x damage
+		These values depend on much mana you currently have
+		'''
+	ManaCloak.Tooltip:
+		'''
+		Increases pickup range for mana stars
+		Taking damage causes stars to fall and restores mana
+		Once every 3 seconds, strikes from mana attacks will cause a star to fall
+		Stars hurt enemies and can restore mana when picked up
+		'''
+	MagicCuffs.Tooltip: Increases mana regeneration rate
+	NaturesGift.Tooltip: 15% reduced mana cost
+	FairyBoots.Tooltip:
+		'''
+		Allows super fast running
+		Can consume mana to provide flight
+		When used with wings, can consume mana to extend flight duration
+		'''
+}
+
+Consumables.Mushroom.Tooltip: test
+
+Weapons: {
+	FlyingDragon.Tooltip:
+		'''
+		When out of Mana, consumes 5 HP per shot instead
+		This life loss will not kill you
+		'''
+	InfluxWaver.Tooltip: Does not require mana when you are inflicted with Electrified
+}
+
+Configs: {
+	Configs: {
+		DisplayName: Configs
+
+		RemoveClasses: {
+			Label: Remove Classes
+			Tooltip: ""
+		}
+
+		RemoveBaseCrit: {
+			Label: Remove Base Crit
+			Tooltip: ""
+		}
+
+		ManaChanges: {
+			Label: Mana Changes
+			Tooltip: ""
+		}
+
+		AmmoChanges: {
+			Label: Ammo Changes
+			Tooltip: ""
+		}
+
+		WorldgenChanges: {
+			Label: Worldgen Changes
+			Tooltip: ""
+		}
+
+		LifeChanges: {
+			Label: Life Changes
+			Tooltip: ""
+		}
+	}
+}
