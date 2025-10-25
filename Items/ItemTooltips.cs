@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Utilities;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Roots.Items
@@ -16,6 +18,11 @@ namespace Roots.Items
                     tooltip.Hide();
                 if (tooltip.Name == "JourneyResearch")
                     tooltip.Hide();
+            }
+
+            if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
+            {
+                RootsUtils.AppendTooltipWith(tooltips, "Roots.Tips.SummonManaCost");
             }
         }
     }

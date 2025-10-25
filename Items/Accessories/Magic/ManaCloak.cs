@@ -22,7 +22,6 @@ namespace Roots.Items.Accessories.Magic
 
         public override void UpdateEquip(Item item, Player player)
         {
-            ItemSets.DontUseVanillaEquipEffects[ItemID.ManaCloak] = true;
             player.starCloakItem = item;
             player.starCloakItem_manaCloakOverrideItem = item;
             player.manaMagnet = true;

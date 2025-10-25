@@ -15,6 +15,9 @@ namespace Roots.Items
         {
             if (Configs.instance.RemoveClasses &&( item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
                 item.DamageType = DamageClass.Generic;
+
+            if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
+                item.mana = 0;
         }
 
         public override bool OnPickup(Item item, Player player)

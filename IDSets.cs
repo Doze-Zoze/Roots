@@ -35,6 +35,11 @@ namespace Roots
             .Description("Stops items from applying their vanilla equipment effects")
             .RegisterBoolSet(false);
 
+        public static bool[] DontUseVanillaSetBonus = ItemID.Sets.Factory
+            .CreateNamedSet("DontUseVanillaSetBonus")
+            .Description("Stops items from applying their vanilla set bonus")
+            .RegisterBoolSet(false);
+
         public static bool[] ManaStarPickup = ItemID.Sets.Factory
             .CreateNamedSet("ManaStarPickup")
             .Description("Items that count as Mana Star pickups")

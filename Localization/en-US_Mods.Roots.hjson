@@ -91,6 +91,12 @@ Accessories: {
 		'''
 }
 
+Armor.ChlorophyteHelmets.Tooltip:
+	'''
+	16% increased damage
+	20% chance to save ammo
+	Increases maximum mana by 80 and 17% reduced mana cost
+	'''
 Consumables.Mushroom.Tooltip: test
 
 Weapons: {
@@ -100,6 +106,13 @@ Weapons: {
 		This life loss will not kill you
 		'''
 	InfluxWaver.Tooltip: Does not require mana when you are inflicted with Electrified
+}
+
+Tips: {
+	SummonManaCost:
+		'''
+		Can convert maximum mana into more summon slots, at the cost of 40 mana per slot
+		'''
 }
 
 Configs: {

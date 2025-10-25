@@ -35,7 +35,7 @@ namespace Roots.Players
             if (Configs.instance.RemoveBaseCrit)
                 Player.GetCritChance(DamageClass.Generic) -= 4;
             //config needed
-            //if (!Player.shinyStone && !Player.sitting.isSitting)
+            if (!Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it
             shootSpeedMult = 1;
             AdditiveDamageMultipliersToApplyOnHit = 1;
@@ -47,6 +47,7 @@ namespace Roots.Players
 
             #endregion
             ModifyHitNPCWithProjectileFuncs = new();
+            Player.maxMinions--;
 
         }
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
@@ -65,6 +66,12 @@ namespace Roots.Players
         {
             if (Configs.instance.RemoveClasses && Player.kbGlove)
                 Player.GetKnockback(DamageClass.Generic) *= 2f;
+
+            int ManaPerMinion = 40;
+            float LostMana = ((int)((Player.slotsMinions - Player.maxMinions) * ManaPerMinion));
+            Player.maxMinions += (int)(Player.statManaMax2 / ManaPerMinion)-1;
+            if (LostMana > 0)
+                Player.statManaMax2 -= (int)LostMana;
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
