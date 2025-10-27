@@ -14,15 +14,13 @@ namespace Roots.Items
             {
                 float addedCrit = 0;
                 item.ModItem?.ModifyWeaponCrit(Main.LocalPlayer, ref addedCrit);
-                if (tooltip.Name == "CritChance" && (Main.LocalPlayer.GetCritChance(item.DamageType) + item.crit + addedCrit == 0))
-                    tooltip.Hide();
+                if (tooltip.Name == "CritChance")
+                {
+                    if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
+                        tooltip.Text = $"{Main.LocalPlayer.maxMinions - (int)(Main.LocalPlayer.statManaMax2 / 40f) - Main.LocalPlayer.slotsMinions} Empty Minion Slots\n" + RootsUtils.GetLocalizedTextValue("Tips.SummonManaCost");
+                }
                 if (tooltip.Name == "JourneyResearch")
                     tooltip.Hide();
-            }
-
-            if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
-            {
-                RootsUtils.AppendTooltipWith(tooltips, "Roots.Tips.SummonManaCost");
             }
         }
     }

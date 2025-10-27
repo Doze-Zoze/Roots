@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Roots.Projectiles;
-using Roots.Utilities;
-using Steamworks;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -24,7 +22,8 @@ namespace Roots.Players
 
         #endregion
 
-        public List<Func<Player,Projectile,NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCWithProjectileFuncs = new();
+        public List<Func<Player, Projectile, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCWithProjectileFuncs = new();
+        public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCFuncs = new();
         public List<Action<Player, Projectile, NPC, NPC.HitInfo, int>> OnHitNPCWithProjectileFuncs = new();
         public List<Action<Player, NPC, NPC.HitInfo, int>> OnHitNPCFuncs = new();
 
@@ -32,21 +31,26 @@ namespace Roots.Players
 
         public override void ResetEffects()
         {
-            if (Configs.instance.RemoveBaseCrit)
+            if (false && Configs.instance.RemoveBaseCrit)
                 Player.GetCritChance(DamageClass.Generic) -= 4;
             //config needed
             if (!Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it
             shootSpeedMult = 1;
             AdditiveDamageMultipliersToApplyOnHit = 1;
-            #region Accessories
+
+            #region Accessories And Gear
             manaFlowerReduction = 1f;
             TimeSinceManaStarPickup++;
             TimeSinceManaCloakStarAttack++;
             forceAutoswing = false;
 
+
             #endregion
             ModifyHitNPCWithProjectileFuncs = new();
+            ModifyHitNPCFuncs = new();
+            OnHitNPCFuncs = new();
+            OnHitNPCWithProjectileFuncs = new();
             Player.maxMinions--;
 
         }
@@ -59,7 +63,18 @@ namespace Roots.Players
                 modifiers = info(Player, proj, target, modifiers);
             }
             if (AdditiveDamageMultipliersToApplyOnHit != 1)
-                modifiers.FinalDamage += ( (AdditiveDamageMultipliersToApplyOnHit-1) / Player.GetTotalDamage(modifiers.DamageType).Additive);
+                modifiers.FinalDamage += ((AdditiveDamageMultipliersToApplyOnHit - 1) / Player.GetTotalDamage(modifiers.DamageType).Additive);
+            AdditiveDamageMultipliersToApplyOnHit = 1;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            foreach (var info in ModifyHitNPCFuncs)
+            {
+                modifiers = info(Player, target, modifiers);
+            }
+            if (AdditiveDamageMultipliersToApplyOnHit != 1)
+                modifiers.FinalDamage += ((AdditiveDamageMultipliersToApplyOnHit - 1) / Player.GetTotalDamage(modifiers.DamageType).Additive);
             AdditiveDamageMultipliersToApplyOnHit = 1;
         }
         public override void UpdateEquips()
@@ -69,7 +84,7 @@ namespace Roots.Players
 
             int ManaPerMinion = 40;
             float LostMana = ((int)((Player.slotsMinions - Player.maxMinions) * ManaPerMinion));
-            Player.maxMinions += (int)(Player.statManaMax2 / ManaPerMinion)-1;
+            Player.maxMinions += (int)(Player.statManaMax2 / ManaPerMinion);
             if (LostMana > 0)
                 Player.statManaMax2 -= (int)LostMana;
         }

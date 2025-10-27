@@ -6,13 +6,18 @@ using Terraria.ModLoader;
 
 namespace Roots.Items.ArmorSets
 {
-    public class ChlorophyteHelmets : GlobalItem
+    public class HallowedHelmets : GlobalItem
     {
         List<int> ItemsToApplyTo =
         [
-            ItemID.ChlorophyteHeadgear,
-            ItemID.ChlorophyteHelmet,
-            ItemID.ChlorophyteMask
+            ItemID.HallowedMask,
+            ItemID.HallowedHelmet,
+            ItemID.HallowedHeadgear,
+            ItemID.HallowedHood,
+            ItemID.AncientHallowedMask,
+            ItemID.AncientHallowedHelmet,
+            ItemID.AncientHallowedHeadgear,
+            ItemID.AncientHallowedHood,
         ];
         public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
 
@@ -31,46 +36,35 @@ namespace Roots.Items.ArmorSets
 
         public override void SetDefaults(Item item)
         {
-            item.defense = 13;
+            item.defense = 9;
         }
 
         public override void UpdateEquip(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.16f;
-            player.chloroAmmoCost80 = true;
-            player.manaCost *= (1 - 0.17f);
-            player.statManaMax2 += 80;
+            player.GetDamage<GenericDamageClass>() += 0.15f;
+            player.GetCritChance<GenericDamageClass>() += 10;
+            player.statManaMax2 += 100;
         }
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.ChlorophytePlateMail && legs.type == ItemID.ChlorophyteGreaves)
-                return "ChlorophyteSet";
+            if (ItemsToApplyTo.Contains(head.type) && (body.type == ItemID.HallowedPlateMail || body.type == ItemID.AncientHallowedPlateMail) && (legs.type == ItemID.HallowedGreaves || legs.type == ItemID.AncientHallowedGreaves))
+                return "HallowedSet";
             return string.Empty;
         }
 
         public override void UpdateArmorSet(Player player, string set)
         {
-            if (set == "ChlorophyteSet")
+            if (set == "HallowedSet")
             {
-                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Chlorophyte.SetBonus");
-                player.AddBuff(60, 18000);
-            }
-            else if (player.crystalLeaf)
-            {
-                for (int n = 0; n < player.buffType.Length; n++)
-                {
-                    if (player.buffType[n] == 60)
-                    {
-                        player.DelBuff(n);
-                    }
-                }
+                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Hallowed.SetBonus");
+                player.onHitDodge = true;
             }
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            tooltips.ReplaceTooltipWith("Armor.Chlorophyte.HelmetTooltip");
+            tooltips.ReplaceTooltipWith("Armor.Hallowed.HelmetTooltip");
         }
 
     }

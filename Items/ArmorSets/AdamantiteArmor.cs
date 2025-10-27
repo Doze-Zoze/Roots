@@ -6,13 +6,13 @@ using Terraria.ModLoader;
 
 namespace Roots.Items.ArmorSets
 {
-    public class ChlorophyteHelmets : GlobalItem
+    public class AdamantiteHelmets : GlobalItem
     {
         List<int> ItemsToApplyTo =
         [
-            ItemID.ChlorophyteHeadgear,
-            ItemID.ChlorophyteHelmet,
-            ItemID.ChlorophyteMask
+            ItemID.AdamantiteHelmet,
+            ItemID.AdamantiteMask,
+            ItemID.AdamantiteHeadgear
         ];
         public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
 
@@ -31,46 +31,37 @@ namespace Roots.Items.ArmorSets
 
         public override void SetDefaults(Item item)
         {
-            item.defense = 13;
+            item.defense = 10;
         }
 
         public override void UpdateEquip(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.16f;
-            player.chloroAmmoCost80 = true;
-            player.manaCost *= (1 - 0.17f);
+            player.GetDamage<GenericDamageClass>() += 0.12f;
+            player.GetCritChance<GenericDamageClass>() += 12;
             player.statManaMax2 += 80;
         }
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.ChlorophytePlateMail && legs.type == ItemID.ChlorophyteGreaves)
-                return "ChlorophyteSet";
+            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.AdamantiteBreastplate && legs.type == ItemID.AdamantiteLeggings)
+                return "AdamantiteSet";
             return string.Empty;
         }
 
         public override void UpdateArmorSet(Player player, string set)
         {
-            if (set == "ChlorophyteSet")
+            if (set == "AdamantiteSet")
             {
-                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Chlorophyte.SetBonus");
-                player.AddBuff(60, 18000);
-            }
-            else if (player.crystalLeaf)
-            {
-                for (int n = 0; n < player.buffType.Length; n++)
-                {
-                    if (player.buffType[n] == 60)
-                    {
-                        player.DelBuff(n);
-                    }
-                }
+                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Adamantite.SetBonus");
+                player.moveSpeed += 0.2f;
+                player.ammoCost75 = true;
+                player.manaCost *= 0.8f;
             }
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            tooltips.ReplaceTooltipWith("Armor.Chlorophyte.HelmetTooltip");
+            tooltips.ReplaceTooltipWith("Armor.Adamantite.HelmetTooltip");
         }
 
     }

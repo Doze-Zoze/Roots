@@ -1,18 +1,22 @@
-﻿using Roots.Utilities;
+﻿using Microsoft.CodeAnalysis.Differencing;
+using Microsoft.Xna.Framework;
+using Roots;
+using Roots.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace Roots.Items.ArmorSets
 {
-    public class ChlorophyteHelmets : GlobalItem
+    public class MythrilHelmets : GlobalItem
     {
         List<int> ItemsToApplyTo =
         [
-            ItemID.ChlorophyteHeadgear,
-            ItemID.ChlorophyteHelmet,
-            ItemID.ChlorophyteMask
+            ItemID.MythrilHelmet,
+            ItemID.MythrilHat,
+            ItemID.MythrilHood
         ];
         public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
 
@@ -31,46 +35,40 @@ namespace Roots.Items.ArmorSets
 
         public override void SetDefaults(Item item)
         {
-            item.defense = 13;
+            item.defense = 3;
         }
 
         public override void UpdateEquip(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.16f;
-            player.chloroAmmoCost80 = true;
-            player.manaCost *= (1 - 0.17f);
+            player.GetDamage<GenericDamageClass>() += 0.14f;
             player.statManaMax2 += 80;
+            player.ammoCost80 = true;
         }
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.ChlorophytePlateMail && legs.type == ItemID.ChlorophyteGreaves)
-                return "ChlorophyteSet";
+            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.MythrilChainmail && legs.type == ItemID.MythrilGreaves)
+                return "MythrilSet";
             return string.Empty;
         }
 
         public override void UpdateArmorSet(Player player, string set)
         {
-            if (set == "ChlorophyteSet")
+            if (set == "MythrilSet")
             {
-                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Chlorophyte.SetBonus");
-                player.AddBuff(60, 18000);
-            }
-            else if (player.crystalLeaf)
-            {
-                for (int n = 0; n < player.buffType.Length; n++)
+                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Mythril.SetBonus");
+                player.manaCost *= 0.8f;
+                player.Roots().ModifyHitNPCFuncs.Add((player, npc, modifiers) =>
                 {
-                    if (player.buffType[n] == 60)
-                    {
-                        player.DelBuff(n);
-                    }
-                }
+                    modifiers.CritDamage += 0.15f;
+                    return modifiers;
+                });
             }
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            tooltips.ReplaceTooltipWith("Armor.Chlorophyte.HelmetTooltip");
+            tooltips.ReplaceTooltipWith("Armor.Mythril.HelmetTooltip");
         }
 
     }

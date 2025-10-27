@@ -20,7 +20,8 @@ namespace Roots.Items.Accessories.Magic
         public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
 
-            player.rocketBoots = player.vanityRocketBoots = 1;
+            player.rocketBoots = player.vanityRocketBoots = 2;
+            player.fairyBoots = true;
             player.accRunSpeed = 6;
             player.rocketTime = 0;
             player.canRocket = player.statMana >= 10 && player.jump == 0 && !(player.velocity.Y == 0);
