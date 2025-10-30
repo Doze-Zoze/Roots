@@ -18,8 +18,6 @@ namespace Roots.Items.Consumables
 
         public override void SetDefaults(Item entity)
         {
-            entity.buffTime = 15 * 60;
-            entity.buffType = BuffID.PotionSickness;
             entity.healLife = 20;
         }
 
@@ -35,19 +33,7 @@ namespace Roots.Items.Consumables
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            return;
-            int tooltipIndex = 0;
-            for (var i = 0; i < tooltips.Count; i++)
-            {
-                var tooltip = tooltips[i];
-                if (tooltip.Name.Contains("Tooltip"))
-                {
-                    tooltip.Hide();
-                    tooltipIndex = i;
-                }
-            }
-            if (tooltipIndex > 0)
-                tooltips.Insert(tooltipIndex, new TooltipLine(Mod, "Tooltip", RootsUtils.GetLocalizedTextValue("Accessories.ManaCloak.Tooltip")));
+            tooltips.ReplaceTooltipWith("Consumables.Mushroom.Tooltip");
         }
     }
 }

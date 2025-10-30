@@ -126,6 +126,12 @@ Armor: {
 		SetBonus: Slightly increases mobilty
 	}
 
+	FlinxFurCoat.Tooltip:
+		'''
+		Summon attacks deal 10% increased damage
+		+1 Maximum Minion
+		'''
+
 	Fossil: {
 		HelmetTooltip: 4% increased critical strike chance
 		ChestplateTooltip: 5% increased damage
@@ -269,6 +275,7 @@ Weapons: {
 	InfluxWaver.Tooltip: Does not require mana when you are inflicted with Electrified
 }
 
+Consumables.Mushroom.Tooltip: Inflicts 15 seconds of Potion Sickness
 Tips.SummonManaCost: Can convert maximum mana into more summon slots, at the cost of 40 mana per slot
 
 Configs: {

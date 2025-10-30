@@ -25,6 +25,10 @@ namespace Roots.Utilities
             for (var i = 0; i < tooltips.Count; i++)
             {
                 var tooltip = tooltips[i];
+                if (tooltip.Name.Contains("Material"))
+                {
+                    tooltipIndex = i+1;
+                }
                 if (tooltip.Name.Contains("Tooltip"))
                 {
                     tooltip.Hide();
@@ -32,7 +36,12 @@ namespace Roots.Utilities
                 }
             }
             if (tooltipIndex > 0)
-                tooltips.Insert(tooltipIndex, new TooltipLine(ModLoader.GetMod("Roots"), "Tooltip", GetLocalizedTextValue(path)));
+            {
+                if (tooltipIndex < tooltips.Count)
+                    tooltips.Insert(tooltipIndex, new TooltipLine(ModLoader.GetMod("Roots"), "Tooltip", GetLocalizedTextValue(path)));
+                else
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Roots"), "Tooltip", GetLocalizedTextValue(path)));
+            }
         }
         public static void AppendTooltipWith(this List<TooltipLine> tooltips, string path)
         {
