@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Roots.Projectiles;
+using Roots.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -24,8 +25,15 @@ namespace Roots.Players
 
         public List<Func<Player, Projectile, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCWithProjectileFuncs = new();
         public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCFuncs = new();
+        public List<Func<Player, Item, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCWithItemFuncs = new();
         public List<Action<Player, Projectile, NPC, NPC.HitInfo, int>> OnHitNPCWithProjectileFuncs = new();
         public List<Action<Player, NPC, NPC.HitInfo, int>> OnHitNPCFuncs = new();
+
+
+        public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> PhysicalModifyHitNPCFuncs = new();
+        public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> MagicalModifyHitNPCFuncs = new();
+        public List<Action<Player, NPC, NPC.HitInfo, int>> PhysicalOnHitNPCFuncs = new();
+        public List<Action<Player, NPC, NPC.HitInfo, int>> MagicalOnHitNPCFuncs = new();
 
         public float AdditiveDamageMultipliersToApplyOnHit = 1;
 
@@ -47,12 +55,18 @@ namespace Roots.Players
 
 
             #endregion
-            ModifyHitNPCWithProjectileFuncs = new();
-            ModifyHitNPCFuncs = new();
-            OnHitNPCFuncs = new();
-            OnHitNPCWithProjectileFuncs = new();
+            ModifyHitNPCWithProjectileFuncs = [];
+            ModifyHitNPCFuncs = []; 
+            ModifyHitNPCWithItemFuncs = [];
+            OnHitNPCFuncs = [];
+            OnHitNPCWithProjectileFuncs = [];
+            PhysicalModifyHitNPCFuncs = [];
+            MagicalModifyHitNPCFuncs = [];
+            PhysicalOnHitNPCFuncs = [];
+            MagicalOnHitNPCFuncs = [];
             Player.maxMinions--;
 
+            Player.setBonus = "";
         }
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
@@ -61,6 +75,34 @@ namespace Roots.Players
             foreach (var info in ModifyHitNPCWithProjectileFuncs)
             {
                 modifiers = info(Player, proj, target, modifiers);
+            }
+            if (proj.Roots().isManaProjectile)
+                foreach (var info in MagicalModifyHitNPCFuncs)
+                {
+                    modifiers = info(Player, target, modifiers);
+                }
+            else if (!proj.IsMinionOrSentryRelated)
+            {
+                foreach (var info in PhysicalModifyHitNPCFuncs)
+                {
+                    modifiers = info(Player, target, modifiers);
+                }
+            }
+            if (AdditiveDamageMultipliersToApplyOnHit != 1)
+                modifiers.FinalDamage += ((AdditiveDamageMultipliersToApplyOnHit - 1) / Player.GetTotalDamage(modifiers.DamageType).Additive);
+            AdditiveDamageMultipliersToApplyOnHit = 1;
+
+        }
+
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            foreach (var info in PhysicalModifyHitNPCFuncs)
+            {
+                modifiers = info(Player, target, modifiers);
+            }
+            foreach (var info in ModifyHitNPCWithItemFuncs)
+            {
+                modifiers = info(Player, item, target, modifiers);
             }
             if (AdditiveDamageMultipliersToApplyOnHit != 1)
                 modifiers.FinalDamage += ((AdditiveDamageMultipliersToApplyOnHit - 1) / Player.GetTotalDamage(modifiers.DamageType).Additive);
@@ -76,6 +118,8 @@ namespace Roots.Players
             if (AdditiveDamageMultipliersToApplyOnHit != 1)
                 modifiers.FinalDamage += ((AdditiveDamageMultipliersToApplyOnHit - 1) / Player.GetTotalDamage(modifiers.DamageType).Additive);
             AdditiveDamageMultipliersToApplyOnHit = 1;
+
+            modifiers.DamageVariationScale *= 0;
         }
         public override void UpdateEquips()
         {

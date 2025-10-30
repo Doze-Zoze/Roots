@@ -22,6 +22,9 @@ namespace Roots.Items
                 if (tooltip.Name == "JourneyResearch")
                     tooltip.Hide();
             }
+
+            if (item.type == ItemID.MagmaStone)
+                tooltips.ReplaceTooltipWith("Accessories.MagmaStone.Tooltip");
         }
     }
 }

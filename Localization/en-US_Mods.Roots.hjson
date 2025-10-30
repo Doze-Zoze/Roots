@@ -126,6 +126,24 @@ Armor: {
 		SetBonus: Slightly increases mobilty
 	}
 
+	Fossil: {
+		HelmetTooltip: 4% increased critical strike chance
+		ChestplateTooltip: 5% increased damage
+		LeggingsTooltip: 4% increased critical strike chance
+		SetBonus: 20% chance to save ammo
+	}
+
+	Frost: {
+		HelmetTooltip: 16% increased damage
+		ChestplateTooltip: 11% increased damage
+		LeggingsTooltip:
+			'''
+			8% increased movement speed
+			10% increased projectile velocity
+			'''
+		SetBonus: Physical attacks deal 15% increased damage and inflict Frostbite
+	}
+
 	Hallowed: {
 		HelmetTooltip:
 			'''
@@ -134,6 +152,43 @@ Armor: {
 			Increases maximum mana by 100
 			'''
 		SetBonus: Gain a holy dodge after striking enemies
+	}
+
+	Jungle: {
+		HelmetTooltip:
+			'''
+			6% increased critical strike chance
+			Increases maximum mana by 40
+			'''
+		ChestplateTooltip:
+			'''
+			6% increased damage
+			Increases maximum mana by 20
+			'''
+		LeggingsTooltip:
+			'''
+			6% increased critical strike chance
+			Increases maximum mana by 20
+			'''
+		SetBonus: 16% reduced mana cost
+	}
+
+	Meteor: {
+		HelmetTooltip: 9% increased damage
+		ChestplateTooltip: 9% increased damage
+		LeggingsTooltip: 9% increased damage
+		SetBonus: Firing the Space Gun requires no mana
+	}
+
+	Molten: {
+		HelmetTooltip: 7% increased critical strike chance
+		ChestplateTooltip: 5% increased damage
+		LeggingsTooltip: 7% increased attack speed
+		SetBonus:
+			'''
+			10% increased damage
+			Immunity to On Fire!
+			'''
 	}
 
 	Mythril: {
@@ -146,6 +201,17 @@ Armor: {
 			'''
 			15% increased critical strike damage
 			20% reduced mana cost
+			'''
+	}
+
+	Necro: {
+		HelmetTooltip: 5% increased damage
+		ChestplateTooltip: 5% increased damage
+		LeggingsTooltip: 5% increased damage
+		SetBonus:
+			'''
+			10% increased critical strike chance
+			20% reduced ammo cost
 			'''
 	}
 
@@ -177,9 +243,22 @@ Armor: {
 			'''
 		SetBonus: Attacking generates a defensive barrier of titanium shards
 	}
-}
 
-Consumables.Mushroom.Tooltip: test
+	Turtle: {
+		HelmetTooltip: 6% increased damage to nearby targets
+		ChestplateTooltip:
+			'''
+			8% increased damage to nearby targets
+			8% increased critical strike chance
+			'''
+		LeggingsTooltip: 4% increased critical strike chance
+		SetBonus:
+			'''
+			Taking melee damage also damages the attacker
+			15% reduced damage taken
+			'''
+	}
+}
 
 Weapons: {
 	FlyingDragon.Tooltip:
