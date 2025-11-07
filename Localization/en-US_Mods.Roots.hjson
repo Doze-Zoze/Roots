@@ -105,6 +105,50 @@ Armor: {
 			25% chance to save ammo
 			'''
 	}
+	
+	Apprentice: {
+		HelmetTooltip:
+			'''
+			10% increased damage
+			+1 Sentry slot
+			'''
+		ChestplateTooltip:
+			'''
+			10% increased damage for Summon attacks
+			20% increased critical strike chance for Mana attacks
+			'''
+		LeggingsTooltip:
+			'''
+			20% increased movement speed
+			10% reduced mana cost
+			'''
+		SetBonus:
+			'''
+			Increased Flameburst sentry effectiveness
+			+1 Sentry Slot
+			'''
+	}
+	
+	Bee: {
+		HelmetTooltip:
+			'''
+			4% increased damage
+			+1 Minion slot
+			'''
+		ChestplateTooltip:
+			'''
+			4% increased damage
+			+1 Minion slot
+			'''
+		LeggingsTooltip:
+			'''
+			5% increased damage
+			'''
+		SetBonus:
+			'''
+			10% increased damage for Summon attacks
+			'''
+	}
 
 	Chlorophyte: {
 		HelmetTooltip:
@@ -125,6 +169,29 @@ Armor: {
 			'''
 		SetBonus: Slightly increases mobilty
 	}
+	
+	DarkArtist: {
+		HelmetTooltip:
+			'''
+			15% increased damage
+			+2 Sentry slots
+			'''
+		ChestplateTooltip:
+			'''
+			25% increased damage for Summon attacks
+			10% increased damage for Mana attacks
+			'''
+		LeggingsTooltip:
+			'''
+			20% increased damage for Summon attacks
+			25% increased critical strike chance for Mana attacks
+			'''
+		SetBonus:
+			'''
+			Greatly increased Flameburst sentry effectiveness
+			+1 Sentry Slot
+			'''
+	}
 
 	FlinxFurCoat.Tooltip:
 		'''
@@ -137,6 +204,27 @@ Armor: {
 		ChestplateTooltip: 5% increased damage
 		LeggingsTooltip: 4% increased critical strike chance
 		SetBonus: 20% chance to save ammo
+	}
+	
+	Forbidden: {
+		HelmetTooltip:
+			'''
+			15% increased damage
+			'''
+		ChestplateTooltip:
+			'''
+			5% increased damage
+			Increases maximum mana by 80
+			'''
+		LeggingsTooltip:
+			'''
+			5% increased damage
+			+2 Minion slots
+			'''
+		SetBonus:
+			'''
+			[SET BONUS KEY] to call an ancient storm to the cursor location
+			'''
 	}
 
 	Frost: {
@@ -158,6 +246,28 @@ Armor: {
 			Increases maximum mana by 100
 			'''
 		SetBonus: Gain a holy dodge after striking enemies
+	}
+	
+	Huntress: {
+		HelmetTooltip:
+			'''
+			10% increased critical strike chance
+			+1 Sentry Slot
+			'''
+		ChestplateTooltip:
+			'''
+			20% increased damage for long-range or Summon attacks
+			'''
+		LeggingsTooltip:
+			'''
+			20% increased movement speed
+			10% reduced ammo cost
+			'''
+		SetBonus:
+			'''
+			Increased Explosive Trap sentry effectiveness
+			+1 Sentry Slot
+			'''
 	}
 
 	Jungle: {
@@ -196,6 +306,28 @@ Armor: {
 			Immunity to On Fire!
 			'''
 	}
+	
+	Monk: {
+		HelmetTooltip:
+			'''
+			20% increased attack speed
+			+1 Sentry Slot
+			'''
+		ChestplateTooltip:
+			'''
+			20% increased damage for Summon attacks
+			'''
+		LeggingsTooltip:
+			'''
+			20% increased movement speed
+			10% increased damage
+			'''
+		SetBonus:
+			'''
+			Increased Lightning Aura sentry effectiveness
+			+1 Sentry Slot
+			'''
+	}
 
 	Mythril: {
 		HelmetTooltip:
@@ -220,6 +352,27 @@ Armor: {
 			20% reduced ammo cost
 			'''
 	}
+	
+	Obsidian: {
+		HelmetTooltip:
+			'''
+			8% increased damage
+			+1 Minion slot
+			'''
+		ChestplateTooltip:
+			'''
+			+1 Minion slot
+			'''
+		LeggingsTooltip:
+			'''
+			8% increased damage
+			'''
+		SetBonus:
+			'''
+			15% increased Summon and whip damage
+			30% increased whip range
+			'''
+	}
 
 	Orichalcum: {
 		HelmetTooltip:
@@ -238,6 +391,145 @@ Armor: {
 			Increases maximum mana by 20
 			'''
 		SetBonus: Greatly increases life regeneration after striking an enemy
+	}
+	
+	RedRiding: {
+		HelmetTooltip:
+			'''
+			20% increased critical strike chance
+			+2 Sentry slots
+			'''
+		ChestplateTooltip:
+			'''
+			25% increased damage for long-range or Summon attacks
+			'''
+		LeggingsTooltip:
+			'''
+			35% increased damage for Summon attacks
+			20% increased movement speed
+			20% reduced ammo cost
+			'''
+		SetBonus:
+			'''
+			Greatly increased Explosive Trap sentry effectiveness
+			+1 Sentry slot
+			'''
+	}
+	
+	ShinobiInfiltrator: {
+		HelmetTooltip:
+			'''
+			20% increased damage
+			+2 Sentry slots
+			'''
+		ChestplateTooltip:
+			'''
+			20% increased damage for Summon attacks
+			20% increased attack speed
+			5% increased critical strike chance
+			'''
+		LeggingsTooltip:
+			'''
+			20% increased damage for Summon attacks
+			20% increased critical strike chance
+			30% increased movement speed
+			'''
+		SetBonus:
+			'''
+			Greatly increased Lightning Aura sentry effectiveness
+			+1 Sentry slot
+			'''
+	}
+	
+	Spider: {
+		HelmetTooltip:
+			'''
+			5% increased damage
+			+1 Minion slot
+			'''
+		ChestplateTooltip:
+			'''
+			5% increased damage
+			+1 Minion slot
+			'''
+		LeggingsTooltip:
+			'''
+			5% increased damage
+			+1 Minion slot
+			'''
+		SetBonus:
+			'''
+			12% increased damage for Summon attacks
+			'''
+	}
+	
+	Spooky: {
+		HelmetTooltip:
+			'''
+			11% increased damage
+			+1 Minion slot
+			'''
+		ChestplateTooltip:
+			'''
+			11% increased damage
+			+2 Minion slots
+			'''
+		LeggingsTooltip:
+			'''
+			11% increased damage
+			+1 Minion slot
+			20% increased movement speed
+			'''
+		SetBonus:
+			'''
+			25% increased damage for Summon attacks
+			'''
+	}
+	
+	Squire: {
+		HelmetTooltip:
+			'''
+			Increases life regeneration by 2 HP/sec
+			+1 Sentry Slot
+			'''
+		ChestplateTooltip:
+			'''
+			15% increased damage for close range or Summon attacks
+			'''
+		LeggingsTooltip:
+			'''
+			15% increased damage for Summon attacks
+			15% increased critical strike chance for close-range attacks
+			'''
+		SetBonus:
+			'''
+			Increased Ballista sentry effectiveness
+			+1 Sentry Slot
+			'''
+	}
+	
+	Tiki: {
+		HelmetTooltip:
+			'''
+			10% increased damage
+			+1 Minion slot
+			10% increased whip range
+			'''
+		ChestplateTooltip:
+			'''
+			10% increased damage
+			+1 Minion slot
+			'''
+		LeggingsTooltip:
+			'''
+			10% increased damage
+			+1 Minion slot
+			'''
+		SetBonus:
+			'''
+			+1 Minion slot
+			20% increased whip range
+			'''
 	}
 
 	Titanium: {
@@ -262,6 +554,29 @@ Armor: {
 			'''
 			Taking melee damage also damages the attacker
 			15% reduced damage taken
+			'''
+	}
+	
+	ValhallaKnight: {
+		HelmetTooltip:
+			'''
+			10% increased damage for close-range or Summon attacks
+			+2 Sentry slots
+			'''
+		ChestplateTooltip:
+			'''
+			Greatly increased life regeneration
+			30% increased damage for Summon attacks
+			'''
+		LeggingsTooltip:
+			'''
+			20% increased damage for Summon attacks
+			20% increased critical strike chance for close-range attacks
+			'''
+		SetBonus:
+			'''
+			Increased Flameburst sentry effectiveness
+			+1 Sentry Slot
 			'''
 	}
 }
