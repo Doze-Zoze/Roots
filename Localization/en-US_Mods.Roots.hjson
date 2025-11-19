@@ -1,3 +1,10 @@
+Common: {
+	MaxMana: Increases maximum many by
+	ManaCost: reduced mana cost
+	DmgUp: increased damage
+	CritUp: increased critical strike chance
+}
+
 Accessories: {
 	FeralClaws.Tooltip:
 		'''
@@ -105,7 +112,7 @@ Armor: {
 			25% chance to save ammo
 			'''
 	}
-	
+
 	Apprentice: {
 		HelmetTooltip:
 			'''
@@ -128,7 +135,7 @@ Armor: {
 			+1 Sentry Slot
 			'''
 	}
-	
+
 	Bee: {
 		HelmetTooltip:
 			'''
@@ -140,14 +147,29 @@ Armor: {
 			4% increased damage
 			+1 Minion slot
 			'''
-		LeggingsTooltip:
+		LeggingsTooltip: 5% increased damage
+		SetBonus: 10% increased damage for Summon attacks
+	}
+
+	Beetle: {
+		HelmetTooltip:
 			'''
 			5% increased damage
+			Enemies are more likely to target you
 			'''
-		SetBonus:
+		ScaleMailTooltip:
 			'''
-			10% increased damage for Summon attacks
+			8% increased damage and critical strike chance
+			6% increased movement speed
 			'''
+		ShellTooltip:
+			'''
+			5% increased damage and critical strike chance
+			Enemies are more likely to target you
+			'''
+		LeggingsTooltip: 6% increased movement speed
+		SetBonusScaleMail: Beetles increase your damage and attack speed
+		SetBonusShell: Beetles protect you from damage
 	}
 
 	Chlorophyte: {
@@ -169,7 +191,7 @@ Armor: {
 			'''
 		SetBonus: Slightly increases mobilty
 	}
-	
+
 	DarkArtist: {
 		HelmetTooltip:
 			'''
@@ -205,12 +227,9 @@ Armor: {
 		LeggingsTooltip: 4% increased critical strike chance
 		SetBonus: 20% chance to save ammo
 	}
-	
+
 	Forbidden: {
-		HelmetTooltip:
-			'''
-			15% increased damage
-			'''
+		HelmetTooltip: 15% increased damage
 		ChestplateTooltip:
 			'''
 			5% increased damage
@@ -221,10 +240,7 @@ Armor: {
 			5% increased damage
 			+2 Minion slots
 			'''
-		SetBonus:
-			'''
-			[SET BONUS KEY] to call an ancient storm to the cursor location
-			'''
+		SetBonus: "[SET BONUS KEY] to call an ancient storm to the cursor location"
 	}
 
 	Frost: {
@@ -247,17 +263,14 @@ Armor: {
 			'''
 		SetBonus: Gain a holy dodge after striking enemies
 	}
-	
+
 	Huntress: {
 		HelmetTooltip:
 			'''
 			10% increased critical strike chance
 			+1 Sentry Slot
 			'''
-		ChestplateTooltip:
-			'''
-			20% increased damage for long-range or Summon attacks
-			'''
+		ChestplateTooltip: 20% increased damage for long-range or Summon attacks
 		LeggingsTooltip:
 			'''
 			20% increased movement speed
@@ -306,17 +319,14 @@ Armor: {
 			Immunity to On Fire!
 			'''
 	}
-	
+
 	Monk: {
 		HelmetTooltip:
 			'''
 			20% increased attack speed
 			+1 Sentry Slot
 			'''
-		ChestplateTooltip:
-			'''
-			20% increased damage for Summon attacks
-			'''
+		ChestplateTooltip: 20% increased damage for Summon attacks
 		LeggingsTooltip:
 			'''
 			20% increased movement speed
@@ -352,21 +362,15 @@ Armor: {
 			20% reduced ammo cost
 			'''
 	}
-	
+
 	Obsidian: {
 		HelmetTooltip:
 			'''
 			8% increased damage
 			+1 Minion slot
 			'''
-		ChestplateTooltip:
-			'''
-			+1 Minion slot
-			'''
-		LeggingsTooltip:
-			'''
-			8% increased damage
-			'''
+		ChestplateTooltip: +1 Minion slot
+		LeggingsTooltip: 8% increased damage
 		SetBonus:
 			'''
 			15% increased Summon and whip damage
@@ -392,17 +396,14 @@ Armor: {
 			'''
 		SetBonus: Greatly increases life regeneration after striking an enemy
 	}
-	
+
 	RedRiding: {
 		HelmetTooltip:
 			'''
 			20% increased critical strike chance
 			+2 Sentry slots
 			'''
-		ChestplateTooltip:
-			'''
-			25% increased damage for long-range or Summon attacks
-			'''
+		ChestplateTooltip: 25% increased damage for long-range or Summon attacks
 		LeggingsTooltip:
 			'''
 			35% increased damage for Summon attacks
@@ -415,7 +416,7 @@ Armor: {
 			+1 Sentry slot
 			'''
 	}
-	
+
 	ShinobiInfiltrator: {
 		HelmetTooltip:
 			'''
@@ -440,7 +441,42 @@ Armor: {
 			+1 Sentry slot
 			'''
 	}
-	
+
+	Shroomite: {
+		HeadgearTooltip:
+			'''
+			1.15x bow damage
+			5% increased critical strike chance
+			'''
+		MaskTooltip:
+			'''
+			1.15x gun damage
+			5% increased critical strike chance
+			'''
+		HelmetTooltip:
+			'''
+			1.15x specialist ranged damage
+			This is anything that consumes ammo other than arrows or bullets
+			5% increased critical strike chance
+			'''
+		ChestplateTooltip:
+			'''
+			13% increased damage and critical strike chance
+			20% reduced ammo cost
+			'''
+		LeggingsTooltip:
+			'''
+			7% increased critical strike chance
+			12% increased movement speed
+			'''
+		SetBonusHood:
+			'''
+			Not moving puts you in stealth, reducing chance for enemies to target you
+			Stealth provides up to 60% damage, 10% critical stirke chance, and 50% increased knockback
+			'''
+		SetBonusMask: Mana attacks will hurt extra nearby enemies
+	}
+
 	Spider: {
 		HelmetTooltip:
 			'''
@@ -457,12 +493,9 @@ Armor: {
 			5% increased damage
 			+1 Minion slot
 			'''
-		SetBonus:
-			'''
-			12% increased damage for Summon attacks
-			'''
+		SetBonus: 12% increased damage for Summon attacks
 	}
-	
+
 	Spooky: {
 		HelmetTooltip:
 			'''
@@ -480,22 +513,37 @@ Armor: {
 			+1 Minion slot
 			20% increased movement speed
 			'''
-		SetBonus:
-			'''
-			25% increased damage for Summon attacks
-			'''
+		SetBonus: 25% increased damage for Summon attacks
 	}
-	
+
+	Spectre: {
+		HoodTooltip: ""
+		MaskTooltip:
+			'''
+			Increases maximum mana by 60 and 13% reduced mana cost
+			10% increased damage and critical strike chance
+			'''
+		ChestplateTooltip: 7% increased damage and critical strike chance
+		LeggingsTooltip:
+			'''
+			8% increased damage
+			8% increased movement speed
+			'''
+		SetBonusHood:
+			'''
+			40% reduced damage for Mana attacks
+			Mana attacks heal the player with the lowest health
+			'''
+		SetBonusMask: Mana attacks will hurt extra nearby enemies
+	}
+
 	Squire: {
 		HelmetTooltip:
 			'''
 			Increases life regeneration by 2 HP/sec
 			+1 Sentry Slot
 			'''
-		ChestplateTooltip:
-			'''
-			15% increased damage for close range or Summon attacks
-			'''
+		ChestplateTooltip: 15% increased damage for close range or Summon attacks
 		LeggingsTooltip:
 			'''
 			15% increased damage for Summon attacks
@@ -507,7 +555,7 @@ Armor: {
 			+1 Sentry Slot
 			'''
 	}
-	
+
 	Tiki: {
 		HelmetTooltip:
 			'''
@@ -556,7 +604,7 @@ Armor: {
 			15% reduced damage taken
 			'''
 	}
-	
+
 	ValhallaKnight: {
 		HelmetTooltip:
 			'''

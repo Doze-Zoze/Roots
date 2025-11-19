@@ -20,15 +20,9 @@ namespace Roots.Items.Consumables
         {
             entity.healLife = 20;
         }
-
-        public override void OnConsumeItem(Item item, Player player)
+        public override void ModifyPotionDelay(Item item, Player player, ref int baseDelay)
         {
-           if (player.HasBuff(BuffID.PotionSickness))
-               player.buffTime[player.FindBuffIndex(BuffID.PotionSickness)] = 15 * 60;
-            player.potionDelay = 15 * 60;
-            player.potionDelayTime = 15 * 60;
-            if (player.respawnTimer > 60 * 5)
-                player.respawnTimer = 60 * 5;
+            baseDelay = 15 * 60;
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)

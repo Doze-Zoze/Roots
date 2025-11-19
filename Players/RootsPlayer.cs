@@ -19,6 +19,7 @@ namespace Roots.Players
         public int TimeSinceManaStarPickup = 0;
         public int TimeSinceManaCloakStarAttack = 0;
         public bool forceAutoswing = false;
+        public float AdditiveManaDamage = 0;
         #endregion
 
         #endregion
@@ -52,7 +53,7 @@ namespace Roots.Players
             TimeSinceManaStarPickup++;
             TimeSinceManaCloakStarAttack++;
             forceAutoswing = false;
-
+            AdditiveManaDamage = 0;
 
             #endregion
             ModifyHitNPCWithProjectileFuncs = [];
@@ -77,10 +78,13 @@ namespace Roots.Players
                 modifiers = info(Player, proj, target, modifiers);
             }
             if (proj.Roots().isManaProjectile)
+            {
+                AdditiveDamageMultipliersToApplyOnHit += AdditiveManaDamage;
                 foreach (var info in MagicalModifyHitNPCFuncs)
                 {
                     modifiers = info(Player, target, modifiers);
                 }
+            }
             else if (!proj.IsMinionOrSentryRelated)
             {
                 foreach (var info in PhysicalModifyHitNPCFuncs)
