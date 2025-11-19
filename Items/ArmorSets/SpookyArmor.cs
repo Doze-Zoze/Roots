@@ -9,9 +9,9 @@ namespace Roots.Items.ArmorSets
     public class SpookyArmor : BaseArmorSet
     {
         public override string SetID => "Spooky";
-        public override List<int> HeadsToApplyTo => [ItemID.TikiMask];
-        public override List<int> ChestsToApplyTo => [ItemID.TikiShirt];
-        public override List<int> LegsToApplyTo => [ItemID.TikiPants];
+        public override List<int> HeadsToApplyTo => [ItemID.SpookyHelmet];
+        public override List<int> ChestsToApplyTo => [ItemID.SpookyBreastplate];
+        public override List<int> LegsToApplyTo => [ItemID.SpookyLeggings];
 
         public override void HeadEquips(Item item, Player player)
         {
