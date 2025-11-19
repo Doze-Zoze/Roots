@@ -469,12 +469,11 @@ Armor: {
 			7% increased critical strike chance
 			12% increased movement speed
 			'''
-		SetBonusHood:
+		SetBonus:
 			'''
 			Not moving puts you in stealth, reducing chance for enemies to target you
 			Stealth provides up to 60% damage, 10% critical stirke chance, and 50% increased knockback
 			'''
-		SetBonusMask: Mana attacks will hurt extra nearby enemies
 	}
 
 	Spider: {
