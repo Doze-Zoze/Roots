@@ -58,7 +58,7 @@ namespace Roots.NPCs
         public override void SetDefaults(NPC npc)
         {
             base.SetDefaults(npc);
-            if (CurrentAiOverride is null && AiOverridesDictionary.ContainsKey(npc.type))
+            if (Configs.instance.AiChanges && CurrentAiOverride is null && AiOverridesDictionary.ContainsKey(npc.type))
                 CurrentAiOverride = AiOverridesDictionary[npc.type].Invoke(npc);
 
             CurrentAiOverride?.SetDefaults();
@@ -96,7 +96,7 @@ namespace Roots.NPCs
     {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            if (FixExploitManEaters.SpotProtected(i, j))
+            if (Configs.instance.AiChanges && FixExploitManEaters.SpotProtected(i, j))
             {
                 effectOnly = true;
                 foreach (var item in Main.ActiveNPCs)

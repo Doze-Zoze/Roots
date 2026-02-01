@@ -16,10 +16,6 @@ namespace Roots
 
         [DefaultValue(true)]
         [ReloadRequired]
-        public bool RemoveBaseCrit;
-
-        [DefaultValue(true)]
-        [ReloadRequired]
         public bool LifeChanges;
 
         [DefaultValue(true)]
@@ -33,5 +29,9 @@ namespace Roots
         [DefaultValue(true)]
         [ReloadRequired]
         public int WorldgenChanges;
+
+        [DefaultValue(true)]
+        [ReloadRequired]
+        public bool AiChanges;
     }
 }

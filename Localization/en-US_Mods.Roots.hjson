@@ -649,11 +649,6 @@ Configs: {
 			Tooltip: ""
 		}
 
-		RemoveBaseCrit: {
-			Label: Remove Base Crit
-			Tooltip: ""
-		}
-
 		ManaChanges: {
 			Label: Mana Changes
 			Tooltip: ""
@@ -671,6 +666,16 @@ Configs: {
 
 		LifeChanges: {
 			Label: Life Changes
+			Tooltip: ""
+		}
+
+		AiChanges: {
+			Label: AI Changes
+			Tooltip: ""
+		}
+
+		RemoveBaseCrit: {
+			Label: Remove Base Crit
 			Tooltip: ""
 		}
 	}

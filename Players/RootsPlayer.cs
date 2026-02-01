@@ -41,10 +41,8 @@ namespace Roots.Players
 
         public override void ResetEffects()
         {
-            if (false && Configs.instance.RemoveBaseCrit)
-                Player.GetCritChance(DamageClass.Generic) -= 4;
-            //config needed
-            if (!Player.shinyStone)
+            //rework needed
+            if (Configs.instance.LifeChanges && !Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it
             shootSpeedMult = 1;
             AdditiveDamageMultipliersToApplyOnHit = 1;
