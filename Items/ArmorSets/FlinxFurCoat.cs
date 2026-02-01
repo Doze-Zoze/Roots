@@ -1,14 +1,14 @@
 ﻿using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.Xna.Framework;
-using Roots;
-using Roots.Utilities;
+using RootsBeta;
+using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace Roots.Items.ArmorSets
+namespace RootsBeta.Items.ArmorSets
 {
     public class FlinxFurCoat : GlobalItem
     {

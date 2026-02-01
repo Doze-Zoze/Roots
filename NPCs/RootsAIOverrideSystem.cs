@@ -10,7 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Roots.NPCs
+namespace RootsBeta.NPCs
 {
     public abstract class AIOverride
     {

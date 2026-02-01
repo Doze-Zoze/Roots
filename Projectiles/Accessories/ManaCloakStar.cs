@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Projectiles.Accessories
+namespace RootsBeta.Projectiles.Accessories
 {
     public class ManaCloakStar : GlobalProjectile
     {

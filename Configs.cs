@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
-namespace Roots
+namespace RootsBeta
 {
     public class Configs : ModConfig
     {

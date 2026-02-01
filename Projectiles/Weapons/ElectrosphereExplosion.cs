@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using Roots.Utilities;
+using RootsBeta.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Projectiles.Weapons
+namespace RootsBeta.Projectiles.Weapons
 {
     public class SkyDragonsFuryShot : GlobalProjectile
     {

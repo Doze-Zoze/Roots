@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using Roots.Projectiles;
+using RootsBeta.Projectiles;
 using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items.Weapons
+namespace RootsBeta.Items.Weapons
 {
     public class TrueNightsEdge : GlobalItem
     {

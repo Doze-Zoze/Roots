@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Roots.Items.Weapons
+namespace RootsBeta.Items.Weapons
 {
     public class TerraBlade : GlobalItem
     {

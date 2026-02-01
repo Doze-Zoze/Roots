@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using Roots.Utilities;
+using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items.Accessories.Magic
+namespace RootsBeta.Items.Accessories.Magic
 {
     public class FairyBoots : GlobalItem
     {

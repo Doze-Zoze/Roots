@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items.ArmorSets
+namespace RootsBeta.Items.ArmorSets
 {
     public class MeteorArmor : BaseArmorSet
     {

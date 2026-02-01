@@ -1,12 +1,12 @@
-﻿using Roots.Items;
-using Roots.Players;
-using Roots.Projectiles;
+﻿using RootsBeta.Items;
+using RootsBeta.Players;
+using RootsBeta.Projectiles;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace Roots.Utilities
+namespace RootsBeta.Utilities
 {
     public static class RootsUtils
     {

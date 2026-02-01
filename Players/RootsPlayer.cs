@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Roots.NPCs;
-using Roots.Projectiles;
-using Roots.Utilities;
+using RootsBeta.NPCs;
+using RootsBeta.Projectiles;
+using RootsBeta.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Players
+namespace RootsBeta.Players
 {
     public class RootsPlayer : ModPlayer
     {

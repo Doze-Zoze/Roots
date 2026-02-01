@@ -1,10 +1,10 @@
-﻿using Roots.Utilities;
+﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items
+namespace RootsBeta.Items
 {
     public partial class RootsGlobalItem : GlobalItem
     {

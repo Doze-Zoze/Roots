@@ -2,7 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots
+namespace RootsBeta
 {
 
     public class RecipeChanges : ModSystem

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Roots.Players;
-using Roots.Utilities;
+using RootsBeta.Players;
+using RootsBeta.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace Roots.Items.Accessories.Magic
+namespace RootsBeta.Items.Accessories.Magic
 {
     public class WarriorEmblem : GlobalItem
     {

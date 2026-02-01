@@ -1,4 +1,4 @@
-using Roots.Utilities;
+using RootsBeta.Utilities;
 using Steamworks;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots
+namespace RootsBeta
 {
-	public partial class Roots : Mod
+	public partial class RootsBeta : Mod
 	{
         public override void Load()
         {

@@ -14,7 +14,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.NPCs
+namespace RootsBeta.NPCs
 {
     public class Snatcher : AIOverride
     {

@@ -1,9 +1,9 @@
-﻿using Roots.Utilities;
+﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Roots.Items.ArmorSets
+namespace RootsBeta.Items.ArmorSets
 {
     /// <summary>
     /// Overrides the entire stats of a given armor set and allows setting your own.

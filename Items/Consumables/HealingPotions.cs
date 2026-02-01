@@ -1,11 +1,11 @@
-﻿using Roots.Utilities;
+﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items.Consumables
+namespace RootsBeta.Items.Consumables
 {
     public class HealingPotions : GlobalItem
     {

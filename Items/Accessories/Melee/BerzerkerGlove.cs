@@ -1,10 +1,10 @@
-﻿using Roots.Utilities;
+﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items.Accessories.Melee
+namespace RootsBeta.Items.Accessories.Melee
 {
     public class BerserkerGlove : GlobalItem
     {

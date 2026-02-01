@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.UI;
 
-namespace Roots.NPCs
+namespace RootsBeta.NPCs
 {
     public class KingSlime : AIOverride
     {

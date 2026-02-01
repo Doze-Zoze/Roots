@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace Roots.Projectiles
+namespace RootsBeta.Projectiles
 {
     public class RootsGlobalProjectile : GlobalProjectile
     {

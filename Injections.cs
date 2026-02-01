@@ -1,12 +1,12 @@
-using Roots.Utilities;
+using RootsBeta.Utilities;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots
+namespace RootsBeta
 {
-    public partial class Roots : Mod
+    public partial class RootsBeta : Mod
     {
         void LoadEdits()
         {

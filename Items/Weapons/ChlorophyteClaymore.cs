@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items.Weapons
+namespace RootsBeta.Items.Weapons
 {
     public class ChlorophyteClaymore : GlobalItem
     {

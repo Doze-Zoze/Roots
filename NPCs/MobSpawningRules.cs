@@ -2,7 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.NPCs
+namespace RootsBeta.NPCs
 {
     public class MobSpawningRules : GlobalNPC
     {

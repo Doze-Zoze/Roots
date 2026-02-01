@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Roots.Utilities;
+using RootsBeta.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Roots.Items.Weapons
+namespace RootsBeta.Items.Weapons
 {
     public class SkyDragonsFury : GlobalItem
     {
