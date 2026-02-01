@@ -8,3 +8,5 @@ These changes fall under these sweeping changes:
 - Changes to the Mana system to be a more valuable resource
 - Adjusting enemy and boss AI to be more unique, interesting, and purposeful
 - Removing natural life regeneration, but increasing the value of Healing Potions
+
+This is still in early beta, expect some features to be unpolished, unbalanced, or unfinished. Feedback is greatly appreciated! Feedback can be given on the Discord: https://discord.gg/ZXNsMPZS6x
