@@ -1,6 +1,6 @@
 Roots is a mod that seeks to re-imagine the Terraria experience by building on core concepts from older versions of Terraria that were lost in the modern game into a new, modernized experience.
 
-Roots does not add any new content of it's own, but greatly adjusts vanilla terraria content. It currently makes changes to 19 accessories, 17 weapons, 4 enemies, and one boss.
+Roots does not add any new content of it's own, but greatly adjusts vanilla terraria content. It currently makes changes to 33 armor sets, 19 accessories, 17 weapons, 4 enemies, two bosses, and multiple core mechanics.
 All changes are adjustable in configs.
 These changes fall under these sweeping changes:
 - Removal of class-specific damage, and rebalancing of all gear to match
@@ -8,3 +8,5 @@ These changes fall under these sweeping changes:
 - Changes to the Mana system to be a more valuable resource
 - Adjusting enemy and boss AI to be more unique, interesting, and purposeful
 - Removing natural life regeneration, but increasing the value of Healing Potions
+
+This is still in early beta, expect some features to be unpolished, unbalanced, or unfinished. Feedback is greatly appreciated! Feedback can be given on the Discord: https://discord.gg/ZXNsMPZS6x
