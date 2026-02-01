@@ -28,10 +28,6 @@ namespace Roots
 
         [DefaultValue(true)]
         [ReloadRequired]
-        public int WorldgenChanges;
-
-        [DefaultValue(true)]
-        [ReloadRequired]
         public bool AiChanges;
     }
 }
