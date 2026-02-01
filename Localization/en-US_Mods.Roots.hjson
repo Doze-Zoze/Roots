@@ -599,7 +599,7 @@ Armor: {
 		LeggingsTooltip: 4% increased critical strike chance
 		SetBonus:
 			'''
-			Taking melee damage also damages the attacker
+			Receiving contact damage causes attackers to take double the damage received
 			15% reduced damage taken
 			'''
 	}

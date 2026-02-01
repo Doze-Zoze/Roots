@@ -12,27 +12,9 @@ using Terraria.ModLoader;
 
 namespace Roots.NPCs
 {
-    public partial class RootsGlobalNPC : GlobalNPC
-    {
-        public bool WallOfFlesh_PreAI(NPC npc)
-        {
-            return true;
-        }
-
-        public bool WallOfFleshEye_PreAI(NPC npc)
-        {
-            return true;
-        }
-        public void WoFAiOverride(NPC npc)
-        {
-
-        }
 
 
-
-    }
-
-    public class WoFCameraSystem : ModSystem
+        public class WoFCameraSystem : ModSystem
     {
         public override void ModifyScreenPosition()
         {

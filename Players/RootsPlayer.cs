@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.NPCs;
 using Roots.Projectiles;
 using Roots.Utilities;
 using System;
@@ -159,6 +160,13 @@ namespace Roots.Players
         public override bool? CanAutoReuseItem(Item item)
         {
             return forceAutoswing ? true : null;
+        }
+
+        public override bool CanHitNPC(NPC target)
+        {
+            if (target.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher)
+                return false;
+            return true;
         }
     }
 }
