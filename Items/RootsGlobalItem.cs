@@ -10,7 +10,7 @@ namespace RootsBeta.Items
     public partial class RootsGlobalItem : GlobalItem
     {
 
-        public static HashSet<string> WhitelistedMods = ["Roots"];
+        public static HashSet<string> WhitelistedMods = ["Roots", "RootsBeta"];
         public override void SetDefaults(Item item)
         {
             if (Configs.instance.RemoveClasses &&( item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))

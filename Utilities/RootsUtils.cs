@@ -38,9 +38,9 @@ namespace RootsBeta.Utilities
             if (tooltipIndex > 0)
             {
                 if (tooltipIndex < tooltips.Count)
-                    tooltips.Insert(tooltipIndex, new TooltipLine(ModLoader.GetMod("Roots"), "Tooltip", GetLocalizedTextValue(path)));
+                    tooltips.Insert(tooltipIndex, new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", GetLocalizedTextValue(path)));
                 else
-                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Roots"), "Tooltip", GetLocalizedTextValue(path)));
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", GetLocalizedTextValue(path)));
             }
         }
         public static void AppendTooltipWith(this List<TooltipLine> tooltips, string path)
@@ -62,7 +62,7 @@ namespace RootsBeta.Utilities
                     tooltipIndex = i;
                 }
             }
-            tooltips.Insert(tooltipIndex > 0 ? tooltipIndex : tooltips.Count - 1, new TooltipLine(ModLoader.GetMod("Roots"), "Tooltip", GetLocalizedTextValue(path)));
+            tooltips.Insert(tooltipIndex > 0 ? tooltipIndex : tooltips.Count - 1, new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", GetLocalizedTextValue(path)));
         }
 
         public static RootsPlayer Roots(this Player player) => player.GetModPlayer<RootsPlayer>();

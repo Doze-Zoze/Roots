@@ -5,6 +5,7 @@
 
 	<!-- General -->
 	<PropertyGroup>
+	<AssemblyName>RootsBeta</AssemblyName>
 		
 	</PropertyGroup>
 

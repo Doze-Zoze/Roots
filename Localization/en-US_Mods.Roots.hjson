@@ -640,43 +640,77 @@ Weapons: {
 Consumables.Mushroom.Tooltip: Inflicts 15 seconds of Potion Sickness
 Tips.SummonManaCost: Can convert maximum mana into more summon slots, at the cost of 40 mana per slot
 
-Configs: {
+eta: {
 	Configs: {
-		DisplayName: Configs
+		Configs: {
+			DisplayName: {
+				$parentVal: Configs
+			}
 
-		RemoveClasses: {
-			Label: Remove Classes
-			Tooltip: ""
-		}
+			RemoveClasses: {
+				Label: {
+					$parentVal: Remove Classes
+				}
 
-		ManaChanges: {
-			Label: Mana Changes
-			Tooltip: ""
-		}
+				Tooltip: {
+					$parentVal: ""
+				}
+			}
 
-		AmmoChanges: {
-			Label: Ammo Changes
-			Tooltip: ""
-		}
+			ManaChanges: {
+				Label: {
+					$parentVal: Mana Changes
+				}
 
-		WorldgenChanges: {
-			Label: Worldgen Changes
-			Tooltip: ""
-		}
+				Tooltip: {
+					$parentVal: ""
+				}
+			}
 
-		LifeChanges: {
-			Label: Life Changes
-			Tooltip: ""
-		}
+			AmmoChanges: {
+				Label: {
+					$parentVal: Ammo Changes
+				}
 
-		AiChanges: {
-			Label: AI Changes
-			Tooltip: ""
-		}
+				Tooltip: {
+					$parentVal: ""
+				}
+			}
 
-		RemoveBaseCrit: {
-			Label: Remove Base Crit
-			Tooltip: ""
+			WorldgenChanges: {
+				Label: {
+					$parentVal: Worldgen Changes
+				}
+
+				Tooltip: {
+					$parentVal: ""
+				}
+			}
+
+			LifeChanges: {
+				Label: {
+					$parentVal: Life Changes
+				}
+
+				Tooltip: {
+					$parentVal: ""
+				}
+			}
+
+			AiChanges: {
+				Label: {
+					$parentVal: Ai Changes
+				}
+
+				Tooltip: {
+					$parentVal: ""
+				}
+			}
+
+			RemoveBaseCrit: {
+				Label: Remove Base Crit
+				Tooltip: ""
+			}
 		}
 	}
 }
