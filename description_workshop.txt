@@ -9,4 +9,6 @@ These changes fall under these sweeping changes:
 - Adjusting enemy and boss AI to be more unique, interesting, and purposeful
 - Removing natural life regeneration, but increasing the value of Healing Potions
 
+Check the "Change Notes" tab on Steam Workshop for a full change log
+
 This is still in early beta, expect some features to be unpolished, unbalanced, or unfinished. Feedback is greatly appreciated! Feedback can be given on the Discord: https://discord.gg/ZXNsMPZS6x
