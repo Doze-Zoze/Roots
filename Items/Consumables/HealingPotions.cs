@@ -15,7 +15,11 @@ namespace Roots.Items.Consumables
                 ItemID.HealingPotion,
                 ItemID.SuperHealingPotion,
                 ItemID.RestorationPotion,
-                ItemID.LesserRestorationPotion
+                ItemID.LesserRestorationPotion,
+                ItemID.BottledHoney,
+                ItemID.BottledWater,
+                ItemID.Honeyfin,
+                ItemID.Eggnog
             };
         public override bool IsLoadingEnabled(Mod mod) => Configs.instance.LifeChanges;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemsToCount.Contains(item.type);
