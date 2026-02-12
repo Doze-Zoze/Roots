@@ -91,9 +91,14 @@ namespace RootsBeta.NPCs
         }
 
     }
-
+    /// <summary>
+    /// Used entirely just to tell Snatchers that they can actually take damage from this source
+    /// </summary>
+    public class PickaxeDamage : DamageClass { }
     public class AllowKillingSnatchers : GlobalTile
     {
+
+       
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             if (Configs.instance.AiChanges && FixExploitManEaters.SpotProtected(i, j))
@@ -103,7 +108,13 @@ namespace RootsBeta.NPCs
                 {
                     if ((item.type == NPCID.Snatcher || item.type == NPCID.ManEater) && (int)item.ai[0] == i && (int)item.ai[1] == j)
                     {
-                        item.SimpleStrikeNPC(50, 0);
+                        NPC.HitInfo hit = new()
+                        {
+                           Damage = Main.LocalPlayer.HeldItem.pick > 0 ? Main.LocalPlayer.HeldItem.pick : 100,
+                           DamageType = ModContent.GetInstance<PickaxeDamage>()
+                        };
+                        hit.Damage -= (int)(item.defense * 0.5f);
+                        item.StrikeNPC(hit);
                         item.netUpdate = true;
                     }
                 }

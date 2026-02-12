@@ -26,6 +26,7 @@ Accessories: {
 		'''
 		Enables autoswing and increases knockback dealt
 		Increases size of melee weapons
+		Increases projectile velocity by 10%
 		Enemies are more likely to target you
 		'''
 	MechanicalGlove.Tooltip:
@@ -48,19 +49,19 @@ Accessories: {
 	SummonerEmblem.Tooltip: 15% increased damage from summons
 	RifleScope.Tooltip:
 		'''
-		Allows pressing <Right> to zoom out while holding a weapon
+		Allows pressing <right> to zoom out while holding a weapon
 		This can be toggled with the accessory visibility button
 		'''
 	ReconScope.Tooltip:
 		'''
 		+10% damage and critical strike chance
-		Allows pressing <Right> to zoom out while holding a weapon
+		Allows pressing <right> to zoom out while holding a weapon
 		This can be toggled with the accessory visibility button
 		'''
 	SniperScope.Tooltip:
 		'''
 		Increases critical strike chance the further you are from your target
-		Allows pressing Right Click to zoom out while holding a weapon
+		Allows pressing <right> to zoom out while holding a weapon
 		This can be toggled with the accessory visibility button
 		'''
 	ManaFlower.Tooltip:
@@ -700,6 +701,14 @@ eta: {
 			RemoveBaseCrit: {
 				Label: Remove Base Crit
 				Tooltip: ""
+			}
+		}
+	}
+
+	DamageClasses: {
+		PickaxeDamage: {
+			DisplayName: {
+				$parentVal: Pickaxe Damage
 			}
 		}
 	}

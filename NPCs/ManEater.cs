@@ -26,7 +26,7 @@ namespace RootsBeta.NPCs
         static float IdleVineLength => 240;
 
         static float StopChargingThreshold => 800f;
-        static float BaseMovementSpeed => 0.125f;
+        static float BaseMovementSpeed => 0.75f;
         #endregion
         
         #region AI

@@ -1,6 +1,11 @@
+using Microsoft.Xna.Framework;
+using RootsBeta.NPCs;
 using RootsBeta.Utilities;
 using System;
+using System.ComponentModel;
+using System.Linq;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,6 +22,82 @@ namespace RootsBeta
             On_Player.UpdateArmorSets += DisableArmorSetBonus;
             On_Projectile.ghostHeal += SpectreHeal;
             On_Projectile.ghostHurt += SpectreHurt;
+            On_SmartCursorHelper.SmartCursorLookup += SnatcherSmartCursor;
+            On_NPC.StrikeNPC_int_float_int_bool_bool_bool += AllowTaking0Damage;
+            On_NPC.StrikeNPC_HitInfo_bool_bool += AllowTaking0Damage_HitInfo;
+        }
+
+        private int AllowTaking0Damage_HitInfo(On_NPC.orig_StrikeNPC_HitInfo_bool_bool orig, NPC self, NPC.HitInfo hit, bool fromNet, bool noPlayerInteraction)
+        {
+            if (self.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher)
+            {
+                if (hit.DamageType != ModContent.GetInstance<PickaxeDamage>())
+                {
+                    Color color2 = CombatText.DamagedHostile;
+                    if (fromNet)
+                        color2 = CombatText.OthersDamagedHostile;
+
+                    CombatText.NewText(new Rectangle((int)self.position.X, (int)self.position.Y, self.width, self.height), color2, 0, false);
+                    Vector2 dustPos = new(self.ai[0] * 16, self.ai[1] * 16);
+                    //Dust.NewDustDirect(dustPos, 16, 16, DustID.Plantera_Pink);
+                    for (var i = 0; i < 3; i++)
+                        Dust.NewDustDirect(dustPos, 16, 16, DustID.SpelunkerGlowstickSparkle,newColor:Color.Green);
+                    return 0;
+                }
+            }
+
+            return orig(self,hit, fromNet, noPlayerInteraction);
+        }
+
+        private int AllowTaking0Damage(On_NPC.orig_StrikeNPC_int_float_int_bool_bool_bool orig, NPC self, int Damage, float knockBack, int hitDirection, bool crit, bool fromNet, bool noPlayerInteraction)
+        {
+            if (self.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher)
+            {
+                if (!noPlayerInteraction)
+                {
+                    Color color2 = CombatText.DamagedHostile;
+                    if (fromNet)
+                        color2 = CombatText.OthersDamagedHostile;
+
+                    CombatText.NewText(new Rectangle((int)self.position.X, (int)self.position.Y, self.width, self.height), color2, 0, false);
+                    return 0;
+                }
+            }
+
+            return orig(self, Damage, knockBack, hitDirection, crit, fromNet, noPlayerInteraction);
+        }
+
+        private void SnatcherSmartCursor(On_SmartCursorHelper.orig_SmartCursorLookup orig, Player player)
+        {
+            orig(player);
+
+            var snatchers = Main.npc.Where(x => x.active && x.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher);
+
+            if (!snatchers.Any() || player.HeldItem.pick <= 0 || !Main.SmartCursorIsUsed)
+                return;
+
+            var reachableStartX = (int)(player.position.X / 16f) - Player.tileRangeX - player.HeldItem.tileBoost + 1;
+            var reachableEndX = (int)((player.position.X + (float)player.width) / 16f) + Player.tileRangeX + player.HeldItem.tileBoost - 1;
+            var reachableStartY = (int)(player.position.Y / 16f) - Player.tileRangeY - player.HeldItem.tileBoost + 1;
+            var reachableEndY = (int)((player.position.Y + (float)player.height) / 16f) + Player.tileRangeY + player.HeldItem.tileBoost - 2;
+            reachableStartX = Utils.Clamp(reachableStartX, 10, Main.maxTilesX - 10);
+            reachableEndX = Utils.Clamp(reachableEndX, 10, Main.maxTilesX - 10);
+            reachableStartY = Utils.Clamp(reachableStartY, 10, Main.maxTilesY - 10);
+            reachableEndY = Utils.Clamp(reachableEndY, 10, Main.maxTilesY - 10);
+
+            for (int i = reachableStartX; i <= reachableEndX; i++)
+            {
+                for (int j = reachableStartY; j <= reachableEndY; j++)
+                {
+                    if (snatchers.Any(x => (int)x.ai[0] == i && (int)x.ai[1] == j))
+                        {
+                        Main.SmartCursorX = (Player.tileTargetX = i);
+                        Main.SmartCursorY = (Player.tileTargetY = j);
+                        Main.SmartCursorShowing = true;
+                        return;
+                    }
+                }
+            }
         }
 
         private void SpectreHurt(On_Projectile.orig_ghostHurt orig, Projectile self, int dmg, Microsoft.Xna.Framework.Vector2 Position, Entity victim)

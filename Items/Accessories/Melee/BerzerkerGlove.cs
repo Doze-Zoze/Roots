@@ -18,7 +18,7 @@ namespace RootsBeta.Items.Accessories.Melee
         public override void UpdateEquip(Item item, Player player)
         {
             player.Roots().forceAutoswing = true;
-            player.magmaStone = true;
+            player.Roots().shootSpeedMult *= 1.1f;
             player.kbGlove = true;
             player.meleeScaleGlove = true;
         }

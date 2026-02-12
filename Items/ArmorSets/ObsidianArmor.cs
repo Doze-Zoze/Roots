@@ -8,7 +8,7 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class ObsidianArmor : BaseArmorSet
     {
-        public override string SetID => "Obsdian";
+        public override string SetID => "Obsidian";
         public override List<int> HeadsToApplyTo => [ItemID.ObsidianHelm];
         public override List<int> ChestsToApplyTo => [ItemID.ObsidianShirt];
         public override List<int> LegsToApplyTo => [ItemID.ObsidianPants];

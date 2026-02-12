@@ -43,9 +43,29 @@ namespace RootsBeta.NPCs
                 NPC.position.X -= NPC.width / 2;
                 NPC.position.Y -= NPC.height;
             }
-
             if (!NPC.HasValidTarget)
+            {
+                JumpCounter = 5;
+
+                NPC.scale *= (30 - (TeleportCounter - 6)) / 30f;
+                TeleportCounter++;
+                if (TeleportCounter > 36)
+                {
+
+                    Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-40f, -NPC.height / 2), NPC.velocity, 734);
+                    NPC.active = false;
+                    return;
+
+                }
+                for (var i = 0; i < 10; i++)
+                {
+                    int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 2f);
+                    Main.dust[num254].noGravity = true;
+                    var dust = Main.dust[num254];
+                    dust.velocity *= 0.5f;
+                }
                 return;
+            }
             int dir = (player.Center.X - NPC.Center.X) > 0 ? 1 : -1;
             if (NPC.velocity.X == 0 && !(NPC.velocity.Y == 0))
                 NPC.velocity.X += dir;
@@ -109,15 +129,15 @@ namespace RootsBeta.NPCs
                         break;
                     case 5:
                         {
-                            NPC.scale *= (30 - (TeleportCounter - 6)) / 30f;
+                            NPC.scale *= (45 - (TeleportCounter - 6)) / 45f;
                             TeleportCounter++;
-                            if (TeleportCounter > 36)
+                            if (TeleportCounter > 51)
                             {
 
                                 Gore.NewGore(NPC.GetSource_FromThis(),NPC.Center + new Vector2(-40f, -NPC.height / 2), NPC.velocity, 734);
                                 NPC.Bottom = TeleportPos;
                                 JumpCounter = 6;
-                                TeleportCounter = 30;
+                                TeleportCounter = 45;
 
                             }
                             for (var i = 0; i < 10; i++)
@@ -131,7 +151,7 @@ namespace RootsBeta.NPCs
                         break;
                     case 6:
                         {
-                            NPC.scale *= (30 - (TeleportCounter - 6)) / 30f;
+                            NPC.scale *= (45 - (TeleportCounter - 6)) / 45f;
                             TeleportCounter--;
                             if (TeleportCounter <= 0)
                             {
@@ -189,7 +209,7 @@ namespace RootsBeta.NPCs
                 NPC.velocity.X *= 0.8f;
                 if (JumpTimer == 30)
                 {
-                    bool outOfRange = (NPC.HasValidTarget && player.Center.Y < NPC.Center.Y - 160);
+                    bool outOfRange = (NPC.HasValidTarget && player.Center.Y < NPC.Center.Y - 320);
                     for (int j = 0; j < (outOfRange ? 7 : 3); j++)
                     {
 
