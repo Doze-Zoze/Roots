@@ -25,6 +25,10 @@ namespace RootsBeta.Utilities
             for (var i = 0; i < tooltips.Count; i++)
             {
                 var tooltip = tooltips[i];
+                if (tooltip.Name.Contains("Consumable"))
+                {
+                    tooltipIndex = i + 1;
+                }
                 if (tooltip.Name.Contains("Material"))
                 {
                     tooltipIndex = i+1;

@@ -638,7 +638,13 @@ Weapons: {
 	InfluxWaver.Tooltip: Does not require mana when you are inflicted with Electrified
 }
 
-Consumables.Mushroom.Tooltip: Inflicts 15 seconds of Potion Sickness
+Buffs.ManaSickness.Tooltip: Prevents drinking mana potions
+
+Consumables: {
+	Mushroom.Tooltip: Inflicts 15 seconds of Potion Sickness
+	ManaPotions.Tooltip: Inflicts 15 seconds of Mana Sickness, which prevents drinking mana potions
+}
+
 Tips.SummonManaCost: Can convert maximum mana into more summon slots, at the cost of 40 mana per slot
 
 eta: {

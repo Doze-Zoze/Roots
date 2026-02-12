@@ -43,6 +43,9 @@ namespace RootsBeta.Players
 
         public override void ResetEffects()
         {
+            Player.manaSickTimeMax = 900;
+            Player.manaSickTime = 900;
+            Player.manaSickLessDmg = 0;
             //rework needed
             if (Configs.instance.LifeChanges && !Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it

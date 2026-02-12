@@ -38,7 +38,7 @@ namespace RootsBeta.Items.Weapons
                         point -= new Vector2(0, 16);
                     }
                 }
-                for (var i = 0; i < 3; i++)
+                for (var i = 0; i < 2; i++)
                 {
                     var target = Main.MouseWorld + Main.rand.NextVector2Circular(100f, 100f);
                     var spawn = new Vector2(target.X - Main.rand.Next(500, 900) * player.direction, player.Center.Y - Main.rand.Next(600, 800));
