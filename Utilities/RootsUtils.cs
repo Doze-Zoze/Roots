@@ -1,6 +1,7 @@
 ﻿using RootsBeta.Items;
 using RootsBeta.Players;
 using RootsBeta.Projectiles;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Localization;
@@ -74,5 +75,7 @@ namespace RootsBeta.Utilities
         public static RootsGlobalItem Roots(this Item item) => item.GetGlobalItem<RootsGlobalItem>();
 
         public static int ScaledWithDifficulty(this int dmg, float amountPerDifficulty = 1f) => (int)(Main.masterMode ? dmg * amountPerDifficulty * 2 : Main.expertMode ? dmg * amountPerDifficulty : dmg);
+
+        public static float Sine0to1(float input) => (MathF.Sin(input) + 1) * 0.5f;
     }
 }

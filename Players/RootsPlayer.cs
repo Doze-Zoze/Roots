@@ -1,12 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using RootsBeta.NPCs;
 using RootsBeta.Projectiles;
 using RootsBeta.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -61,7 +58,7 @@ namespace RootsBeta.Players
 
             #endregion
             ModifyHitNPCWithProjectileFuncs = [];
-            ModifyHitNPCFuncs = []; 
+            ModifyHitNPCFuncs = [];
             ModifyHitNPCWithItemFuncs = [];
             OnHitNPCFuncs = [];
             OnHitNPCWithProjectileFuncs = [];
@@ -131,7 +128,7 @@ namespace RootsBeta.Players
         }
         public override void UpdateEquips()
         {
-            
+
 
             if (Configs.instance.RemoveClasses && Player.kbGlove)
                 Player.GetKnockback(DamageClass.Generic) *= 2f;
@@ -170,7 +167,7 @@ namespace RootsBeta.Players
         public override bool CanHitNPC(NPC target)
         {
             //if (target.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher)
-                //return false;
+            //return false;
             return true;
         }
     }

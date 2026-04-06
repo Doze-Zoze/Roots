@@ -8,6 +8,9 @@
 	<AssemblyName>RootsBeta</AssemblyName>
 		
 	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\RootsCore\RootsCore.csproj" />
+	</ItemGroup>
 
 	<!-- References -->
 

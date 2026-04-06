@@ -1,5 +1,5 @@
 ﻿using RootsBeta.Utilities;
-using System;
+using RootsCore;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -13,7 +13,7 @@ namespace RootsBeta.Items
         public static HashSet<string> WhitelistedMods = ["Roots", "RootsBeta"];
         public override void SetDefaults(Item item)
         {
-            if (Configs.instance.RemoveClasses &&( item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
+            if (Configs.instance.RemoveClasses && (item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
                 item.DamageType = DamageClass.Generic;
 
             if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])

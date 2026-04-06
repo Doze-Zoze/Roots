@@ -1,12 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using RootsBeta.Players;
+﻿using RootsBeta.Players;
 using RootsBeta.Utilities;
-using System;
+using RootsCore;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
@@ -24,7 +21,7 @@ namespace RootsBeta.Items.Accessories.Magic
         {
             player.GetModPlayer<RootsPlayer>().manaFlowerReduction *= 0.75f;
             player.manaRegenCount += 40;
-            HashSet<int> projToHide = [ProjectileID.TerraBlade2Shot,ProjectileID.Starfury,ProjectileID.EnchantedBeam,ProjectileID.TrueNightsEdge];
+            HashSet<int> projToHide = [ProjectileID.TerraBlade2Shot, ProjectileID.Starfury, ProjectileID.EnchantedBeam, ProjectileID.TrueNightsEdge];
             foreach (var item1 in projToHide)
             {
                 ProjSets.ManaSpawnedProjectile[item1] = true;

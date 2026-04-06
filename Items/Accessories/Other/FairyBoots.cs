@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RootsBeta.Utilities;
+using RootsCore;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -38,7 +39,8 @@ namespace RootsBeta.Items.Accessories.Magic
                         SoundEngine.PlaySound(SoundID.Item13, player.Center);
                     }
                 }
-            } else
+            }
+            else
             {
                 if (player.wingTime == 0 && player.wingTimeMax > 0 && player.statMana >= 2 && !player.mount.Active)
                 {

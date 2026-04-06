@@ -1,12 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using RootsBeta.Players;
-using RootsBeta.Utilities;
-using System;
+﻿using RootsBeta.Utilities;
+using RootsCore;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
@@ -25,7 +21,7 @@ namespace RootsBeta.Items.Accessories.Magic
             if (!hideVisual && player.HeldItem.damage > 0)
                 player.scope = true;
             player.GetDamage<GenericDamageClass>() += 0.10f;
-            player.GetCritChance <GenericDamageClass>() += 10;
+            player.GetCritChance<GenericDamageClass>() += 10;
             player.aggro -= 400;
         }
 

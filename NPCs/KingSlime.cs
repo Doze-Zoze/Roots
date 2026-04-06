@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using RootsCore;
 using System;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
-using Terraria.UI;
 
 namespace RootsBeta.NPCs
 {
@@ -104,7 +104,7 @@ namespace RootsBeta.NPCs
                         break;
                     case 4:
                         {
-                            for (var i = 0; i < (4 + MathF.Round(-2 * liferatio)) ; i++)
+                            for (var i = 0; i < (4 + MathF.Round(-2 * liferatio)); i++)
                             {
                                 var slime = NPC.NewNPCDirect(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.SlimeSpiked, ai0: 30, ai1: -1);
                                 slime.velocity += new Vector2(0, -10).RotatedByRandom(1);
@@ -113,8 +113,8 @@ namespace RootsBeta.NPCs
                                 if (slime.life < 1)
                                     slime.life = 1;
                                 NPC.life -= slime.life;
-                                    if (NPC.life < 1)
-                                        NPC.life = 1;
+                                if (NPC.life < 1)
+                                    NPC.life = 1;
                                 slime.netUpdate = true;
                                 NPC.netUpdate = true;
                                 int num254 = Dust.NewDust(slime.position, slime.width, slime.height, 4, slime.velocity.X, slime.velocity.Y, 150, new Color(0, 80, 255, 80), 1.2f);
@@ -134,7 +134,7 @@ namespace RootsBeta.NPCs
                             if (TeleportCounter > 51)
                             {
 
-                                Gore.NewGore(NPC.GetSource_FromThis(),NPC.Center + new Vector2(-40f, -NPC.height / 2), NPC.velocity, 734);
+                                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-40f, -NPC.height / 2), NPC.velocity, 734);
                                 NPC.Bottom = TeleportPos;
                                 JumpCounter = 6;
                                 TeleportCounter = 45;
@@ -231,7 +231,7 @@ namespace RootsBeta.NPCs
                 }
                 if (JumpTimer > 0)
                     JumpTimer--;
-                
+
             }
             var kslime = Main.npc.FirstOrDefault(x => x.active && x.type == NPCID.KingSlime);
             if (kslime is not null)
@@ -293,7 +293,7 @@ namespace RootsBeta.NPCs
                     case -2:
                         {
 
-                             int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 1.25f);
+                            int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 1.25f);
                             Main.dust[num254].noGravity = true;
                             var dust = Main.dust[num254];
                             dust.velocity *= 0.5f;

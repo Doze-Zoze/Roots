@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using RootsCore;
 
 namespace RootsBeta.Items.ArmorSets
 {

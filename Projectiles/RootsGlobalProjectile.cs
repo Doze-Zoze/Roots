@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using RootsCore;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Projectiles

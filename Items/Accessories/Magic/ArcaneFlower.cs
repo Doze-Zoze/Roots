@@ -1,12 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using RootsBeta.Players;
 using RootsBeta.Utilities;
-using System;
+using RootsCore;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
@@ -23,8 +20,8 @@ namespace RootsBeta.Items.Accessories.Magic
         public override void UpdateEquip(Item item, Player player)
         {
             float playerManaRatio = player.statMana / (float)player.statManaMax2;
-            player.Roots().manaFlowerReduction *= MathHelper.Lerp(0.5f,1, playerManaRatio);
-            player.manaRegenCount += (int)(120 * (1-playerManaRatio));
+            player.Roots().manaFlowerReduction *= MathHelper.Lerp(0.5f, 1, playerManaRatio);
+            player.manaRegenCount += (int)(120 * (1 - playerManaRatio));
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)

@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class BeetlerArmor : BaseArmorSet
+    public class BeetleArmor : BaseArmorSet
     {
         public override string SetID => "Beetle";
         public override List<int> HeadsToApplyTo => [ItemID.BeetleHelmet];

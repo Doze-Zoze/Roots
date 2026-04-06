@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using RootsCore;
 using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RootsBeta.Items.Weapons
 {

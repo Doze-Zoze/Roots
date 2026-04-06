@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using RootsBeta.NPCs;
 using RootsBeta.Utilities;
+using RootsCore;
 using System;
-using System.ComponentModel;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent;
@@ -15,11 +15,6 @@ namespace RootsBeta
     {
         void LoadEdits()
         {
-            On_Player.ItemCheck_PayMana += AllowItemUsageWithImproperMana;
-            On_Player.ItemCheck_ApplyManaRegenDelay += DisableManaRegenDelayWhenOutOfMana;
-            On_Player.ApplyEquipFunctional += DisableVanillaEquipmentBuffs;
-            On_Player.GrantArmorBenefits += DisableArmorPieceBuffs;
-            On_Player.UpdateArmorSets += DisableArmorSetBonus;
             On_Projectile.ghostHeal += SpectreHeal;
             On_Projectile.ghostHurt += SpectreHurt;
             On_SmartCursorHelper.SmartCursorLookup += SnatcherSmartCursor;
@@ -29,29 +24,32 @@ namespace RootsBeta
 
         private int AllowTaking0Damage_HitInfo(On_NPC.orig_StrikeNPC_HitInfo_bool_bool orig, NPC self, NPC.HitInfo hit, bool fromNet, bool noPlayerInteraction)
         {
-            if (self.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher)
+            if (self.TryGetGlobalNPC<AIOverrideSystem>(out var system))
             {
-                if (hit.DamageType != ModContent.GetInstance<PickaxeDamage>())
-                {
-                    Color color2 = CombatText.DamagedHostile;
-                    if (fromNet)
-                        color2 = CombatText.OthersDamagedHostile;
 
-                    CombatText.NewText(new Rectangle((int)self.position.X, (int)self.position.Y, self.width, self.height), color2, 0, false);
-                    Vector2 dustPos = new(self.ai[0] * 16, self.ai[1] * 16);
-                    //Dust.NewDustDirect(dustPos, 16, 16, DustID.Plantera_Pink);
-                    for (var i = 0; i < 3; i++)
-                        Dust.NewDustDirect(dustPos, 16, 16, DustID.SpelunkerGlowstickSparkle,newColor:Color.Green);
-                    return 0;
+                if (system.CurrentAiOverride is Snatcher)
+                {
+                    if (hit.DamageType != ModContent.GetInstance<PickaxeDamage>())
+                    {
+                        Color color2 = CombatText.DamagedHostile;
+                        if (fromNet)
+                            color2 = CombatText.OthersDamagedHostile;
+
+                        CombatText.NewText(new Rectangle((int)self.position.X, (int)self.position.Y, self.width, self.height), color2, 0, false);
+                        Vector2 dustPos = new(self.ai[0] * 16, self.ai[1] * 16);
+                        //Dust.NewDustDirect(dustPos, 16, 16, DustID.Plantera_Pink);
+                        for (var i = 0; i < 3; i++)
+                            Dust.NewDustDirect(dustPos, 16, 16, DustID.SpelunkerGlowstickSparkle, newColor: Color.Green);
+                        return 0;
+                    }
                 }
             }
-
-            return orig(self,hit, fromNet, noPlayerInteraction);
+            return orig(self, hit, fromNet, noPlayerInteraction);
         }
 
         private int AllowTaking0Damage(On_NPC.orig_StrikeNPC_int_float_int_bool_bool_bool orig, NPC self, int Damage, float knockBack, int hitDirection, bool crit, bool fromNet, bool noPlayerInteraction)
         {
-            if (self.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher)
+            if (self.GetGlobalNPC<AIOverrideSystem>().CurrentAiOverride is Snatcher)
             {
                 if (!noPlayerInteraction)
                 {
@@ -71,7 +69,7 @@ namespace RootsBeta
         {
             orig(player);
 
-            var snatchers = Main.npc.Where(x => x.active && x.GetGlobalNPC<RootsAIOverrideSystem>().CurrentAiOverride is Snatcher);
+            var snatchers = Main.npc.Where(x => x.active && x.GetGlobalNPC<AIOverrideSystem>().CurrentAiOverride is Snatcher);
 
             if (!snatchers.Any() || player.HeldItem.pick <= 0 || !Main.SmartCursorIsUsed)
                 return;
@@ -90,7 +88,7 @@ namespace RootsBeta
                 for (int j = reachableStartY; j <= reachableEndY; j++)
                 {
                     if (snatchers.Any(x => (int)x.ai[0] == i && (int)x.ai[1] == j))
-                        {
+                    {
                         Main.SmartCursorX = (Player.tileTargetX = i);
                         Main.SmartCursorY = (Player.tileTargetY = j);
                         Main.SmartCursorShowing = true;
@@ -190,61 +188,6 @@ namespace RootsBeta
                 }
             }
             Projectile.NewProjectile(self.GetSource_OnHit(victim), Position.X, Position.Y, 0f, 0f, ProjectileID.SpiritHeal, 0, 0f, self.owner, num4, num2);
-        }
-
-        private void DisableArmorSetBonus(On_Player.orig_UpdateArmorSets orig, Player self, int i)
-        {
-            if (ItemSets.DontUseVanillaSetBonus[self.armor[0].type] || ItemSets.DontUseVanillaSetBonus[self.armor[2].type] || ItemSets.DontUseVanillaSetBonus[self.armor[2].type])
-            {
-
-                ItemLoader.UpdateArmorSet(self, self.armor[0], self.armor[1], self.armor[2]);
-                return;
-            }
-            orig(self, i);
-        }
-
-        private void DisableArmorPieceBuffs(On_Player.orig_GrantArmorBenefits orig, Player self, Item armorPiece)
-        {
-            if (ItemSets.DontUseVanillaEquipEffects[armorPiece.type])
-            {
-                int type = armorPiece.type;
-                self.RefreshInfoAccsFromItemType(armorPiece);
-                self.RefreshMechanicalAccsFromItemType(type);
-
-                self.statDefense += armorPiece.defense;
-                self.lifeRegen += armorPiece.lifeRegen;
-                if (armorPiece.shieldSlot > 0)
-                    self.hasRaisableShield = true;
-
-                if (armorPiece.type == ItemID.AmberRobe || (armorPiece.type >= ItemID.AmethystRobe && armorPiece.type <= ItemID.DiamondRobe))
-                    self.hasGemRobe = true;
-
-                ItemLoader.UpdateEquip(armorPiece, self);
-                return;
-            }
-            orig(self, armorPiece);
-        }
-
-        private void DisableVanillaEquipmentBuffs(On_Player.orig_ApplyEquipFunctional orig, Player self, Item currentItem, bool hideVisual)
-        {
-            if (ItemSets.DontUseVanillaEquipEffects[currentItem.type])
-            {
-                ItemLoader.UpdateAccessory(currentItem, self, hideVisual);
-                return;
-            }
-            orig(self, currentItem, hideVisual);
-            return;
-        }
-        private void DisableManaRegenDelayWhenOutOfMana(On_Player.orig_ItemCheck_ApplyManaRegenDelay orig, Player self, Item sItem)
-        {
-            if (ItemSets.ShouldResetManaRegen[sItem.type]((self, sItem)))
-                orig(self, sItem);
-        }
-        private bool AllowItemUsageWithImproperMana(On_Player.orig_ItemCheck_PayMana orig, Player self, Item sItem, bool canUse)
-        {
-            if (ItemSets.DontConsumeManaOnSwing[sItem.type])
-                return canUse;
-            return orig(self, sItem, canUse);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using RootsBeta.Utilities;
+using RootsCore;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

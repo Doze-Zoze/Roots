@@ -1,11 +1,8 @@
-﻿using Microsoft.CodeAnalysis.Differencing;
-using Microsoft.Xna.Framework;
-using RootsBeta;
-using RootsBeta.Utilities;
+﻿using RootsBeta.Utilities;
+using RootsCore;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets

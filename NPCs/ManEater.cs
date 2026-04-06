@@ -1,17 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
+using RootsCore;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace RootsBeta.NPCs
 {
@@ -28,7 +18,7 @@ namespace RootsBeta.NPCs
         static float StopChargingThreshold => 800f;
         static float BaseMovementSpeed => 0.75f;
         #endregion
-        
+
         #region AI
         public override bool PreAI()
         {
@@ -65,14 +55,14 @@ namespace RootsBeta.NPCs
 
             float vineLength = IdleVineLength;
             if (NPC.ai[2] == 1)
-                vineLength =  playerVineDis;
+                vineLength = playerVineDis;
 
 
 
 
             NPC.velocity += BaseMovementSpeed * (NPC.DirectionTo(worldVinePos + toPlayerFromVine * vineLength));
             NPC.velocity *= 0.98f;
-            NPC.rotation = (toPlayer+toPlayerFromVine*2f).ToRotation() + MathHelper.Pi;
+            NPC.rotation = (toPlayer + toPlayerFromVine * 2f).ToRotation() + MathHelper.Pi;
         }
         #endregion
 

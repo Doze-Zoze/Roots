@@ -1,5 +1,6 @@
 displayName = Roots (beta)
 author = dozezoze
 version = 0.3
+modReferences = RootsCore
 homepage = https://discord.gg/ZXNsMPZS6x
 includeSource=true

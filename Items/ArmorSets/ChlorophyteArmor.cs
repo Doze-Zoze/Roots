@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using RootsCore;
 
 namespace RootsBeta.Items.ArmorSets
 {
@@ -54,7 +55,7 @@ namespace RootsBeta.Items.ArmorSets
             if (set == "ChlorophyteSet")
             {
                 player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Chlorophyte.SetBonus");
-                player.AddBuff(60, 18000);
+                player.AddBuff(BuffID.LeafCrystal, 18000);
             }
             else if (player.crystalLeaf)
             {

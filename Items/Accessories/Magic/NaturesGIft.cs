@@ -1,12 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using RootsBeta.Players;
-using RootsBeta.Utilities;
-using System;
+﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
