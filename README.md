@@ -10,3 +10,5 @@ These changes fall under these sweeping changes:
 - Removing natural life regeneration, but increasing the value of Healing Potions
 
 This is still in early beta, expect some features to be unpolished, unbalanced, or unfinished. Feedback is greatly appreciated! Feedback can be given on the Discord: https://discord.gg/ZXNsMPZS6x
+
+You can find Roots Core, the library mod for Roots, at https://github.com/Doze-Zoze/RootsCore
