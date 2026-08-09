@@ -43,6 +43,10 @@ namespace RootsBeta.Players
             Player.manaSickTimeMax = 900;
             Player.manaSickTime = 900;
             Player.manaSickLessDmg = 0;
+
+            if (Player.manaRegenDelay > 30)
+                Player.manaRegenDelay = 30;
+
             //rework needed
             if (Configs.instance.LifeChanges && !Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it

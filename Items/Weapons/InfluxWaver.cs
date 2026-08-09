@@ -7,6 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Terraria.Utilities;
 
 namespace RootsBeta.Items.Weapons
 {
@@ -20,14 +21,26 @@ namespace RootsBeta.Items.Weapons
             ItemSets.ShouldResetManaRegen[ItemID.InfluxWaver] = x => !x.Item1.electrified && x.Item1.statMana >= (int)(x.Item2.mana * x.Item1.manaCost);
         }
 
+        public override void HoldItem(Item item, Player player)
+        {
+            if (player.controlUseTile)
+            {
+                player.AddBuff(BuffID.Electrified, 60);
+                player.manaRegenDelay = 0;
+            }
+        }
+
         public override void SetDefaults(Item item)
         {
-            item.mana = 10;
+            item.mana = 20;
         }
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.electrified)
-                return true;
+            {
+                Projectile.NewProjectile(source, position, velocity, type, damage*2, knockback, player.whoAmI);
+                return false;
+            }
             if (player.CheckMana((int)Math.Max(0, item.mana * player.manaCost), true))
             {
                 return true;

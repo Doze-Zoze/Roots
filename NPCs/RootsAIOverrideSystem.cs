@@ -1,35 +1,44 @@
-﻿using MonoMod.Utils;
-using RootsCore;
+﻿using RootsCore;
 using System;
 using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.IO;
-using System.Reflection;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace RootsBeta.NPCs
 {
-    
+
     public partial class RootsAIOverrideSystem : GlobalNPC
     {
         public override void SetStaticDefaults()
         {
-            foreach (var item in AiOverridesDictionary)
+            foreach (var item in EnemyAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add(((n) => Configs.instance.AiChanges, item.Value));
+                NpcSets.AiOverrides[item.Key].Add(((n) => Configs.instance.EnemyChanges, item.Value));
+            }
+
+            foreach (var item in BossAIChanges)
+            {
+                NpcSets.AiOverrides[item.Key].Add(((n) => Configs.instance.BossChanges, item.Value));
+            }
+
+            if (Configs.instance.EnemyChanges)
+            {
+                NPCID.Sets.ImmuneToAllBuffs[NPCID.Snatcher] = true;
             }
         }
 
-        public static Dictionary<int, Func<NPC, AIOverride>> AiOverridesDictionary = new()
+        public static Dictionary<int, Func<NPC, AIOverride>> EnemyAIChanges = new()
         {
             { NPCID.ManEater, x => new ManEater(x) },
             { NPCID.Snatcher, x => new Snatcher(x) },
-            { NPCID.AngryTrapper, x => new AngryTrapper(x) },
+            { NPCID.AngryTrapper, x => new AngryTrapper(x) }
+        };
+
+
+        public static Dictionary<int, Func<NPC, AIOverride>> BossAIChanges = new()
+        {
             { NPCID.KingSlime, x => new KingSlime(x) },
             { NPCID.SlimeSpiked, x => new SpikedSlime(x) },
             { NPCID.WallofFlesh, x => new WoFMouth(x) },
@@ -44,11 +53,9 @@ namespace RootsBeta.NPCs
     public class PickaxeDamage : DamageClass { }
     public class AllowKillingSnatchers : GlobalTile
     {
-
-       
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            if (Configs.instance.AiChanges && FixExploitManEaters.SpotProtected(i, j))
+            if (Configs.instance.EnemyChanges && FixExploitManEaters.SpotProtected(i, j))
             {
                 effectOnly = true;
                 foreach (var item in Main.ActiveNPCs)
@@ -57,8 +64,8 @@ namespace RootsBeta.NPCs
                     {
                         NPC.HitInfo hit = new()
                         {
-                           Damage = Main.LocalPlayer.HeldItem.pick > 0 ? Main.LocalPlayer.HeldItem.pick : 100,
-                           DamageType = ModContent.GetInstance<PickaxeDamage>()
+                            Damage = Main.LocalPlayer.HeldItem.pick > 0 ? Main.LocalPlayer.HeldItem.pick : 100,
+                            DamageType = ModContent.GetInstance<PickaxeDamage>()
                         };
                         hit.Damage -= (int)(item.defense * 0.5f);
                         item.StrikeNPC(hit);

@@ -17,6 +17,7 @@ namespace RootsBeta.Items.Weapons
         public override void SetStaticDefaults()
         {
             ItemSets.DontConsumeManaOnSwing[ItemID.DD2SquireBetsySword] = true;
+            ItemSets.ShouldResetManaRegen[ItemID.DD2SquireBetsySword] = x => x.Item1.statMana >= (int)(x.Item2.mana * x.Item1.manaCost) || x.Item1.statLife > 5;
         }
 
         public override void SetDefaults(Item item)
@@ -32,6 +33,7 @@ namespace RootsBeta.Items.Weapons
             if (player.statLife > 5)
             {
                 player.lifeRegenCount -= 120 * 5;
+                player.CheckMana(0, true);
             }
             return true;
         }

@@ -28,6 +28,10 @@ namespace RootsBeta
 
         [DefaultValue(true)]
         [ReloadRequired]
-        public bool AiChanges;
+        public bool EnemyChanges;
+
+        [DefaultValue(false)]
+        [ReloadRequired]
+        public bool BossChanges;
     }
 }

@@ -635,7 +635,11 @@ Weapons: {
 		When out of Mana, consumes 5 HP per shot instead
 		This life loss will not kill you
 		'''
-	InfluxWaver.Tooltip: Does not require mana when you are inflicted with Electrified
+	InfluxWaver.Tooltip:
+		'''
+		Beams deal much more damage and do not require mana when you are inflicted with Electrified
+		Hold Right Click to inflict Electrified on yourself
+		'''
 }
 
 Buffs.ManaSickness.Tooltip: Prevents drinking mana potions
@@ -694,9 +698,9 @@ eta: {
 				}
 			}
 
-			AiChanges: {
+			EnemyChanges: {
 				Label: {
-					$parentVal: Ai Changes
+					$parentVal: Enemy Changes
 				}
 
 				Tooltip: {
@@ -704,9 +708,14 @@ eta: {
 				}
 			}
 
-			RemoveBaseCrit: {
-				Label: Remove Base Crit
-				Tooltip: ""
+			BossChanges: {
+				Label: {
+					$parentVal: Boss Changes
+				}
+
+				Tooltip: {
+					$parentVal: ""
+				}
 			}
 		}
 	}
