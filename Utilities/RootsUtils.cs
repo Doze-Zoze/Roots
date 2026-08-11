@@ -1,4 +1,4 @@
-﻿using RootsBeta.Items;
+using RootsBeta.Items;
 using RootsBeta.Players;
 using RootsBeta.Projectiles;
 using System;
@@ -13,11 +13,11 @@ namespace RootsBeta.Utilities
     {
         public static string GetLocalizedTextValue(string path)
         {
-            return Language.GetTextValue("Mods.Roots." + path);
+            return Language.GetTextValue("Mods.RootsBeta." + path);
         }
         public static LocalizedText GetLocalizedText(string path)
         {
-            return Language.GetText("Mods.Roots." + path);
+            return Language.GetText("Mods.RootsBeta." + path);
         }
 
         public static void ReplaceTooltipWith(this List<TooltipLine> tooltips, string path)
