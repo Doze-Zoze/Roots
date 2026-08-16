@@ -275,7 +275,7 @@ Armor: {
 		LeggingsTooltip:
 			'''
 			20% increased movement speed
-			10% reduced ammo cost
+			10% chance to save ammo
 			'''
 		SetBonus:
 			'''
@@ -360,7 +360,7 @@ Armor: {
 		SetBonus:
 			'''
 			10% increased critical strike chance
-			20% reduced ammo cost
+			20% chance to save ammo
 			'''
 	}
 
@@ -473,7 +473,7 @@ Armor: {
 		SetBonus:
 			'''
 			Not moving puts you in stealth, reducing chance for enemies to target you
-			Stealth provides up to 60% damage, 10% critical stirke chance, and 50% increased knockback
+			Stealth provides up to 60% damage, 10% critical strike chance, and 50% increased knockback
 			'''
 	}
 
@@ -623,7 +623,7 @@ Armor: {
 			'''
 		SetBonus:
 			'''
-			Increased Flameburst sentry effectiveness
+			Greatly increased Ballista sentry effectiveness
 			+1 Sentry Slot
 			'''
 	}
@@ -649,82 +649,45 @@ Consumables: {
 	ManaPotions.Tooltip: Inflicts 15 seconds of Mana Sickness, which prevents drinking mana potions
 }
 
-Tips.SummonManaCost: Can convert maximum mana into more summon slots, at the cost of 40 mana per slot
+Tips: {
+	SummonSlots: "{0} Empty Minion Slots"
+	SummonManaCost: Can convert maximum mana into more summon slots, at the cost of 40 mana per slot
+}
 
-eta: {
+DamageClasses.PickaxeDamage.DisplayName: Pickaxe Damage
+
+Configs: {
 	Configs: {
-		Configs: {
-			DisplayName: {
-				$parentVal: Configs
-			}
+		DisplayName: Configs
 
-			RemoveClasses: {
-				Label: {
-					$parentVal: Remove Classes
-				}
-
-				Tooltip: {
-					$parentVal: ""
-				}
-			}
-
-			ManaChanges: {
-				Label: {
-					$parentVal: Mana Changes
-				}
-
-				Tooltip: {
-					$parentVal: ""
-				}
-			}
-
-			AmmoChanges: {
-				Label: {
-					$parentVal: Ammo Changes
-				}
-
-				Tooltip: {
-					$parentVal: ""
-				}
-			}
-
-			LifeChanges: {
-				Label: {
-					$parentVal: Life Changes
-				}
-
-				Tooltip: {
-					$parentVal: ""
-				}
-			}
-
-			EnemyChanges: {
-				Label: {
-					$parentVal: Enemy Changes
-				}
-
-				Tooltip: {
-					$parentVal: ""
-				}
-			}
-
-			BossChanges: {
-				Label: {
-					$parentVal: Boss Changes
-				}
-
-				Tooltip: {
-					$parentVal: ""
-				}
-			}
+		RemoveClasses: {
+			Label: Remove Classes
+			Tooltip: ""
 		}
-	}
 
-	DamageClasses: {
-		PickaxeDamage: {
-			DisplayName: {
-				$parentVal: Pickaxe Damage
-			}
+		LifeChanges: {
+			Label: Life Changes
+			Tooltip: ""
+		}
+
+		ManaChanges: {
+			Label: Mana Changes
+			Tooltip: ""
+		}
+
+		AmmoChanges: {
+			Label: Ammo Changes
+			Tooltip: ""
+		}
+
+		EnemyChanges: {
+			Label: Enemy Changes
+			Tooltip: ""
+		}
+
+		BossChanges: {
+			Label: Boss Changes
+			Tooltip: ""
 		}
 	}
 }
