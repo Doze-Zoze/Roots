@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using RootsBeta.Players;
 using RootsBeta.Utilities;
 using System;
@@ -15,7 +15,7 @@ namespace RootsBeta.Items.Accessories.Magic
     {
         public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
         {
-            tip = Language.GetTextValue("Mods.Roots.Buffs.ManaSickness.Tooltip");
+            tip = Language.GetTextValue("Mods.RootsBeta.Buffs.ManaSickness.Tooltip");
         }
         public override bool IsLoadingEnabled(Mod mod) => Configs.instance.ManaChanges;
     }

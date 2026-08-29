@@ -1,4 +1,4 @@
-﻿using RootsBeta.Utilities;
+using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -17,7 +17,7 @@ namespace RootsBeta.Items
                 if (tooltip.Name == "CritChance")
                 {
                     if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
-                        tooltip.Text = $"{Main.LocalPlayer.maxMinions - (int)(Main.LocalPlayer.statManaMax2 / 40f) - Main.LocalPlayer.slotsMinions} Empty Minion Slots\n" + RootsUtils.GetLocalizedTextValue("Tips.SummonManaCost");
+                        tooltip.Text = RootsUtils.GetLocalizedText("Tips.SummonSlots").Format(Main.LocalPlayer.maxMinions - (int)(Main.LocalPlayer.statManaMax2 / 40f) - Main.LocalPlayer.slotsMinions) + $"\n" + RootsUtils.GetLocalizedTextValue("Tips.SummonManaCost");
                 }
                 if (tooltip.Name == "JourneyResearch")
                     tooltip.Hide();
