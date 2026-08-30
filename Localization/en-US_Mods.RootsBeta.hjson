@@ -122,7 +122,7 @@ Armor: {
 			'''
 		ChestplateTooltip:
 			'''
-			10% increased damage for Summon attacks
+			20% increased damage for Summon attacks
 			20% increased critical strike chance for Mana attacks
 			'''
 		LeggingsTooltip:

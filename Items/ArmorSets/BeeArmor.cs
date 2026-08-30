@@ -20,7 +20,7 @@ namespace RootsBeta.Items.ArmorSets
         public override string SetID => "Bee";
         public override List<int> HeadsToApplyTo => [ItemID.BeeHeadgear];
         public override List<int> ChestsToApplyTo => [ItemID.BeeBreastplate];
-        public override List<int> LegsToApplyTo => [ItemID.BeePants];
+        public override List<int> LegsToApplyTo => [ItemID.BeeGreaves];
 
         public override void HeadEquips(Item item, Player player)
         {
