@@ -9,21 +9,28 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class ChlorophyteHelmets : GlobalItem
     {
-        List<int> ItemsToApplyTo =
+        #region Parameters
+        private static int Defense => 13;
+        private static float DamageBonus => 0.16f;
+        private static float ManaCostReduction => 0.17f;
+        public static int ManaMaxBonus => 80;
+        #endregion
+
+        private List<int> _itemsToApplyTo =
         [
             ItemID.ChlorophyteHeadgear,
             ItemID.ChlorophyteHelmet,
             ItemID.ChlorophyteMask
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
-
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemsToApplyTo.Contains(item.type);
-
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.ReplaceTooltipWith("Armor.Chlorophyte.HelmetTooltip");
 
         public override void SetStaticDefaults()
         {
-            foreach (var item in ItemsToApplyTo)
+            foreach (var item in _itemsToApplyTo)
             {
                 ItemSets.DontUseVanillaEquipEffects[item] = true;
                 ItemSets.DontUseVanillaSetBonus[item] = true;
@@ -32,20 +39,20 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void SetDefaults(Item item)
         {
-            item.defense = 13;
+            item.defense = Defense;
         }
 
         public override void UpdateEquip(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.16f;
+            player.GetDamage<GenericDamageClass>() += DamageBonus;
             player.chloroAmmoCost80 = true;
-            player.manaCost *= (1 - 0.17f);
-            player.statManaMax2 += 80;
+            player.manaCost -= ManaCostReduction;
+            player.statManaMax2 += ManaMaxBonus;
         }
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.ChlorophytePlateMail && legs.type == ItemID.ChlorophyteGreaves)
+            if (_itemsToApplyTo.Contains(head.type) && body.type == ItemID.ChlorophytePlateMail && legs.type == ItemID.ChlorophyteGreaves)
                 return "ChlorophyteSet";
             return string.Empty;
         }
@@ -61,18 +68,12 @@ namespace RootsBeta.Items.ArmorSets
             {
                 for (int n = 0; n < player.buffType.Length; n++)
                 {
-                    if (player.buffType[n] == 60)
+                    if (player.buffType[n] == BuffID.LeafCrystal)
                     {
                         player.DelBuff(n);
                     }
                 }
             }
         }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            tooltips.ReplaceTooltipWith("Armor.Chlorophyte.HelmetTooltip");
-        }
-
     }
 }

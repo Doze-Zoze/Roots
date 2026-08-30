@@ -8,7 +8,7 @@ namespace RootsBeta
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        public static Configs instance => ModContent.GetInstance<Configs>();
+        public static Configs Instance => ModContent.GetInstance<Configs>();
 
         [DefaultValue(true)]
         [ReloadRequired]

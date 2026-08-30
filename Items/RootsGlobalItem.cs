@@ -9,11 +9,15 @@ namespace RootsBeta.Items
 {
     public partial class RootsGlobalItem : GlobalItem
     {
+        #region Parameters
+        public static float TitanGloveScale => 1.1f;
+        #endregion
 
         public static HashSet<string> WhitelistedMods = ["Roots", "RootsBeta"];
+
         public override void SetDefaults(Item item)
         {
-            if (Configs.instance.RemoveClasses && (item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
+            if (Configs.Instance.RemoveClasses && (item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
                 item.DamageType = DamageClass.Generic;
 
             if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
@@ -30,7 +34,7 @@ namespace RootsBeta.Items
         public override void ModifyItemScale(Item item, Player player, ref float scale)
         {
             if (player.meleeScaleGlove)
-                scale *= 1.1f;
+                scale *= TitanGloveScale;
         }
     }
 }

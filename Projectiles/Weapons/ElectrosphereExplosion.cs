@@ -20,7 +20,7 @@ namespace RootsBeta.Projectiles.Weapons
             if (projectile.scale >= 1f)
             {
                 projectile.position = projectile.Center;
-                projectile.width = (projectile.height = 144);
+                projectile.width = projectile.height = 144;
                 projectile.Center = projectile.position;
                 smokeAmount = 7;
                 electricAmount = 30;
@@ -48,29 +48,28 @@ namespace RootsBeta.Projectiles.Weapons
                 int g = Gore.NewGore(projectile.GetSource_FromThis(), projectile.position + new Vector2((projectile.width * Main.rand.Next(100)) / 100f, (projectile.height * Main.rand.Next(100)) / 100f) - Vector2.One * 10f, default, Main.rand.Next(61, 64));
                 Gore gore2 = Main.gore[g];
                 gore2.velocity *= 0.3f;
-                Main.gore[g].velocity.X += (float)Main.rand.Next(-10, 11) * 0.05f;
-                Main.gore[g].velocity.Y += (float)Main.rand.Next(-10, 11) * 0.05f;
+                Main.gore[g].velocity.X += Main.rand.Next(-10, 11) * 0.05f;
+                Main.gore[g].velocity.Y += Main.rand.Next(-10, 11) * 0.05f;
             }
 
             //Checking for other electrospheres in the area and spawning the sphere
-            if (Main.myPlayer == projectile.owner)
+            if (Main.myPlayer != projectile.owner) return false;
+            Rectangle sphereHitboxToCheck = new Rectangle((int)projectile.Center.X - 40, (int)projectile.Center.Y - 40, 80, 80);
+            for (int i = 0; i < 1000; i++)
             {
-                Rectangle sphereHitboxToCheck = new Rectangle((int)projectile.Center.X - 40, (int)projectile.Center.Y - 40, 80, 80);
-                for (int i = 0; i < 1000; i++)
-                {
-                    if (i != projectile.whoAmI && Main.projectile[i].active && Main.projectile[i].owner == projectile.owner && Main.projectile[i].type == ProjectileID.Electrosphere && Main.projectile[i].getRect().Intersects(sphereHitboxToCheck))
-                    {
-                        Main.projectile[i].ai[1] = 1f;
-                        Main.projectile[i].velocity = (projectile.Center - Main.projectile[i].Center) / 5f;
-                        Main.projectile[i].netUpdate = true;
-                    }
-                }
-
-                int projID = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center.X, projectile.Center.Y, 0f, 0f, ProjectileID.Electrosphere, projectile.damage, 0f, projectile.owner);
-                Main.projectile[projID].timeLeft = 30 * Main.rand.Next(2, 6);
-                Main.projectile[projID].localAI[0] = SoundEngine.PlaySound(SoundID.DD2_SkyDragonsFuryCircle, projectile.Center).ToFloat();
-                Main.projectile[projID].Roots().isManaProjectile = true;
+                if (i == projectile.whoAmI || !Main.projectile[i].active ||
+                    Main.projectile[i].owner != projectile.owner ||
+                    Main.projectile[i].type != ProjectileID.Electrosphere ||
+                    !Main.projectile[i].getRect().Intersects(sphereHitboxToCheck)) continue;
+                Main.projectile[i].ai[1] = 1f;
+                Main.projectile[i].velocity = (projectile.Center - Main.projectile[i].Center) / 5f;
+                Main.projectile[i].netUpdate = true;
             }
+
+            int projID = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center.X, projectile.Center.Y, 0f, 0f, ProjectileID.Electrosphere, projectile.damage, 0f, projectile.owner);
+            Main.projectile[projID].timeLeft = 30 * Main.rand.Next(2, 6);
+            Main.projectile[projID].localAI[0] = SoundEngine.PlaySound(SoundID.DD2_SkyDragonsFuryCircle, projectile.Center).ToFloat();
+            Main.projectile[projID].Roots().IsManaProjectile = true;
             return false;
         }
     }

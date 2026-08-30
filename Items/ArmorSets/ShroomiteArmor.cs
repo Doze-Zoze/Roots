@@ -8,6 +8,22 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class ShroomiteArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageMultiplierHead => 1.15f;
+        public static float DamageBonusChest => 0.13f;
+        public static int CritChanceBonusHead => 5;
+        public static int CritChanceBonusChest => 13;
+        public static int CritChanceBonusLegs => 7;
+        public static float MoveSpeedBonusLegs => 0.12f;
+        public static float StealthDamageMax => 0.6f;
+        public static float StealthCritMax => 10f;
+        public static float StealthKnockbackMax => 0.5f;
+        #endregion
+
+        private const float StealthDamageMaxVanilla = 0.6f;
+        private const float StealthCritMaxVanilla = 10f;
+        private const float StealthKnockbackMaxVanilla = 0.5f;
+
         public override string SetID => "Shroomite";
         public override List<int> HeadsToApplyTo => [ItemID.ShroomiteHeadgear, ItemID.ShroomiteMask,ItemID.ShroomiteHelmet];
         public override List<int> ChestsToApplyTo => [ItemID.ShroomiteBreastplate];
@@ -15,39 +31,48 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            if (item.type == ItemID.ShroomiteHeadgear) //Arrow
-                player.arrowDamage *= 0.15f;
-            if (item.type == ItemID.ShroomiteMask) //Bullet
-                player.bulletDamage *= 0.15f;
-            if (item.type == ItemID.ShroomiteHeadgear) //Specialist
-                player.specialistDamage *= 0.15f;
-            player.GetCritChance<GenericDamageClass>() += 5f;
+            switch (item.type)
+            {
+                //Arrow
+                case ItemID.ShroomiteHeadgear:
+                    player.arrowDamage *= DamageMultiplierHead;
+                    break;
+                //Bullet
+                case ItemID.ShroomiteMask:
+                    player.bulletDamage *= DamageMultiplierHead;
+                    break;
+                //Specialist
+                case ItemID.ShroomiteHelmet:
+                    player.specialistDamage *= DamageMultiplierHead;
+                    break;
+            }
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.13f;
-            player.GetCritChance<GenericDamageClass>() += 13f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusChest;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusChest;
             player.ammoCost80 = true;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetCritChance<GenericDamageClass>() += 7f;
-            player.moveSpeed += 0.12f;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusLegs;
+            player.moveSpeed += MoveSpeedBonusLegs;
         }
 
         public override void SetBonusEffect(Player player)
         {
             player.shroomiteStealth = true;
-            player.GetDamage<GenericDamageClass>() += (1f - player.stealth) * 0.6f;
-            player.GetCritChance<GenericDamageClass>() += (int)((1f - player.stealth) * 10f);
-            player.GetKnockback<GenericDamageClass>() *= 1f + (1f - player.stealth) * 0.5f;
+            player.GetDamage<GenericDamageClass>() += (1f - player.stealth) * StealthDamageMax;
+            player.GetCritChance<GenericDamageClass>() += (int)((1f - player.stealth) * StealthCritMax);
+            player.GetKnockback<GenericDamageClass>() *= 1f + (1f - player.stealth) * StealthKnockbackMax;
 
             //Cancel vanilla buffs
-            player.GetDamage<RangedDamageClass>() -= (1f - player.stealth) * 0.6f;
-            player.GetCritChance<RangedDamageClass>() -= (int)((1f - player.stealth) * 10f);
-            player.GetKnockback<RangedDamageClass>() /= 1f + (1f - player.stealth) * 0.5f;
+            player.GetDamage<RangedDamageClass>() -= (1f - player.stealth) * StealthDamageMaxVanilla;
+            player.GetCritChance<RangedDamageClass>() -= (int)((1f - player.stealth) * StealthCritMaxVanilla);
+            player.GetKnockback<RangedDamageClass>() /= 1f + (1f - player.stealth) * StealthKnockbackMaxVanilla;
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)

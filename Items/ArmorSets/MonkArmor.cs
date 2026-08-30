@@ -8,6 +8,16 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class MonkArmor : BaseArmorSet
     {
+        #region Parameters
+        public static int SentrySlotsHead => 1;
+        public static int SentrySlotsSet => 1;
+        public static float AttackSpeedBonusHead => 0.2f;
+        public static float SummonDamageBonusChest => 0.2f;
+        public static float CritChanceBonusChest => 0.15f;
+        public static float MoveSpeedBonusLegs => 0.2f;
+        public static float DamageBonusLegs => 0.1f;
+        #endregion
+
         public override string SetID => "Monk";
         public override List<int> HeadsToApplyTo => [ItemID.MonkBrows];
         public override List<int> ChestsToApplyTo => [ItemID.MonkShirt];
@@ -15,30 +25,30 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.maxTurrets++;
-            player.GetAttackSpeed<GenericDamageClass>() += 0.2f;
+            player.maxTurrets += SentrySlotsHead;
+            player.GetAttackSpeed<GenericDamageClass>() += AttackSpeedBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.2f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusChest;
+                return modifiers;
             });
-            player.GetCritChance<GenericDamageClass>() += 0.15f;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.moveSpeed += 0.2f;
-            player.GetDamage<GenericDamageClass>() += 0.1f;
+            player.moveSpeed += MoveSpeedBonusLegs;
+            player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.maxTurrets++;
+            player.maxTurrets += SentrySlotsSet;
             player.setMonkT2 = true;
         }
     }

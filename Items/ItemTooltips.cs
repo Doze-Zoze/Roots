@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items
 {
-    public partial class RootsGlobalItem : GlobalItem
+    public partial class RootsGlobalItem
     {
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
@@ -14,13 +14,13 @@ namespace RootsBeta.Items
             {
                 float addedCrit = 0;
                 item.ModItem?.ModifyWeaponCrit(Main.LocalPlayer, ref addedCrit);
-                if (tooltip.Name == "CritChance")
-                {
-                    if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
-                        tooltip.Text = RootsUtils.GetLocalizedText("Tips.SummonSlots").Format(Main.LocalPlayer.maxMinions - (int)(Main.LocalPlayer.statManaMax2 / 40f) - Main.LocalPlayer.slotsMinions) + $"\n" + RootsUtils.GetLocalizedTextValue("Tips.SummonManaCost");
-                }
-                if (tooltip.Name == "JourneyResearch")
-                    tooltip.Hide();
+                if (tooltip.Name != "CritChance") continue;
+                if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
+                    tooltip.Text = 
+                        RootsUtils.GetLocalizedText("Tips.SummonSlots").Format(Main.LocalPlayer.maxMinions -
+                        (int)(Main.LocalPlayer.statManaMax2 / 40f) - Main.LocalPlayer.slotsMinions)
+                        + $"\n" 
+                        + RootsUtils.GetLocalizedTextValue("Tips.SummonManaCost");
             }
 
             if (item.type == ItemID.MagmaStone)

@@ -9,21 +9,29 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class MythrilHelmets : GlobalItem
     {
-        List<int> ItemsToApplyTo =
+        #region Parameters
+        public static int Defense => 3;
+        public static float DamageBonus => 0.14f;
+        public static int ManaMaxBonus => 80;
+        public static float ManaCostReductionSet => 0.2f;
+        public static float CritDamageBonusSet => 0.15f;
+        #endregion
+
+        private List<int> _itemsToApplyTo =
         [
             ItemID.MythrilHelmet,
             ItemID.MythrilHat,
             ItemID.MythrilHood
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
-
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemsToApplyTo.Contains(item.type);
-
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.ReplaceTooltipWith("Armor.Mythril.HelmetTooltip");
 
         public override void SetStaticDefaults()
         {
-            foreach (var item in ItemsToApplyTo)
+            foreach (var item in _itemsToApplyTo)
             {
                 ItemSets.DontUseVanillaEquipEffects[item] = true;
                 ItemSets.DontUseVanillaSetBonus[item] = true;
@@ -32,41 +40,33 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void SetDefaults(Item item)
         {
-            item.defense = 3;
+            item.defense = Defense;
         }
 
         public override void UpdateEquip(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.14f;
-            player.statManaMax2 += 80;
+            player.GetDamage<GenericDamageClass>() += DamageBonus;
+            player.statManaMax2 += ManaMaxBonus;
             player.ammoCost80 = true;
         }
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.MythrilChainmail && legs.type == ItemID.MythrilGreaves)
+            if (_itemsToApplyTo.Contains(head.type) && body.type == ItemID.MythrilChainmail && legs.type == ItemID.MythrilGreaves)
                 return "MythrilSet";
             return string.Empty;
         }
 
         public override void UpdateArmorSet(Player player, string set)
         {
-            if (set == "MythrilSet")
+            if (set != "MythrilSet") return;
+            player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Mythril.SetBonus");
+            player.manaCost -= ManaCostReductionSet;
+            player.Roots().ModifyHitNPCFuncs.Add((_, _, modifiers) =>
             {
-                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Mythril.SetBonus");
-                player.manaCost *= 0.8f;
-                player.Roots().ModifyHitNPCFuncs.Add((player, npc, modifiers) =>
-                {
-                    modifiers.CritDamage += 0.15f;
-                    return modifiers;
-                });
-            }
+                modifiers.CritDamage += CritDamageBonusSet;
+                return modifiers;
+            });
         }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            tooltips.ReplaceTooltipWith("Armor.Mythril.HelmetTooltip");
-        }
-
     }
 }

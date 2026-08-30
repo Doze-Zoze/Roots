@@ -9,21 +9,28 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class TitaniumHelmets : GlobalItem
     {
-        List<int> ItemsToApplyTo =
+        #region Parameters
+        public static int Defense => 18;
+        public static float DamageBonus => 0.12f;
+        public static int CritChanceBonus => 5;
+        public static int ManaMaxBonus => 100;
+        #endregion
+
+        private List<int> _itemsToApplyTo =
         [
             ItemID.TitaniumHeadgear,
             ItemID.TitaniumMask,
             ItemID.TitaniumHelmet
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
-
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemsToApplyTo.Contains(item.type);
-
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.ReplaceTooltipWith("Armor.Titanium.HelmetTooltip");
 
         public override void SetStaticDefaults()
         {
-            foreach (var item in ItemsToApplyTo)
+            foreach (var item in _itemsToApplyTo)
             {
                 ItemSets.DontUseVanillaEquipEffects[item] = true;
                 ItemSets.DontUseVanillaSetBonus[item] = true;
@@ -32,36 +39,28 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void SetDefaults(Item item)
         {
-            item.defense = 18;
+            item.defense = Defense;
         }
 
         public override void UpdateEquip(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.12f;
-            player.GetCritChance<GenericDamageClass>() += 5;
-            player.statManaMax2 += 100;
+            player.GetDamage<GenericDamageClass>() += DamageBonus;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonus;
+            player.statManaMax2 += ManaMaxBonus;
         }
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.TitaniumBreastplate && legs.type == ItemID.TitaniumLeggings)
+            if (_itemsToApplyTo.Contains(head.type) && body.type == ItemID.TitaniumBreastplate && legs.type == ItemID.TitaniumLeggings)
                 return "TitaniumSet";
             return string.Empty;
         }
 
         public override void UpdateArmorSet(Player player, string set)
         {
-            if (set == "TitaniumSet")
-            {
-                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Titanium.SetBonus");
-                player.onHitTitaniumStorm = true;
-            }
+            if (set != "TitaniumSet") return;
+            player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Titanium.SetBonus");
+            player.onHitTitaniumStorm = true;
         }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            tooltips.ReplaceTooltipWith("Armor.Titanium.HelmetTooltip");
-        }
-
     }
 }

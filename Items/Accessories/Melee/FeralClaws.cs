@@ -9,21 +9,20 @@ namespace RootsBeta.Items.Accessories.Melee
 {
     public class FeralClaws : GlobalItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.FeralClaws;
+        #region Parameters
+        public static float ShootSpeedMultiplier => 1.1f;
+        #endregion
 
-        public override void SetDefaults(Item entity)
-        {
-            ItemSets.DontUseVanillaEquipEffects[ItemID.FeralClaws] = true;
-        }
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.FeralClaws;
+        public override void SetDefaults(Item entity) => ItemSets.DontUseVanillaEquipEffects[ItemID.FeralClaws] = true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) => 
+            tooltips.ReplaceTooltipWith("Accessories.FeralClaws.Tooltip");
+
         public override void UpdateEquip(Item item, Player player)
         {
-            player.Roots().shootSpeedMult *= 1.1f;
-            player.Roots().forceAutoswing = true;
-        }
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            tooltips.ReplaceTooltipWith("Accessories.FeralClaws.Tooltip");
+            player.Roots().ShootSpeedMult *= ShootSpeedMultiplier;
+            player.Roots().ForceAutoSwing = true;
         }
     }
 }

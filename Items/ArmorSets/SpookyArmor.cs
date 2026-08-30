@@ -8,6 +8,17 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class SpookyArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.11f;
+        public static float DamageBonusChest => 0.11f;
+        public static float DamageBonusLegs => 0.11f;
+        public static int MinionSlotsHead => 1;
+        public static int MinionSlotsChest => 2;
+        public static int MinionSlotsLegs => 1;
+        public static float MoveSpeedBonusLegs => 0.2f;
+        public static float SummonDamageBonusSet => 0.25f;
+        #endregion
+
         public override string SetID => "Spooky";
         public override List<int> HeadsToApplyTo => [ItemID.SpookyHelmet];
         public override List<int> ChestsToApplyTo => [ItemID.SpookyBreastplate];
@@ -15,29 +26,29 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.11f;
-            player.slotsMinions++;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
+            player.slotsMinions += MinionSlotsHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.11f;
-            player.slotsMinions+=2;
+            player.GetDamage<GenericDamageClass>() += DamageBonusChest;
+            player.slotsMinions += MinionSlotsChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.11f;
-            player.slotsMinions++;
-            player.moveSpeed += 0.2f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
+            player.slotsMinions += MinionSlotsLegs;
+            player.moveSpeed += MoveSpeedBonusLegs;
         }
         public override void SetBonusEffect(Player player)
         {
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.25f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusSet;
+                return modifiers;
             });
         }
     }

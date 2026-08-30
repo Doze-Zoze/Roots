@@ -1,30 +1,28 @@
-﻿using Microsoft.Xna.Framework;
-using RootsBeta.Players;
-using RootsBeta.Utilities;
-using System;
-using System.Collections.Generic;
+﻿using RootsBeta.Items.ArmorSets;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace RootsBeta.Items.Accessories.Magic
+namespace RootsBeta.Buffs
 {
     public class BeetleMight : GlobalBuff
     {
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
+        #region Parameters
+        public static float BeetleMightDamageModifier => BeetleArmor.BeetleMightDamageModifier;
+        #endregion
+        
+        private const float BeetleMightDamageModifierVanilla = 0.1f;
+
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+
         public override void Update(int type, Player player, ref int buffIndex)
         {
-            if (type >= BuffID.BeetleMight1 && type <= BuffID.BeetleMight3)
-            {
-
-                player.GetDamage<GenericDamageClass>() += 0.1f * player.beetleOrbs;
-                player.GetAttackSpeed<GenericDamageClass>() += 0.1f * player.beetleOrbs;
-                //cancel the vanilla buff so it doesn't double stack for other mods lol
-                player.GetDamage<MeleeDamageClass>() -= 0.1f * player.beetleOrbs;
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f * player.beetleOrbs;
-            }
+            if (type is < BuffID.BeetleMight1 or > BuffID.BeetleMight3) return;
+            player.GetDamage<GenericDamageClass>() += BeetleMightDamageModifier * player.beetleOrbs;
+            player.GetAttackSpeed<GenericDamageClass>() += BeetleMightDamageModifier * player.beetleOrbs;
+            //cancel the vanilla buff so it doesn't double stack for other mods lol
+            player.GetDamage<MeleeDamageClass>() -= BeetleMightDamageModifierVanilla * player.beetleOrbs;
+            player.GetAttackSpeed<MeleeDamageClass>() -= BeetleMightDamageModifierVanilla * player.beetleOrbs;
         }
     }
 }

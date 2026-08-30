@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using RootsBeta.Players;
+using RootsBeta.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,6 +9,13 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class MoltenArmor : BaseArmorSet
     {
+        #region Parameters
+        public static int CritChanceBonusHead => 7;
+        public static float DamageBonusChest => 0.05f;
+        public static float AttackSpeedBonusLegs => 0.07f;
+        public static float CloseRangeDamageBonusSet => 0.1f;
+        #endregion
+
         public override string SetID => "Molten";
         public override List<int> HeadsToApplyTo => [ItemID.MoltenHelmet];
         public override List<int> ChestsToApplyTo => [ItemID.MoltenBreastplate];
@@ -14,12 +23,12 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetCritChance<GenericDamageClass>() += 7f;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.05f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusChest;
         }
 
         public override void LegsEquips(Item item, Player player)
@@ -31,7 +40,12 @@ namespace RootsBeta.Items.ArmorSets
         {
             player.buffImmune[BuffID.OnFire] = true;
             player.buffImmune[BuffID.Burning] = true;
-            player.GetDamage<GenericDamageClass>() += 0.1f;
+            player.Roots().ModifyHitNPCFuncs.Add((plr, npc, modifiers) =>
+            {
+                if (plr.Distance(npc.Center) > RootsPlayer.CloseRangeDistance)
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += CloseRangeDamageBonusSet;
+                return modifiers;
+            });
         }
     }
 }

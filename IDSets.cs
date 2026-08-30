@@ -5,9 +5,9 @@ using Terraria.ModLoader;
 
 namespace RootsBeta
 {
-    public partial class RootsBeta : Mod
+    public partial class RootsBeta
     {
-        readonly List<int> _projToMarkAsMana =
+        private readonly List<int> _projToMarkAsMana =
             [
                 ProjectileID.TerraBlade2Shot,
                 ProjectileID.Starfury,

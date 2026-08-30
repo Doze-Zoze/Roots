@@ -1,33 +1,31 @@
-﻿using Microsoft.Xna.Framework;
-using RootsBeta.Players;
-using RootsBeta.Utilities;
-using System;
+﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Consumables
 {
     public class Mushroom : GlobalItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.LifeChanges;
+        #region Parameters
+        public static int Healing => 20;
+        public static int HealingCooldownSeconds => 15;
+        #endregion
+
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.LifeChanges;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.Mushroom;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.ReplaceTooltipWith("Consumables.Mushroom.Tooltip");
 
         public override void SetDefaults(Item entity)
         {
-            entity.healLife = 20;
-        }
-        public override void ModifyPotionDelay(Item item, Player player, ref int baseDelay)
-        {
-            baseDelay = 15 * 60;
+            entity.healLife = Healing;
         }
 
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        public override void ModifyPotionDelay(Item item, Player player, ref int baseDelay)
         {
-            tooltips.ReplaceTooltipWith("Consumables.Mushroom.Tooltip");
+            baseDelay = HealingCooldownSeconds * 60;
         }
     }
 }

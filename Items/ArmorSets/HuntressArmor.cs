@@ -1,5 +1,6 @@
 ﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
+using RootsBeta.Players;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +9,14 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class HuntressArmor : BaseArmorSet
     {
+        #region Parameters
+        public static int SentrySlotsHead => 1;
+        public static int SentrySlotsLegs => 1;
+        public static int CritChanceBonusHead => 10;
+        public static float SummonOrLongRangeDamageBonusChest => 0.2f;
+        public static float MoveSpeedBonusLegs => 0.2f;
+        #endregion
+
         public override string SetID => "Huntress";
         public override List<int> HeadsToApplyTo => [ItemID.HuntressWig];
         public override List<int> ChestsToApplyTo => [ItemID.HuntressJerkin];
@@ -15,29 +24,29 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.maxTurrets++;
-            player.GetCritChance<GenericDamageClass>() += 0.1f;
+            player.maxTurrets += SentrySlotsHead;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, npc, modifiers) =>
             {
-                if (proj.IsMinionOrSentryRelated || (player.Distance(npc.Center) > 16 * 25))
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.2f;
-                return mod;
+                if (proj.IsMinionOrSentryRelated || (plr.Distance(npc.Center) > RootsPlayer.CloseRangeDistance))
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonOrLongRangeDamageBonusChest;
+                return modifiers;
             });
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.moveSpeed += 0.2f;
+            player.moveSpeed += MoveSpeedBonusLegs;
             player.huntressAmmoCost90 = true;
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.maxTurrets++;
+            player.maxTurrets += SentrySlotsLegs;
             player.setHuntressT2 = true;
         }
     }

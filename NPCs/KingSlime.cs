@@ -5,12 +5,12 @@ using System.Linq;
 using Terraria;
 using Terraria.ID;
 
+// TODO: Unfuck this
+
 namespace RootsBeta.NPCs
 {
-    public class KingSlime : AIOverride
+    public class KingSlime(NPC npc) : AIOverride(npc)
     {
-        public KingSlime(NPC npc) : base(npc) { }
-
         #region Balancing Stats
 
         #endregion
@@ -59,116 +59,116 @@ namespace RootsBeta.NPCs
                 }
                 for (var i = 0; i < 10; i++)
                 {
-                    int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 2f);
+                    int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 2f);
                     Main.dust[num254].noGravity = true;
                     var dust = Main.dust[num254];
                     dust.velocity *= 0.5f;
                 }
                 return;
             }
-            int dir = (player.Center.X - NPC.Center.X) > 0 ? 1 : -1;
-            if (NPC.velocity.X == 0 && !(NPC.velocity.Y == 0))
+            int dir = (Player.Center.X - NPC.Center.X) > 0 ? 1 : -1;
+            if (NPC.velocity.X == 0 && NPC.velocity.Y != 0)
                 NPC.velocity.X += dir;
-            if (JumpTimer <= 0)
-                switch (JumpCounter)
+            if (!(JumpTimer <= 0)) return;
+            switch (JumpCounter)
+            {
+                case 0:
                 {
-                    case 0:
-                        {
-                            NPC.velocity += new Vector2(3 * dir, -10);
-                            JumpTimer = 15 + liferatio * 30;
-                            JumpCounter++;
-                            TeleportCounter++;
-                        }
-                        break;
-                    case 1:
-                        {
-                            NPC.velocity += new Vector2(5 * dir, -8);
-                            JumpTimer = 10 + liferatio * 10;
-                            JumpCounter = dir == -1 ? 2 : 3;
-                            TeleportCounter++;
-                        }
-                        break;
-                    case 2:
-                        {
-                            NPC.velocity += new Vector2(-8, -5);
-                            JumpTimer = 5;
-                            JumpCounter = 4;
-                        }
-                        break;
-                    case 3:
-                        {
-                            NPC.velocity += new Vector2(8, -5);
-                            JumpTimer = 5;
-                            JumpCounter = 4;
-                        }
-                        break;
-                    case 4:
-                        {
-                            for (var i = 0; i < (4 + MathF.Round(-2 * liferatio)); i++)
-                            {
-                                var slime = NPC.NewNPCDirect(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.SlimeSpiked, ai0: 30, ai1: -1);
-                                slime.velocity += new Vector2(0, -10).RotatedByRandom(1);
-                                slime.lifeMax = (int)(slime.lifeMax * 0.33f);
-                                slime.life = (int)(slime.lifeMax * liferatio);
-                                if (slime.life < 1)
-                                    slime.life = 1;
-                                NPC.life -= slime.life;
-                                if (NPC.life < 1)
-                                    NPC.life = 1;
-                                slime.netUpdate = true;
-                                NPC.netUpdate = true;
-                                int num254 = Dust.NewDust(slime.position, slime.width, slime.height, 4, slime.velocity.X, slime.velocity.Y, 150, new Color(0, 80, 255, 80), 1.2f);
-                                Main.dust[num254].noGravity = true;
-                                var dust = Main.dust[num254];
-                                dust.velocity *= 0.5f;
-                            }
-                            JumpTimer = 15 + liferatio * 30;
-                            TeleportPos = player.Center;
-                            JumpCounter = TeleportCounter < 6 ? 0 : 5;
-                        }
-                        break;
-                    case 5:
-                        {
-                            NPC.scale *= (45 - (TeleportCounter - 6)) / 45f;
-                            TeleportCounter++;
-                            if (TeleportCounter > 51)
-                            {
-
-                                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-40f, -NPC.height / 2), NPC.velocity, 734);
-                                NPC.Bottom = TeleportPos;
-                                JumpCounter = 6;
-                                TeleportCounter = 45;
-
-                            }
-                            for (var i = 0; i < 10; i++)
-                            {
-                                int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 2f);
-                                Main.dust[num254].noGravity = true;
-                                var dust = Main.dust[num254];
-                                dust.velocity *= 0.5f;
-                            }
-                        }
-                        break;
-                    case 6:
-                        {
-                            NPC.scale *= (45 - (TeleportCounter - 6)) / 45f;
-                            TeleportCounter--;
-                            if (TeleportCounter <= 0)
-                            {
-                                JumpCounter = 0;
-                                TeleportCounter = 0;
-                                JumpTimer = 1;
-                            }
-                            for (var i = 0; i < 10; i++)
-                            {
-                                int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 2f);
-                                Main.dust[num254].noGravity = true;
-                                var dust = Main.dust[num254];
-                                dust.velocity *= 0.5f;
-                            }
-                        }
-                        break;
+                    NPC.velocity += new Vector2(3 * dir, -10);
+                    JumpTimer = 15 + liferatio * 30;
+                    JumpCounter++;
+                    TeleportCounter++;
                 }
+                    break;
+                case 1:
+                {
+                    NPC.velocity += new Vector2(5 * dir, -8);
+                    JumpTimer = 10 + liferatio * 10;
+                    JumpCounter = dir == -1 ? 2 : 3;
+                    TeleportCounter++;
+                }
+                    break;
+                case 2:
+                {
+                    NPC.velocity += new Vector2(-8, -5);
+                    JumpTimer = 5;
+                    JumpCounter = 4;
+                }
+                    break;
+                case 3:
+                {
+                    NPC.velocity += new Vector2(8, -5);
+                    JumpTimer = 5;
+                    JumpCounter = 4;
+                }
+                    break;
+                case 4:
+                {
+                    for (var i = 0; i < (4 + MathF.Round(-2 * liferatio)); i++)
+                    {
+                        var slime = NPC.NewNPCDirect(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.SlimeSpiked, ai0: 30, ai1: -1);
+                        slime.velocity += new Vector2(0, -10).RotatedByRandom(1);
+                        slime.lifeMax = (int)(slime.lifeMax * 0.33f);
+                        slime.life = (int)(slime.lifeMax * liferatio);
+                        if (slime.life < 1)
+                            slime.life = 1;
+                        NPC.life -= slime.life;
+                        if (NPC.life < 1)
+                            NPC.life = 1;
+                        slime.netUpdate = true;
+                        NPC.netUpdate = true;
+                        int num254 = Dust.NewDust(slime.position, slime.width, slime.height, DustID.TintableDust, slime.velocity.X, slime.velocity.Y, 150, new Color(0, 80, 255, 80), 1.2f);
+                        Main.dust[num254].noGravity = true;
+                        var dust = Main.dust[num254];
+                        dust.velocity *= 0.5f;
+                    }
+                    JumpTimer = 15 + liferatio * 30;
+                    _teleportPos = Player.Center;
+                    JumpCounter = TeleportCounter < 6 ? 0 : 5;
+                }
+                    break;
+                case 5:
+                {
+                    NPC.scale *= (45 - (TeleportCounter - 6)) / 45f;
+                    TeleportCounter++;
+                    if (TeleportCounter > 51)
+                    {
+
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-40f, -NPC.height / 2), NPC.velocity, 734);
+                        NPC.Bottom = _teleportPos;
+                        JumpCounter = 6;
+                        TeleportCounter = 45;
+
+                    }
+                    for (var i = 0; i < 10; i++)
+                    {
+                        int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 2f);
+                        Main.dust[num254].noGravity = true;
+                        var dust = Main.dust[num254];
+                        dust.velocity *= 0.5f;
+                    }
+                }
+                    break;
+                case 6:
+                {
+                    NPC.scale *= (45 - (TeleportCounter - 6)) / 45f;
+                    TeleportCounter--;
+                    if (TeleportCounter <= 0)
+                    {
+                        JumpCounter = 0;
+                        TeleportCounter = 0;
+                        JumpTimer = 1;
+                    }
+                    for (var i = 0; i < 10; i++)
+                    {
+                        int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 2f);
+                        Main.dust[num254].noGravity = true;
+                        var dust = Main.dust[num254];
+                        dust.velocity *= 0.5f;
+                    }
+                }
+                    break;
+            }
 
         }
         #endregion
@@ -177,21 +177,20 @@ namespace RootsBeta.NPCs
         #endregion
 
         #region Helpers
-        Player player => Main.player[NPC.target];
-        public ref float JumpTimer => ref NPC.ai[0];
-        public ref float JumpCounter => ref NPC.ai[1];
 
-        public ref float TeleportCounter => ref NPC.ai[2];
+        private Player Player => Main.player[NPC.target];
+        private ref float JumpTimer => ref NPC.ai[0];
+        private ref float JumpCounter => ref NPC.ai[1];
 
-        public Vector2 TeleportPos = new();
+        private ref float TeleportCounter => ref NPC.ai[2];
+
+        private Vector2 _teleportPos;
         #endregion
 
     }
 
-    public class SpikedSlime : AIOverride
+    public class SpikedSlime(NPC npc) : AIOverride(npc)
     {
-        public SpikedSlime(NPC npc) : base(npc) { }
-
         #region Balancing Stats
 
         #endregion
@@ -214,19 +213,19 @@ namespace RootsBeta.NPCs
                     {
 
                         Vector2 vector5 = new Vector2(j - (outOfRange ? 3 : 1), -3f);
-                        vector5.X *= 1f + (float)Main.rand.Next(-50, 51) * 0.005f;
-                        vector5.Y *= 1f + (float)Main.rand.Next(-50, 51) * 0.005f;
+                        vector5.X *= 1f + Main.rand.Next(-50, 51) * 0.005f;
+                        vector5.Y *= 1f + Main.rand.Next(-50, 51) * 0.005f;
                         vector5.Normalize();
-                        vector5 *= 4f + (float)Main.rand.Next(-50, 51) * 0.01f;
+                        vector5 *= 4f + Main.rand.Next(-50, 51) * 0.01f;
 
-                        int attackDamage_ForProjectiles2 = NPC.GetAttackDamage_ForProjectiles(9f, 9f);
-                        Vector2 vector4 = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
+                        int attackDamageForProjectiles2 = NPC.GetAttackDamage_ForProjectiles(9f, 9f);
+                        Vector2 vector4 = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
 
                         if (NPC.HasValidTarget && player.Center.Y < NPC.Center.Y - 160)
                         {
                             vector5 *= -(player.Center.Y - NPC.Center.Y) * 0.25f;
                         }
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), vector4.X, vector4.Y, vector5.X, vector5.Y, 605, attackDamage_ForProjectiles2, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), vector4.X, vector4.Y, vector5.X, vector5.Y, ProjectileID.SpikedSlimeSpike, attackDamageForProjectiles2, 0f, Main.myPlayer);
                     }
                 }
                 if (JumpTimer > 0)
@@ -267,57 +266,57 @@ namespace RootsBeta.NPCs
             if (!NPC.HasValidTarget)
                 return;
             int dir = (player.Center.X - NPC.Center.X) > 0 ? 1 : -1;
-            if (JumpTimer <= 0)
-                switch (JumpCounter)
+            if (!(JumpTimer <= 0)) return;
+            switch (JumpCounter)
+            {
+
+                case -1:
+                {
+                    JumpCounter++;
+                }
+                    break;
+                case 0:
+                {
+                    NPC.velocity += new Vector2(2 * dir, -10);
+                    JumpTimer = 30;
+                    JumpCounter++;
+                }
+                    break;
+                case 1:
+                {
+                    NPC.velocity += new Vector2(3 * dir, -8);
+                    JumpTimer = 30;
+                    JumpCounter--;
+                }
+                    break;
+                case -2:
                 {
 
-                    case -1:
+                    int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 1.25f);
+                    Main.dust[num254].noGravity = true;
+                    var dust = Main.dust[num254];
+                    dust.velocity *= 0.5f;
+                    if (kslime is null)
+                    {
+                        NPC.scale += 0.1f;
+                        if (NPC.scale >= 1)
                         {
-                            JumpCounter++;
+                            JumpCounter = 0;
+                            NPC.damage = NPC.defDamage;
                         }
-                        break;
-                    case 0:
-                        {
-                            NPC.velocity += new Vector2(2 * dir, -10);
-                            JumpTimer = 30;
-                            JumpCounter++;
-                        }
-                        break;
-                    case 1:
-                        {
-                            NPC.velocity += new Vector2(3 * dir, -8);
-                            JumpTimer = 30;
-                            JumpCounter--;
-                        }
-                        break;
-                    case -2:
-                        {
-
-                            int num254 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, NPC.velocity.X, NPC.velocity.Y, 150, new Color(0, 80, 255, 80), 1.25f);
-                            Main.dust[num254].noGravity = true;
-                            var dust = Main.dust[num254];
-                            dust.velocity *= 0.5f;
-                            if (kslime is null)
-                            {
-                                NPC.scale += 0.1f;
-                                if (NPC.scale >= 1)
-                                {
-                                    JumpCounter = 0;
-                                    NPC.damage = NPC.defDamage;
-                                }
-                            }
-                        }
-                        break;
-
+                    }
                 }
+                    break;
+
+            }
         }
         #endregion
 
         #region Helpers
 
         Player player => Main.player[NPC.target];
-        public ref float JumpTimer => ref NPC.ai[0];
-        public ref float JumpCounter => ref NPC.ai[1];
+        private ref float JumpTimer => ref NPC.ai[0];
+        private ref float JumpCounter => ref NPC.ai[1];
         #endregion
 
     }

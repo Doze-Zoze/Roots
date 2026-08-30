@@ -8,6 +8,18 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class DarkArtistArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.15f;
+        public static float SummonDamageBonusChest => 0.25f;
+        public static float ManaDamageBonusChest => 0.1f;
+        public static float SummonDamageBonusLegs => 0.2f;
+        public static int SentrySlotsHead => 2;
+        public static int SentrySlotsSet => 1;
+        public static int CritChanceBonus => 25;
+        public static float MoveSpeedBonus => 0.2f;
+        public static float ManaCostReduction => 0.1f;
+        #endregion
+
         public override string SetID => "DarkArtist";
         public override List<int> HeadsToApplyTo => [ItemID.ApprenticeAltHead];
         public override List<int> ChestsToApplyTo => [ItemID.ApprenticeAltShirt];
@@ -15,39 +27,40 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.maxTurrets+= 2;
-            player.GetDamage<GenericDamageClass>() += 0.15f;
+            player.maxTurrets += SentrySlotsHead;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
 
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.25f;
-                if (proj.Roots().isManaProjectile)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.1f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusChest;
+                if (proj.Roots().IsManaProjectile)
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += ManaDamageBonusChest;
+                return modifiers;
             });
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.2f;
-                if (proj.Roots().isManaProjectile)
-                    proj.CritChance += 25;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusLegs;
+                if (proj.Roots().IsManaProjectile)
+                    proj.CritChance += CritChanceBonus;
+                return modifiers;
             });
-            player.moveSpeed += 0.2f;
-            player.manaCost -= 0.1f;
+            player.moveSpeed += MoveSpeedBonus;
+            player.manaCost -= ManaCostReduction;
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.maxTurrets++;
+            player.maxTurrets += SentrySlotsSet;
             player.setApprenticeT2 = true;
             player.setApprenticeT3 = true;
         }

@@ -8,6 +8,19 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class BeetleArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.05f;
+        public static float DamageBonusScale => 0.08f;
+        public static float DamageBonusShell => 0.05f;
+        public static int CritChanceBonusScale => 8;
+        public static int CritChanceBonusShell => 5;
+        public static float MoveSpeedBonusScale => 0.06f;
+        public static float MoveSpeedBonusLegs => 0.06f;
+        public static int AggroBonusHead => 250;
+        public static int AggroBonusShell  => 400;
+        public static float BeetleMightDamageModifier => 0.1f;
+        #endregion
+
         public override string SetID => "Beetle";
         public override List<int> HeadsToApplyTo => [ItemID.BeetleHelmet];
         public override List<int> ChestsToApplyTo => [ItemID.BeetleShell, ItemID.BeetleScaleMail];
@@ -15,41 +28,40 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.05f;
-            player.aggro += 250;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
+            player.aggro += AggroBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
             if (item.type == ItemID.BeetleScaleMail)
             {
-
-                player.GetDamage<GenericDamageClass>() += 0.08f;
-                player.GetCritChance<GenericDamageClass>() += 8f;
-                player.moveSpeed += 0.06f;
+                player.GetDamage<GenericDamageClass>() += DamageBonusScale;
+                player.GetCritChance<GenericDamageClass>() += CritChanceBonusScale;
+                player.moveSpeed += MoveSpeedBonusScale;
                 //6% melee speed
             } else
             {
-
-                player.GetDamage<GenericDamageClass>() += 0.05f;
-                player.GetCritChance<GenericDamageClass>() += 5f;
-                player.aggro += 400;
+                player.GetDamage<GenericDamageClass>() += DamageBonusShell;
+                player.GetCritChance<GenericDamageClass>() += CritChanceBonusShell;
+                player.aggro += AggroBonusShell;
             }
         }
 
         public override void LegsEquips(Item item, Player player)
         {
             //6% melee speed
-            player.moveSpeed += 0.06f;
+            player.moveSpeed += MoveSpeedBonusLegs;
         }
-
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if ((ChestsToApplyTo.Count == 0 || ChestsToApplyTo.Contains(head.type)) && (body.type == ItemID.BeetleScaleMail) && (LegsToApplyTo.Count == 0 || LegsToApplyTo.Contains(legs.type)))
-                return SetID + "SetScaleMail";
-            if ((ChestsToApplyTo.Count == 0 || ChestsToApplyTo.Contains(head.type)) && (body.type == ItemID.BeetleShell) && (LegsToApplyTo.Count == 0 || LegsToApplyTo.Contains(legs.type)))
-                return SetID + "SetShell";
+            if ((ChestsToApplyTo.Count == 0 || ChestsToApplyTo.Contains(body.type)) &&
+                (LegsToApplyTo.Count == 0 || LegsToApplyTo.Contains(legs.type)) &&
+                (HeadsToApplyTo.Count == 0 || HeadsToApplyTo.Contains(head.type)))
+            {
+                return SetID + (body.type == ItemID.BeetleScaleMail ? "SetScaleMail" : "SetShell");
+            }
             return string.Empty;
         }
 
@@ -59,24 +71,16 @@ namespace RootsBeta.Items.ArmorSets
             {
                 player.setBonus = RootsUtils.GetLocalizedTextValue($"Armor.{SetID}.SetBonusScaleMail");
                 player.beetleOffense = true;
-                player.Roots().OnHitNPCWithProjectileFuncs.Add((player, projectile, npc, hitinfo, dmg) =>
+                player.Roots().OnHitNPCWithProjectileFuncs.Add((plr, _, _, _, dmg) =>
                 {
-                    if (player.beetleOffense)
+                    if (!plr.beetleOffense) return;
+                    plr.beetleCounter += plr.beetleOrbs switch
                     {
-                        if (player.beetleOrbs == 0)
-                        {
-                            player.beetleCounter += dmg * 3;
-                        }
-                        else if (player.beetleOrbs == 1)
-                        {
-                            player.beetleCounter += dmg * 2;
-                        }
-                        else
-                        {
-                            player.beetleCounter += dmg;
-                        }
-                        player.beetleCountdown = 0;
-                    }
+                        0 => dmg * 3,
+                        1 => dmg * 2,
+                        _ => dmg
+                    };
+                    plr.beetleCountdown = 0;
                 });
             }
             else if (set == SetID + "SetShell")

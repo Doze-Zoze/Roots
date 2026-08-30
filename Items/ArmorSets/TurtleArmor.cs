@@ -1,5 +1,6 @@
 ﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
+using RootsBeta.Players;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,45 +9,49 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class TurtleArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float CloseRangedDamageBonusHead => 0.06f;
+        public static float CloseRangedDamageBonusChest => 0.08f;
+        public static int CritChanceBonusChest => 8;
+        public static int CritChanceBonusLegs => 4;
+        public static float DamageReduction => 0.15f;
+        #endregion
+
         public override string SetID => "Turtle";
         public override List<int> HeadsToApplyTo => [ItemID.TurtleHelmet];
         public override List<int> ChestsToApplyTo => [ItemID.TurtleScaleMail];
         public override List<int> LegsToApplyTo => [ItemID.TurtleLeggings];
 
-        void AdditiveDamageAtCloseRange(Player player, float amount)
+        private static void AdditiveDamageAtCloseRange(Player player, float amount)
         {
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, projectile, npc, modifiers) => {
-                if (player.Distance(npc.Center) <= 16 * 25)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.15f;
-                return modifiers;
-            });
-            player.Roots().ModifyHitNPCWithItemFuncs.Add((player, item, npc, modifiers) =>
-            {
-                player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.15f;
+            player.Roots().ModifyHitNPCFuncs.Add((plr, npc, modifiers) => {
+                if (plr.Distance(npc.Center) <= RootsPlayer.CloseRangeDistance)
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += amount;
                 return modifiers;
             });
         }
+
         public override void HeadEquips(Item item, Player player)
         {
-            AdditiveDamageAtCloseRange(player, 0.06f);
+            AdditiveDamageAtCloseRange(player, CloseRangedDamageBonusHead);
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            AdditiveDamageAtCloseRange(player, 0.08f);
-            player.GetCritChance<GenericDamageClass>() += 8;
+            AdditiveDamageAtCloseRange(player, CloseRangedDamageBonusChest);
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetCritChance<GenericDamageClass>() += 4;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusLegs;
         }
 
         public override void SetBonusEffect(Player player)
         {
             player.turtleArmor = true;
             player.turtleThorns = true;
-            player.endurance += 0.15f;
+            player.endurance += DamageReduction;
         }
     }
 }

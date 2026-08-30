@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Jetbrains, remove/adjust this if needed to sync Rider between multiple people
+.idea/

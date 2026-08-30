@@ -8,6 +8,16 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class FrostArmor : BaseArmorSet
     {
+        #region Parameters
+
+        public static int CritChanceBonusHead => 16;
+        public static int CritChanceBonusChest => 11;
+        public static float MoveSpeedBonusLegs => 0.08f;
+        public static float ShotSpeedMultiplier => 1.1f;
+        public static float PhysicalDamageBonusSet => 0.15f;
+        public static int FrostburnDebuffFrames => 60;
+        #endregion
+
         public override string SetID => "Frost";
         public override List<int> HeadsToApplyTo => [ItemID.FrostHelmet];
         public override List<int> ChestsToApplyTo => [ItemID.FrostBreastplate];
@@ -15,27 +25,27 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetCritChance<GenericDamageClass>() += 0.16f;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetCritChance<GenericDamageClass>() += 11;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.moveSpeed += 0.08f;
-            player.Roots().shootSpeedMult *= 1.1f;
+            player.moveSpeed += MoveSpeedBonusLegs;
+            player.Roots().ShootSpeedMult *= ShotSpeedMultiplier;
         }
 
         public override void SetBonusEffect(Player player)
         {
             player.frostArmor = true;
-            player.Roots().PhysicalModifyHitNPCFuncs.Add((player, target, modifier) =>
+            player.Roots().PhysicalModifyHitNPCFuncs.Add((plr, target, modifier) =>
             {
-                player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.15f;
-                target.AddBuff(BuffID.Frostburn2, 60);
+                plr.Roots().AdditiveDamageMultipliersToApplyOnHit += PhysicalDamageBonusSet;
+                target.AddBuff(BuffID.Frostburn2, FrostburnDebuffFrames);
                 return modifier;
             });
         }

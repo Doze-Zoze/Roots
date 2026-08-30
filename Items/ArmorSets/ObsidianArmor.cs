@@ -8,6 +8,15 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class ObsidianArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.08f;
+        public static float DamageBonusLegs => 0.08f;
+        public static int MinionSlotsHead => 1;
+        public static int MinionSlotsChest => 1;
+        public static float SummonOrWhipDamageBonusSet => 0.15f;
+        public static float WhipRangeBonusSet => 0.3f;
+        #endregion
+
         public override string SetID => "Obsidian";
         public override List<int> HeadsToApplyTo => [ItemID.ObsidianHelm];
         public override List<int> ChestsToApplyTo => [ItemID.ObsidianShirt];
@@ -15,29 +24,30 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.08f;
-            player.slotsMinions++;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
+            player.slotsMinions += MinionSlotsHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.slotsMinions++;
+            player.slotsMinions += MinionSlotsChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.08f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
             
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated || proj.DamageType == DamageClass.SummonMeleeSpeed)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.15f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonOrWhipDamageBonusSet;
+                return modifiers;
             });
-            player.whipRangeMultiplier += 0.3f;
+            player.whipRangeMultiplier += WhipRangeBonusSet;
         }
     }
 }

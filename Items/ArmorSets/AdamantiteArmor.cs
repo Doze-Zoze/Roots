@@ -9,21 +9,30 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class AdamantiteHelmets : GlobalItem
     {
-        List<int> ItemsToApplyTo =
+        #region Parameters
+        public static int Defense => 10;
+        public static float DamageBonus => 0.12f;
+        public static int CritChanceBonus => 12;
+        public static int MaxManaBonus => 80;
+        public static float MoveSpeedBonusSet => 0.2f;
+        public static float ManaCostReductionSet => 0.2f;
+        #endregion
+
+        private List<int> _itemsToApplyTo =
         [
             ItemID.AdamantiteHelmet,
             ItemID.AdamantiteMask,
             ItemID.AdamantiteHeadgear
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
-
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemsToApplyTo.Contains(item.type);
-
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.ReplaceTooltipWith("Armor.Adamantite.HelmetTooltip");
 
         public override void SetStaticDefaults()
         {
-            foreach (var item in ItemsToApplyTo)
+            foreach (var item in _itemsToApplyTo)
             {
                 ItemSets.DontUseVanillaEquipEffects[item] = true;
                 ItemSets.DontUseVanillaSetBonus[item] = true;
@@ -32,38 +41,30 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void SetDefaults(Item item)
         {
-            item.defense = 10;
+            item.defense = Defense;
         }
 
         public override void UpdateEquip(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.12f;
-            player.GetCritChance<GenericDamageClass>() += 12;
-            player.statManaMax2 += 80;
+            player.GetDamage<GenericDamageClass>() += DamageBonus;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonus;
+            player.statManaMax2 += MaxManaBonus;
         }
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if (ItemsToApplyTo.Contains(head.type) && body.type == ItemID.AdamantiteBreastplate && legs.type == ItemID.AdamantiteLeggings)
+            if (_itemsToApplyTo.Contains(head.type) && body.type == ItemID.AdamantiteBreastplate && legs.type == ItemID.AdamantiteLeggings)
                 return "AdamantiteSet";
             return string.Empty;
         }
 
         public override void UpdateArmorSet(Player player, string set)
         {
-            if (set == "AdamantiteSet")
-            {
-                player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Adamantite.SetBonus");
-                player.moveSpeed += 0.2f;
-                player.ammoCost75 = true;
-                player.manaCost *= 0.8f;
-            }
+            if (set != "AdamantiteSet") return;
+            player.setBonus = RootsUtils.GetLocalizedTextValue("Armor.Adamantite.SetBonus");
+            player.moveSpeed += MoveSpeedBonusSet;
+            player.ammoCost75 = true;
+            player.manaCost -= ManaCostReductionSet;
         }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            tooltips.ReplaceTooltipWith("Armor.Adamantite.HelmetTooltip");
-        }
-
     }
 }

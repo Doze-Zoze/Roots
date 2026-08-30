@@ -8,6 +8,15 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class BeeArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.04f;
+        public static float DamageBonusChest => 0.04f;
+        public static float DamageBonusLegs => 0.05f;
+        public static int MinionSlotsHead => 1;
+        public static int MinionSlotsChest => 1;
+        public static float SummonDamageBonusSet => 0.1f;
+        #endregion
+
         public override string SetID => "Bee";
         public override List<int> HeadsToApplyTo => [ItemID.BeeHeadgear];
         public override List<int> ChestsToApplyTo => [ItemID.BeeBreastplate];
@@ -15,28 +24,28 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.04f;
-            player.slotsMinions++;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
+            player.slotsMinions += MinionSlotsHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.04f;
-            player.slotsMinions++;
+            player.GetDamage<GenericDamageClass>() += DamageBonusChest;
+            player.slotsMinions += MinionSlotsChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.05f;
-            
+            player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.1f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusSet;
+                return modifiers;
             });
         }
     }

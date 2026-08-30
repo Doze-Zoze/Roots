@@ -8,6 +8,18 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class ShinobiInfiltratorArmor : BaseArmorSet
     {
+        #region Parameters
+        public static int SentrySlotsHead => 2;
+        public static int SentrySlotsSet => 1;
+        public static float DamageBonusHead => 0.2f;
+        public static float SummonDamageBonusChest => 0.2f;
+        public static float SummonDamageBonusLegs => 0.2f;
+        public static float AttackSpeedBonusChest => 0.2f;
+        public static int CritChanceBonusChest => 5;
+        public static int CritChanceBonusLegs => 20;
+        public static float MoveSpeedBonusLegs => 0.3f;
+        #endregion
+
         public override string SetID => "ShinobiInfiltrator";
         public override List<int> HeadsToApplyTo => [ItemID.MonkAltHead];
         public override List<int> ChestsToApplyTo => [ItemID.MonkAltShirt];
@@ -15,38 +27,37 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.maxTurrets+=2;
-            player.GetDamage<GenericDamageClass>() += 0.2f;
+            player.maxTurrets += SentrySlotsHead;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.2f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusChest;
+                return modifiers;
             });
-            player.GetAttackSpeed<GenericDamageClass>() += 0.2f;
-            player.GetCritChance<GenericDamageClass>() += 5f;
+            player.GetAttackSpeed<GenericDamageClass>() += AttackSpeedBonusChest;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.2f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusLegs;
+                return modifiers;
             });
-
-            player.GetCritChance<GenericDamageClass>() += 20f;
-            player.moveSpeed += 0.3f;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusLegs;
+            player.moveSpeed += MoveSpeedBonusLegs;
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.maxTurrets++;
+            player.maxTurrets += SentrySlotsSet;
             player.setMonkT2 = true;
             player.setMonkT3 = true;
         }

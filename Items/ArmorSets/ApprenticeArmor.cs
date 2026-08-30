@@ -8,6 +8,16 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class ApprenticeArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.1f;
+        public static int SentrySlotsHead => 1;
+        public static float SummonDamageBonusChest => 0.2f;
+        public static int ManaCritChanceBonusChest => 20;
+        public static float MoveSpeedBonusLegs => 0.2f;
+        public static float ManaCostReductionLegs => 0.1f;
+        public static int SentrySlotsSet => 1;
+        #endregion
+
         public override string SetID => "Apprentice";
         public override List<int> HeadsToApplyTo => [ItemID.ApprenticeHat];
         public override List<int> ChestsToApplyTo => [ItemID.ApprenticeRobe];
@@ -15,31 +25,31 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.maxTurrets++;
-            player.GetDamage<GenericDamageClass>() += 0.1f;
+            player.maxTurrets += SentrySlotsHead;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.2f;
-                if (proj.Roots().isManaProjectile)
-                    proj.CritChance += 20;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusChest;
+                if (proj.Roots().IsManaProjectile)
+                    proj.CritChance += ManaCritChanceBonusChest;
+                return modifiers;
             });
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.moveSpeed += 0.2f;
-            player.manaCost -= 0.1f;
+            player.moveSpeed += MoveSpeedBonusLegs;
+            player.manaCost -= ManaCostReductionLegs;
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.maxTurrets++;
+            player.maxTurrets += SentrySlotsSet;
             player.setApprenticeT2 = true;
         }
     }

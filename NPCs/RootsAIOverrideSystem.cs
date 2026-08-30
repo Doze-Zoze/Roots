@@ -9,21 +9,21 @@ using Terraria.ModLoader;
 namespace RootsBeta.NPCs
 {
 
-    public partial class RootsAIOverrideSystem : GlobalNPC
+    public class RootsAIOverrideSystem : GlobalNPC
     {
         public override void SetStaticDefaults()
         {
             foreach (var item in EnemyAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add(((n) => Configs.instance.EnemyChanges, item.Value));
+                NpcSets.AiOverrides[item.Key].Add((_ => Configs.Instance.EnemyChanges, item.Value));
             }
 
             foreach (var item in BossAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add(((n) => Configs.instance.BossChanges, item.Value));
+                NpcSets.AiOverrides[item.Key].Add((_ => Configs.Instance.BossChanges, item.Value));
             }
 
-            if (Configs.instance.EnemyChanges)
+            if (Configs.Instance.EnemyChanges)
             {
                 NPCID.Sets.ImmuneToAllBuffs[NPCID.Snatcher] = true;
             }
@@ -55,23 +55,20 @@ namespace RootsBeta.NPCs
     {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            if (Configs.instance.EnemyChanges && FixExploitManEaters.SpotProtected(i, j))
+            if (!Configs.Instance.EnemyChanges || !FixExploitManEaters.SpotProtected(i, j)) return;
+            effectOnly = true;
+            foreach (var item in Main.ActiveNPCs)
             {
-                effectOnly = true;
-                foreach (var item in Main.ActiveNPCs)
+                if ((item.type != NPCID.Snatcher && item.type != NPCID.ManEater) || (int)item.ai[0] != i ||
+                    (int)item.ai[1] != j) continue;
+                NPC.HitInfo hit = new()
                 {
-                    if ((item.type == NPCID.Snatcher || item.type == NPCID.ManEater) && (int)item.ai[0] == i && (int)item.ai[1] == j)
-                    {
-                        NPC.HitInfo hit = new()
-                        {
-                            Damage = Main.LocalPlayer.HeldItem.pick > 0 ? Main.LocalPlayer.HeldItem.pick : 100,
-                            DamageType = ModContent.GetInstance<PickaxeDamage>()
-                        };
-                        hit.Damage -= (int)(item.defense * 0.5f);
-                        item.StrikeNPC(hit);
-                        item.netUpdate = true;
-                    }
-                }
+                    Damage = Main.LocalPlayer.HeldItem.pick > 0 ? Main.LocalPlayer.HeldItem.pick : 100,
+                    DamageType = ModContent.GetInstance<PickaxeDamage>()
+                };
+                hit.Damage -= (int)(item.defense * 0.5f);
+                item.StrikeNPC(hit);
+                item.netUpdate = true;
             }
         }
     }

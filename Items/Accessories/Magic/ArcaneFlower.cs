@@ -10,34 +10,23 @@ namespace RootsBeta.Items.Accessories.Magic
 {
     public class ArcaneFlower : GlobalItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.ManaChanges;
+        #region Parameters
+        public static float MinimumManaMagicDamageModifier => 0.5f;
+        public static float MaximumManaMagicDamageModifier => 1.0f;
+        public static int MaximumManaRegen => 120;
+        #endregion
+
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ArcaneFlower;
-        public override void SetStaticDefaults()
-        {
-            ItemSets.DontUseVanillaEquipEffects[ItemID.ArcaneFlower] = true;
-        }
+        public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.ArcaneFlower] = true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) => 
+            tooltips.ReplaceTooltipWith("Accessories.ArcaneFlower.Tooltip");
 
         public override void UpdateEquip(Item item, Player player)
         {
             float playerManaRatio = player.statMana / (float)player.statManaMax2;
-            player.Roots().manaFlowerReduction *= MathHelper.Lerp(0.5f, 1, playerManaRatio);
-            player.manaRegenCount += (int)(120 * (1 - playerManaRatio));
-        }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            int tooltipIndex = 0;
-            for (var i = 0; i < tooltips.Count; i++)
-            {
-                var tooltip = tooltips[i];
-                if (tooltip.Name.Contains("Tooltip"))
-                {
-                    tooltip.Hide();
-                    tooltipIndex = i;
-                }
-            }
-            if (tooltipIndex > 0)
-                tooltips.Insert(tooltipIndex, new TooltipLine(Mod, "Tooltip", RootsUtils.GetLocalizedTextValue("Accessories.ArcaneFlower.Tooltip")));
+            player.Roots().ManaFlowerReduction *= MathHelper.Lerp(MinimumManaMagicDamageModifier, MaximumManaMagicDamageModifier, playerManaRatio);
+            player.manaRegenCount += (int)(MaximumManaRegen * (1 - playerManaRatio));
         }
     }
 }

@@ -8,6 +8,18 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class SpectreArmor : BaseArmorSet
     {
+        #region Parameters
+        public static int ManaMaxBonusMask => 60;
+        public static float ManaCostReductionMask => 0.13f;
+        public static float DamageBonusMask => 0.1f;
+        public static int CritChanceBonusMask => 10;
+        public static float DamageBonusChest => 0.07f;
+        public static int CritChanceBonusChest => 7;
+        public static float DamageBonusLegs => 0.08f;
+        public static float MoveSpeedBonusLegs => 0.08f;
+        public static float ManaDamageReductionHood => 0.4f;
+        #endregion
+
         public override string SetID => "Spectre";
         public override List<int> HeadsToApplyTo => [ItemID.SpectreHood, ItemID.SpectreMask];
         public override List<int> ChestsToApplyTo => [ItemID.SpectreRobe];
@@ -15,35 +27,37 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            if (item.type != ItemID.SpectreHood)
-            {
-                player.statManaMax2 += 60;
-                player.manaCost -= 0.13f;
-                player.GetDamage<GenericDamageClass>() += 0.1f;
-                player.GetCritChance<GenericDamageClass>() += 10f;
-            }
+            if (item.type == ItemID.SpectreHood) return;
+            player.statManaMax2 += ManaMaxBonusMask;
+            player.manaCost -= ManaCostReductionMask;
+            player.GetDamage<GenericDamageClass>() += DamageBonusMask;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusMask;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.07f;
-            player.GetCritChance<GenericDamageClass>() += 7f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusChest;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonusChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.08f;
-            player.moveSpeed += 0.08f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
+            player.moveSpeed += MoveSpeedBonusLegs;
         }
-
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            if ((head.type == ItemID.SpectreHood) && (ChestsToApplyTo.Count == 0 || ChestsToApplyTo.Contains(body.type)) && (LegsToApplyTo.Count == 0 || LegsToApplyTo.Contains(legs.type)))
-                return SetID + "SetHood";
-            if ((head.type == ItemID.SpectreMask) && (ChestsToApplyTo.Count == 0 || ChestsToApplyTo.Contains(body.type)) && (LegsToApplyTo.Count == 0 || LegsToApplyTo.Contains(legs.type)))
-                return SetID + "SetMask";
-            return string.Empty;
+            return head.type switch
+            {
+                ItemID.SpectreHood when (ChestsToApplyTo.Count == 0 || ChestsToApplyTo.Contains(body.type)) &&
+                    (LegsToApplyTo.Count == 0 || LegsToApplyTo.Contains(legs.type)) 
+                    => SetID + "SetHood",
+                ItemID.SpectreMask when (ChestsToApplyTo.Count == 0 || ChestsToApplyTo.Contains(body.type)) &&
+                    (LegsToApplyTo.Count == 0 || LegsToApplyTo.Contains(legs.type)) 
+                    => SetID + "SetMask",
+                _ => string.Empty
+            };
         }
 
         public override void UpdateArmorSet(Player player, string set)
@@ -51,7 +65,7 @@ namespace RootsBeta.Items.ArmorSets
             if (set == SetID + "SetHood")
             {
                 player.setBonus = RootsUtils.GetLocalizedTextValue($"Armor.{SetID}.SetBonusHood");
-                player.Roots().AdditiveManaDamage -= 0.4f;
+                player.Roots().AdditiveManaDamage -= ManaDamageReductionHood;
                 player.ghostHeal = true;
             }
             else if (set == SetID + "SetMask")

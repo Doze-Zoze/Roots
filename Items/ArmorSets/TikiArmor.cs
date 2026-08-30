@@ -1,5 +1,4 @@
-﻿using RootsBeta.Utilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +7,18 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class TikiArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.1f;
+        public static float DamageBonusChest => 0.1f;
+        public static float DamageBonusLegs => 0.1f;
+        public static int MinionSlotsHead => 1;
+        public static int MinionSlotsChest => 1;
+        public static int MinionSlotsLegs => 1;
+        public static int MinionSlotsSet => 1;
+        public static float WhipRangeBonusHead => 0.1f;
+        public static float WhipRangeBonusSet => 0.2f;
+        #endregion
+
         public override string SetID => "Tiki";
         public override List<int> HeadsToApplyTo => [ItemID.TikiMask];
         public override List<int> ChestsToApplyTo => [ItemID.TikiShirt];
@@ -15,26 +26,27 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.10f;
-            player.slotsMinions++;
-            player.whipRangeMultiplier += 0.1f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
+            player.slotsMinions += MinionSlotsHead;
+            player.whipRangeMultiplier += WhipRangeBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.10f;
-            player.slotsMinions++;
+            player.GetDamage<GenericDamageClass>() += DamageBonusChest;
+            player.slotsMinions += MinionSlotsChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.10f;
-            player.slotsMinions++;
+            player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
+            player.slotsMinions += MinionSlotsLegs;
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.slotsMinions++;
-            player.whipRangeMultiplier += 0.2f;
+            player.slotsMinions += MinionSlotsSet;
+            player.whipRangeMultiplier += WhipRangeBonusSet;
         }
     }
 }

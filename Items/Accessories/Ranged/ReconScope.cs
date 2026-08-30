@@ -5,29 +5,29 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RootsBeta.Items.Accessories.Magic
+namespace RootsBeta.Items.Accessories.Ranger
 {
     public class ReconScope : GlobalItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
+        #region Parameters
+        public static float DamageBonus => 0.1f;
+        public static int CritChanceBonus => 10;
+        public static int AggroReduction => 400;
+        #endregion
+
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ReconScope;
-        public override void SetStaticDefaults()
-        {
-            ItemSets.DontUseVanillaEquipEffects[ItemID.ReconScope] = true;
-        }
+        public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.ReconScope] = true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.ReplaceTooltipWith("Accessories.ReconScope.Tooltip");
 
         public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             if (!hideVisual && player.HeldItem.damage > 0)
                 player.scope = true;
-            player.GetDamage<GenericDamageClass>() += 0.10f;
-            player.GetCritChance<GenericDamageClass>() += 10;
-            player.aggro -= 400;
-        }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            tooltips.ReplaceTooltipWith("Accessories.ReconScope.Tooltip");
+            player.GetDamage<GenericDamageClass>() += DamageBonus;
+            player.GetCritChance<GenericDamageClass>() += CritChanceBonus;
+            player.aggro -= AggroReduction;
         }
     }
 }

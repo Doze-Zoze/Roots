@@ -7,47 +7,47 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
-using Terraria.Utilities;
 
 namespace RootsBeta.Items.Weapons
 {
     public class InfluxWaver : GlobalItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.ManaChanges;
+        #region Parameters
+
+        public static int ElectrifiedFrames => 60;
+        public static int ManaCost => 20;
+        private static float ElectrifiedMultiplier => 2f;
+        #endregion
+
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.InfluxWaver;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.AppendTooltipWith("Weapons.InfluxWaver.Tooltip");
+
         public override void SetStaticDefaults()
         {
             ItemSets.DontConsumeManaOnSwing[ItemID.InfluxWaver] = true;
-            ItemSets.ShouldResetManaRegen[ItemID.InfluxWaver] = x => !x.Item1.electrified && x.Item1.statMana >= (int)(x.Item2.mana * x.Item1.manaCost);
+            ItemSets.ShouldResetManaRegen[ItemID.InfluxWaver] = 
+                x => !x.Item1.electrified && x.Item1.statMana >= (int)(x.Item2.mana * x.Item1.manaCost);
         }
 
         public override void HoldItem(Item item, Player player)
         {
-            if (player.controlUseTile)
-            {
-                player.AddBuff(BuffID.Electrified, 60);
-                player.manaRegenDelay = 0;
-            }
+            if (!player.controlUseTile) return;
+            player.AddBuff(BuffID.Electrified, ElectrifiedFrames);
+            player.manaRegenDelay = 0;
         }
 
         public override void SetDefaults(Item item)
         {
-            item.mana = 20;
+            item.mana = ManaCost;
         }
+
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.electrified)
-            {
-                Projectile.NewProjectile(source, position, velocity, type, damage*2, knockback, player.whoAmI);
-                return false;
-            }
-            if (player.CheckMana((int)Math.Max(0, item.mana * player.manaCost), true))
-            {
-                return true;
-            }
+            if (!player.electrified) return player.CheckMana((int)Math.Max(0, item.mana * player.manaCost), true);
+            Projectile.NewProjectile(source, position, velocity, type, (int)(damage * ElectrifiedMultiplier), knockback, player.whoAmI);
             return false;
         }
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
-            tooltips.AppendTooltipWith("Weapons.InfluxWaver.Tooltip");
     }
 }

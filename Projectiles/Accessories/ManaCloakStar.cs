@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using RootsBeta.Items.Accessories.Magic;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,13 +15,11 @@ namespace RootsBeta.Projectiles.Accessories
         }
         public override void OnKill(Projectile projectile, int timeLeft)
         {
-            if (Main.player[projectile.owner].starCloakCooldown == 0)
-            {
-                Main.player[projectile.owner].starCloakCooldown = 60;
-                int number2 = Item.NewItem(projectile.GetSource_DropAsItem(), projectile.Center, 4143);
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number2, 1f);
-            }
+            if (Main.player[projectile.owner].starCloakCooldown != 0) return;
+            Main.player[projectile.owner].starCloakCooldown = ManaCloak.ManaStarConversionCooldownFrames;
+            int number2 = Item.NewItem(projectile.GetSource_DropAsItem(), projectile.Center, ItemID.ManaCloakStar);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number2, 1f);
         }
     }
 }

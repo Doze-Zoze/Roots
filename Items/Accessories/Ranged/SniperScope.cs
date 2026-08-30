@@ -5,16 +5,19 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RootsBeta.Items.Accessories.Magic
+namespace RootsBeta.Items.Accessories.Ranger
 {
     public class SniperScope : GlobalItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Configs.instance.RemoveClasses;
+        #region Parameters
+        public static float DistancePerCritBoost => 32f;
+        #endregion
+
+        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.SniperScope;
-        public override void SetStaticDefaults()
-        {
-            ItemSets.DontUseVanillaEquipEffects[ItemID.SniperScope] = true;
-        }
+        public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.SniperScope] = true;
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
+            tooltips.ReplaceTooltipWith("Accessories.SniperScope.Tooltip");
 
         public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
@@ -23,15 +26,10 @@ namespace RootsBeta.Items.Accessories.Magic
             player.Roots().ModifyHitNPCWithProjectileFuncs.Add(SniperScopeScaling);
         }
 
-        NPC.HitModifiers SniperScopeScaling(Player player, Projectile projectile, NPC npc, NPC.HitModifiers modifiers)
+        private NPC.HitModifiers SniperScopeScaling(Player player, Projectile projectile, NPC npc, NPC.HitModifiers modifiers)
         {
-            projectile.CritChance += (int)(player.Distance(npc.Center) / 32f);
+            projectile.CritChance += (int)(player.Distance(npc.Center) / DistancePerCritBoost);
             return modifiers;
-        }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
-            tooltips.ReplaceTooltipWith("Accessories.SniperScope.Tooltip");
         }
     }
 }

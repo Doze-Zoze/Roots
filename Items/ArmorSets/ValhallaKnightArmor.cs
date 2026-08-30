@@ -1,5 +1,6 @@
 ﻿using RootsBeta.Utilities;
 using System.Collections.Generic;
+using RootsBeta.Players;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +9,16 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class ValhallaKnightArmor : BaseArmorSet
     {
+        #region Parameters
+        public static int SentrySlotsHead => 2;
+        public static int SentrySlotsSet => 1;
+        public static float SummonOrCloseRangedDamageBonusHead => 0.1f;
+        public static int LifeRegenChest => 8;
+        public static float SummonDamageBonusChest => 0.3f;
+        public static float SummonDamageBonusLegs => 0.2f;
+        public static int CloseRangedCritChanceBonusLegs => 20;
+        #endregion
+
         public override string SetID => "ValhallaKnight";
         public override List<int> HeadsToApplyTo => [ItemID.SquireAltHead];
         public override List<int> ChestsToApplyTo => [ItemID.SquireAltShirt];
@@ -15,47 +26,48 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.maxTurrets+=2;
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.maxTurrets += SentrySlotsHead;
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, npc, modifiers) =>
             {
-                if (proj.IsMinionOrSentryRelated || (player.Distance(npc.Center) <= 16 * 25))
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.1f;
-                return mod;
+                if (proj.IsMinionOrSentryRelated || (plr.Distance(npc.Center) <= RootsPlayer.CloseRangeDistance))
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonOrCloseRangedDamageBonusHead;
+                return modifiers;
             });
-            player.Roots().ModifyHitNPCWithItemFuncs.Add((player, item, npc, modifiers) =>
+            player.Roots().ModifyHitNPCWithItemFuncs.Add((plr, _, _, modifiers) =>
             {
-                player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.1f;
+                plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonOrCloseRangedDamageBonusHead;
                 return modifiers;
             });
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.lifeRegen += 8;
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.lifeRegen += LifeRegenChest;
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, _, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.3f;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusChest;
+                return modifiers;
             });
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((player, proj, npc, mod) =>
+            player.Roots().ModifyHitNPCWithProjectileFuncs.Add((plr, proj, npc, modifiers) =>
             {
                 if (proj.IsMinionOrSentryRelated)
-                    player.Roots().AdditiveDamageMultipliersToApplyOnHit += 0.2f;
-                if ((player.Distance(npc.Center) > 16 * 25))
-                    proj.CritChance -= 20;
-                return mod;
+                    plr.Roots().AdditiveDamageMultipliersToApplyOnHit += SummonDamageBonusLegs;
+                if ((plr.Distance(npc.Center) > RootsPlayer.CloseRangeDistance))
+                    proj.CritChance -= CloseRangedCritChanceBonusLegs;
+                return modifiers;
             });
-            player.GetCritChance<GenericDamageClass>() += 20;
+            player.GetCritChance<GenericDamageClass>() += CloseRangedCritChanceBonusLegs;
 
         }
+
         public override void SetBonusEffect(Player player)
         {
-            player.maxTurrets++;
+            player.maxTurrets += SentrySlotsSet;
             player.setSquireT2 = true;
             player.setSquireT3 = true;
         }

@@ -8,13 +8,11 @@ namespace RootsBeta.Projectiles
     {
         public override bool InstancePerEntity => true;
         #region Variables
-
-        public bool isManaProjectile = false;
-
+        public bool IsManaProjectile;
         #endregion
         public override void SetDefaults(Projectile entity)
         {
-            isManaProjectile = ProjSets.ManaSpawnedProjectile[entity.type] || isManaProjectile;
+            IsManaProjectile = ProjSets.ManaSpawnedProjectile[entity.type] || IsManaProjectile;
         }
     }
 }

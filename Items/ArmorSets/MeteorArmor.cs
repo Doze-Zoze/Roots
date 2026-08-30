@@ -7,6 +7,12 @@ namespace RootsBeta.Items.ArmorSets
 {
     public class MeteorArmor : BaseArmorSet
     {
+        #region Parameters
+        public static float DamageBonusHead => 0.09f;
+        public static float DamageBonusChest => 0.09f;
+        public static float DamageBonusLegs => 0.09f;
+        #endregion
+
         public override string SetID => "Meteor";
         public override List<int> HeadsToApplyTo => [ItemID.MeteorHelmet];
         public override List<int> ChestsToApplyTo => [ItemID.MeteorSuit];
@@ -14,17 +20,17 @@ namespace RootsBeta.Items.ArmorSets
 
         public override void HeadEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.09f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.09f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
-            player.GetDamage<GenericDamageClass>() += 0.09f;
+            player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
         }
 
         public override void SetBonusEffect(Player player)
