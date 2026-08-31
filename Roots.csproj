@@ -1,17 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-	<!-- Import tModLoader mod properties -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\tModLoader.targets" />
 
-	<!-- General -->
 	<PropertyGroup>
-	<AssemblyName>RootsBeta</AssemblyName>
-		
+		<AssemblyName>RootsBeta</AssemblyName>
+		<TargetFramework>net10.0</TargetFramework>
+		<LangVersion>14.0</LangVersion>
 	</PropertyGroup>
+
 	<ItemGroup>
 	  <ProjectReference Include="..\RootsCore\RootsCore.csproj" />
 	</ItemGroup>
-
-	<!-- References -->
 
 </Project>
