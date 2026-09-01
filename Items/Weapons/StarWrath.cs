@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsCore;
 using System;
 using Terraria;
@@ -8,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class StarWrath : GlobalItem
+    public class StarWrath : ConfigurableItemRework
     {
         #region Parameters
         public static int ManaCost => 10;
@@ -22,8 +23,7 @@ namespace RootsBeta.Items.Weapons
         public static int StarUpdatesPerFrame => 2;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.StarWrath;
+        public override int[] ItemIds => [ItemID.StarWrath];
 
         public override void SetStaticDefaults()
         {

@@ -7,18 +7,18 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class FlyingDragon : GlobalItem
+    public class FlyingDragon : ConfigurableItemRework
     {
         #region Parameters
         public static int LifeCost => 5;
         public static int ManaCost => 12;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.DD2SquireBetsySword;
+        public override int[] ItemIds => [ItemID.DD2SquireBetsySword];
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.AppendTooltipWith("Weapons.FlyingDragon.Tooltip");
 

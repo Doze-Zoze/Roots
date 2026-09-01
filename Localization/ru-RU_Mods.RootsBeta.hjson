@@ -690,4 +690,50 @@ Configs: {
 			// Tooltip: ""
 		}
 	}
+
+	RootsModConfig: {
+		// DisplayName: Roots Mod Config
+
+		RemoveClasses: {
+			// Label: Remove Classes
+			// Tooltip: ""
+		}
+
+		LifeChanges: {
+			// Label: Life Changes
+			// Tooltip: ""
+		}
+
+		ManaChanges: {
+			// Label: Mana Changes
+			// Tooltip: ""
+		}
+
+		AmmoChanges: {
+			// Label: Ammo Changes
+			// Tooltip: ""
+		}
+
+		EnemyChanges: {
+			// Label: Enemy Changes
+			// Tooltip: ""
+		}
+
+		BossChanges: {
+			// Label: Boss Changes
+			// Tooltip: ""
+		}
+
+		ToggleableItems: {
+			// Label: Toggleable Items
+			// Tooltip: ""
+		}
+
+		ToggleableContent: {
+			// Label: Toggleable Content
+			// Tooltip: ""
+		}
+	}
+
+	// "ContentConfigData[].Tooltip": ""
 }

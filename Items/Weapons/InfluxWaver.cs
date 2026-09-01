@@ -7,10 +7,11 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class InfluxWaver : GlobalItem
+    public class InfluxWaver : ConfigurableItemRework
     {
         #region Parameters
 
@@ -19,8 +20,7 @@ namespace RootsBeta.Items.Weapons
         private static float ElectrifiedMultiplier => 2f;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.InfluxWaver;
+        public override int[] ItemIds => [ItemID.InfluxWaver];
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.AppendTooltipWith("Weapons.InfluxWaver.Tooltip");
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Other
 {
-    public class FairyBoots : GlobalItem
+    public class FairyBoots : ConfigurableItemRework
     {
         #region Parameters
         public static int RunSpeed => 6;
@@ -20,8 +21,7 @@ namespace RootsBeta.Items.Accessories.Other
         public static int RocketSoundDelay => 30;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.FairyBoots;
+        public override int[] ItemIds => [ItemID.FairyBoots];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.FairyBoots] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.FairyBoots.Tooltip");

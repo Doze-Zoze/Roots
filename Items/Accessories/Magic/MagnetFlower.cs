@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class MagnetFlower : GlobalItem
+    public class MagnetFlower : ConfigurableItemRework
     {
         #region Parameters
             public static int ManaStarPickupGraceFrames => 300;
@@ -15,8 +16,7 @@ namespace RootsBeta.Items.Accessories.Magic
             public static int ManaRegen => ManaFlower.ManaRegen;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.MagnetFlower;
+        public override int[] ItemIds => [ItemID.MagnetFlower];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.MagnetFlower] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.MagnetFlower.Tooltip");

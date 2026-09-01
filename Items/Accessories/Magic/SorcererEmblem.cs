@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -13,7 +14,7 @@ namespace RootsBeta.Items.Accessories.Magic
         public static float DamageBoost => 0.15f;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool IsLoadingEnabled(Mod mod) => RootsModConfig.Instance.RemoveClasses;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.SorcererEmblem;
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.SorcererEmblem] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>

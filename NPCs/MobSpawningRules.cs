@@ -8,6 +8,7 @@ namespace RootsBeta.NPCs
     {
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
+            //TODO - Config
             if (spawnInfo.Player.ZoneJungle)
                 pool.Add(NPCID.Snatcher, spawnInfo.Player.ZoneRockLayerHeight || spawnInfo.Player.ZoneDirtLayerHeight ? 0.05f : 0.025f); // TODO: Put into snatcher file
         }

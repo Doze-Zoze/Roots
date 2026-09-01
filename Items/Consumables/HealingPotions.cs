@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Config;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Consumables
 {
-    public class HealingPotions : GlobalItem
+    public class HealingPotions : GlobalItem, IConfigurableContent
     {
         #region Parameters
 
@@ -25,7 +26,7 @@ namespace RootsBeta.Items.Consumables
             ItemID.Honeyfin,
             ItemID.Eggnog
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.LifeChanges;
+        public override bool IsLoadingEnabled(Mod mod) => this.ConfigEnabled;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemsToCount.Contains(item.type);
 
         public override void SetDefaults(Item entity)

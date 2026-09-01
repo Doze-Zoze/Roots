@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class ManaCloak : GlobalItem
+    public class ManaCloak : ConfigurableItemRework
     {
         #region Parameters
             public static int Defense => MagicCuffs.Defense;
@@ -23,8 +24,7 @@ namespace RootsBeta.Items.Accessories.Magic
             public static int ManaStarConversionCooldownFrames => 60;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ManaCloak;
+        public override int[] ItemIds => [ItemID.ManaCloak];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.ManaCloak] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.ManaCloak.Tooltip");

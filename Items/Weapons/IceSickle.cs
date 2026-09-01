@@ -5,17 +5,17 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class IceSickle : GlobalItem
+    public class IceSickle : ConfigurableItemRework
     {
         #region Parameters
         public static int ManaCost => 10;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.IceSickle;
+        public override int[] ItemIds => [ItemID.IceSickle];
 
         public override void SetStaticDefaults()
         {

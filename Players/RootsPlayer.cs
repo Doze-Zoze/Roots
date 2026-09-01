@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsBeta.Projectiles;
 using RootsBeta.Utilities;
 using System;
@@ -55,7 +56,7 @@ namespace RootsBeta.Players
             Player.manaRegenDelay = Math.Min(Player.manaRegenDelay, ManaRegenDelayMax);
 
             //rework needed
-            if (Configs.Instance.LifeChanges && !Player.shinyStone)
+            if (RootsModConfig.Instance.LifeChanges && !Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it
             ShootSpeedMult = 1;
             AdditiveDamageMultipliersToApplyOnHit = 1;
@@ -122,9 +123,10 @@ namespace RootsBeta.Players
 
         public override void UpdateEquips()
         {
-            if (Configs.Instance.RemoveClasses && Player.kbGlove)
+            if (RootsModConfig.Instance.RemoveClasses && Player.kbGlove)
                 Player.GetKnockback(DamageClass.Generic) *= 2f;
-            
+
+            //TODO - Config & Bugfix
             int lostMana = (int)((Player.slotsMinions - Player.maxMinions) * ManaPerMinion);
             Player.maxMinions += Player.statManaMax2 / ManaPerMinion;
             if (lostMana > 0)
@@ -137,7 +139,7 @@ namespace RootsBeta.Players
             {
                 func(Player, target, hit, damageDone);
             }
-            if (Configs.Instance.RemoveClasses && Player.magmaStone)
+            if (RootsModConfig.Instance.RemoveClasses && Player.magmaStone)
                 target.AddBuff(BuffID.OnFire3, 120);
         }
 

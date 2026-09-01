@@ -5,17 +5,17 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class BladeOfGrass : GlobalItem
+    public class BladeOfGrass : ConfigurableItemRework
     {
         #region Parameters
         public static int ManaCost => 5;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.BladeofGrass;
+        public override int[] ItemIds => [ItemID.BladeofGrass];
 
         public override void SetStaticDefaults()
         {

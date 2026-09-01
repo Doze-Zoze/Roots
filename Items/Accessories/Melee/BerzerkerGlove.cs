@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,15 +8,14 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Melee
 {
-    public class BerserkerGlove : GlobalItem
+    public class BerserkerGlove : ConfigurableItemRework
     {
         #region Parameters
         public static float ShootSpeedMultiplier => PowerGlove.ShootSpeedMultiplier;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.BerserkerGlove;
-        public override void SetDefaults(Item entity) => ItemSets.DontUseVanillaEquipEffects[ItemID.BerserkerGlove] = true;
+        public override int[] ItemIds => [ItemID.BerserkerGlove];
+        public override void SetDefaults(Item entity) => ItemSets.DontUseVanillaEquipEffects[ItemIds[0]] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.BerserkerGlove.Tooltip");
 

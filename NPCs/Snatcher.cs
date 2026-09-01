@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsCore;
 using Terraria;
 using Terraria.DataStructures;
@@ -6,7 +7,7 @@ using Terraria.GameContent;
 
 namespace RootsBeta.NPCs
 {
-    public class Snatcher(NPC npc) : AIOverride(npc)
+    public class Snatcher(NPC npc) : AIOverride(npc), IConfigurableContent
     {
         #region Balancing Stats
         private static float BeginChargingThreshold => 640;

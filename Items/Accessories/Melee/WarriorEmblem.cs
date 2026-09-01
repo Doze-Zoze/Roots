@@ -5,17 +5,17 @@ using RootsBeta.Players;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Roots.Config;
 
 namespace RootsBeta.Items.Accessories.Melee
 {
-    public class WarriorEmblem : GlobalItem
+    public class WarriorEmblem : ConfigurableItemRework
     {
         #region Parameters
         public static float DamageBonus => 0.15f;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.WarriorEmblem;
+        public override int[] ItemIds => [ItemID.WarriorEmblem];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.WarriorEmblem] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.WarriorEmblem.Tooltip");

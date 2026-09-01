@@ -5,17 +5,17 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class ChristmasTreeSword : GlobalItem
+    public class ChristmasTreeSword : ConfigurableItemRework
     {
         #region Parameters
         public static int ManaCost => 12;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ChristmasTreeSword;
+        public override int[] ItemIds => [ItemID.ChristmasTreeSword];
 
         public override void SetStaticDefaults()
         {

@@ -1,4 +1,5 @@
-﻿using RootsCore;
+﻿using Roots.Config;
+using RootsCore;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -15,15 +16,15 @@ namespace RootsBeta.NPCs
         {
             foreach (var item in EnemyAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add((_ => Configs.Instance.EnemyChanges, item.Value));
+                NpcSets.AiOverrides[item.Key].Add((_ => RootsModConfig.Instance.EnemyChanges, item.Value));
             }
 
             foreach (var item in BossAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add((_ => Configs.Instance.BossChanges, item.Value));
+                NpcSets.AiOverrides[item.Key].Add((_ => RootsModConfig.Instance.BossChanges, item.Value));
             }
 
-            if (Configs.Instance.EnemyChanges)
+            if (RootsModConfig.Instance.EnemyChanges)
             {
                 NPCID.Sets.ImmuneToAllBuffs[NPCID.Snatcher] = true;
             }
@@ -55,7 +56,7 @@ namespace RootsBeta.NPCs
     {
         public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            if (!Configs.Instance.EnemyChanges || !FixExploitManEaters.SpotProtected(i, j)) return;
+            if (!RootsModConfig.Instance.EnemyChanges || !FixExploitManEaters.SpotProtected(i, j)) return;
             effectOnly = true;
             foreach (var item in Main.ActiveNPCs)
             {

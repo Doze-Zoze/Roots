@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,15 +8,14 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Melee
 {
-    public class FireGauntlet : GlobalItem
+    public class FireGauntlet : ConfigurableItemRework
     {
         #region Parameters
         public static float ShootSpeedMultiplier => MechanicalGlove.ShootSpeedMultiplier;
         public static float DamageBonus => MechanicalGlove.DamageBonus;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.FireGauntlet;
+        public override int[] ItemIds => [ItemID.FireGauntlet];
         public override void SetDefaults(Item entity) => ItemSets.DontUseVanillaEquipEffects[ItemID.FireGauntlet] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.FireGauntlet.Tooltip");
