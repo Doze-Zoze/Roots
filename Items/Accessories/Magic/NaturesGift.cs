@@ -8,8 +8,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class NaturesGift : ConfigurableItemRework
+    public class NaturesGift : ConfigurableItemRework<NaturesGift>, IConfigurableContent<NaturesGift>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         private static float ManaCostReduction => 0.15f;
         #endregion

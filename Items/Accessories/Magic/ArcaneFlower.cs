@@ -9,8 +9,9 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class ArcaneFlower : ConfigurableItemRework
+    public class ArcaneFlower : ConfigurableItemRework<ArcaneFlower>, IConfigurableContent<ArcaneFlower>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
         #region Parameters
         public static float MinimumManaMagicDamageModifier => 0.5f;
         public static float MaximumManaMagicDamageModifier => 1.0f;

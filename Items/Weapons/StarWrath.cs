@@ -9,8 +9,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class StarWrath : ConfigurableItemRework
+    public class StarWrath : ConfigurableItemRework<StarWrath>, IConfigurableContent<StarWrath>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 10;
         public static int ShootSpeed => 16;

@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Config;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class JungleArmor : BaseArmorSet
+    public class JungleArmor : BaseArmorSet<JungleArmor>, IConfigurableContent<JungleArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int ManaMaxBonusHead => 40;
         public static int ManaMaxBonusChest => 20;

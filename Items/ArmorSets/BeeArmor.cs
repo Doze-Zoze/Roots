@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -6,8 +7,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class BeeArmor : BaseArmorSet
+    public class BeeArmor : BaseArmorSet<BeeArmor>, IConfigurableContent<BeeArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static float DamageBonusHead => 0.04f;
         public static float DamageBonusChest => 0.04f;

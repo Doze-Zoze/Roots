@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Consumables
 {
-    public class Mushroom : ConfigurableItemRework
+    public class Mushroom : ConfigurableItemRework<Mushroom>, IConfigurableContent<Mushroom>
     {
         #region Parameters
         public static int Healing => 20;

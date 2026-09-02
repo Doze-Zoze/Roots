@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Melee
 {
-    public class FeralClaws : ConfigurableItemRework
+    public class FeralClaws : ConfigurableItemRework<FeralClaws>, IConfigurableContent<FeralClaws>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float ShootSpeedMultiplier => 1.1f;
         #endregion

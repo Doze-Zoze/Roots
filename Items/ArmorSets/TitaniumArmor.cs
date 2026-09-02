@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class TitaniumHelmets : GlobalItem, IConfigurableContent
+    public class TitaniumHelmets : GlobalItem, IConfigurableContent<TitaniumHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int Defense => 18;
         public static float DamageBonus => 0.12f;
@@ -23,7 +25,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.TitaniumMask,
             ItemID.TitaniumHelmet
         ];
-        public override bool IsLoadingEnabled(Mod mod) => this.ConfigEnabled;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<TitaniumHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>

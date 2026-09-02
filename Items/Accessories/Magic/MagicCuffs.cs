@@ -7,8 +7,9 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class MagicCuffs : ConfigurableItemRework
+    public class MagicCuffs : ConfigurableItemRework<MagicCuffs>, IConfigurableContent<MagicCuffs>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
         #region Parameters
         public static int Defense => 1;
         public static float ManaRegenDelayBonus => 1f;

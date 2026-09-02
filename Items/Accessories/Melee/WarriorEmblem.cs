@@ -9,8 +9,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Accessories.Melee
 {
-    public class WarriorEmblem : ConfigurableItemRework
+    public class WarriorEmblem : ConfigurableItemRework<WarriorEmblem>, IConfigurableContent<WarriorEmblem>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float DamageBonus => 0.15f;
         #endregion

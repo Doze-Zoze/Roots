@@ -8,8 +8,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class HallowedHelmets : GlobalItem, IConfigurableContent
+    public class HallowedHelmets : GlobalItem, IConfigurableContent<HallowedHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int Defense => 9;
         public static float DamageBonus => 0.15f;
@@ -28,7 +30,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.AncientHallowedHeadgear,
             ItemID.AncientHallowedHood,
         ];
-        public override bool IsLoadingEnabled(Mod mod) => this.ConfigEnabled;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<HallowedHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>

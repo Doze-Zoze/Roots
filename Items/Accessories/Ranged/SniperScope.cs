@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Ranger
 {
-    public class SniperScope : ConfigurableItemRework
+    public class SniperScope : ConfigurableItemRework<SniperScope>, IConfigurableContent<SniperScope>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float DistancePerCritBoost => 32f;
         #endregion

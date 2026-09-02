@@ -1,14 +1,17 @@
-﻿using RootsBeta.Utilities;
-using System.Collections.Generic;
+﻿using Roots.Config;
 using RootsBeta.Players;
+using RootsBeta.Utilities;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class SquireArmor : BaseArmorSet
+    public class SquireArmor : BaseArmorSet<SquireArmor>, IConfigurableContent<SquireArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int SentrySlotsHead => 1;
         public static int SentrySlotsSet => 1;

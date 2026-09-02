@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Consumables
 {
-    public class ManaPotions : ConfigurableItemRework
+    public class ManaPotions : ConfigurableItemRework<ManaPotions>, IConfigurableContent<ManaPotions>
     {
         public override int[] ItemIds =>
         [
@@ -17,8 +17,6 @@ namespace RootsBeta.Items.Consumables
             ItemID.GreaterManaPotion,
             ItemID.SuperManaPotion
         ];
-        public override bool IsLoadingEnabled(Mod mod) => RootsModConfig.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemIds.Contains(item.type);
         public override bool CanUseItem(Item item, Player player) => !player.manaSick;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Consumables.ManaPotions.Tooltip");

@@ -9,8 +9,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class TerraBlade : ConfigurableItemRework
+    public class TerraBlade : ConfigurableItemRework<TerraBlade>, IConfigurableContent<TerraBlade>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 10;
         #endregion

@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Summon
 {
-    public class SummonerEmblem : ConfigurableItemRework
+    public class SummonerEmblem : ConfigurableItemRework<SummonerEmblem>, IConfigurableContent<SummonerEmblem>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameter
         public static float DamageBonus => 0.15f;
         #endregion

@@ -22,7 +22,7 @@ namespace RootsBeta.Items
             if (RootsModConfig.Instance.RemoveClasses && (item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
                 item.DamageType = DamageClass.Generic;
 
-            //TODO - Config
+            //TODO - Make configurable
             if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
                 item.mana = 0;
         }

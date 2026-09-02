@@ -9,8 +9,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class SkyDragonsFury : ConfigurableItemRework
+    public class SkyDragonsFury : ConfigurableItemRework<SkyDragonsFury>, IConfigurableContent<SkyDragonsFury>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 30;
         #endregion

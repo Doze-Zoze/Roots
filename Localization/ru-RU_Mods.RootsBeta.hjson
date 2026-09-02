@@ -731,9 +731,24 @@ Configs: {
 
 		ToggleableContent: {
 			// Label: Toggleable Content
+			// Tooltip: Allows granular control over what Roots content is enabled or disabled
+		}
+
+		WeaponChanges: {
+			// Label: Weapon Changes
+			// Tooltip: ""
+		}
+
+		AccessoryChanges: {
+			// Label: Accessory Changes
+			// Tooltip: ""
+		}
+
+		ArmorReworks: {
+			// Label: Armor Reworks
 			// Tooltip: ""
 		}
 	}
 
-	// "ContentConfigData[].Tooltip": ""
+	// "ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }

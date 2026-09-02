@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Melee
 {
-    public class FireGauntlet : ConfigurableItemRework
+    public class FireGauntlet : ConfigurableItemRework<FireGauntlet>, IConfigurableContent<FireGauntlet>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float ShootSpeedMultiplier => MechanicalGlove.ShootSpeedMultiplier;
         public static float DamageBonus => MechanicalGlove.DamageBonus;

@@ -1,14 +1,17 @@
-﻿using RootsBeta.Utilities;
-using System.Collections.Generic;
+﻿using Roots.Config;
 using RootsBeta.Players;
+using RootsBeta.Utilities;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class TurtleArmor : BaseArmorSet
+    public class TurtleArmor : BaseArmorSet<TurtleArmor>, IConfigurableContent<TurtleArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static float CloseRangedDamageBonusHead => 0.06f;
         public static float CloseRangedDamageBonusChest => 0.08f;

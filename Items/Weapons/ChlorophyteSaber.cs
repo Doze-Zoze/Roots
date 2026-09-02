@@ -9,8 +9,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class ChlorophyteSaber : ConfigurableItemRework
+    public class ChlorophyteSaber : ConfigurableItemRework<ChlorophyteSaber>, IConfigurableContent<ChlorophyteSaber>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 8;
         #endregion

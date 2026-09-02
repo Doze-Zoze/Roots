@@ -9,8 +9,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class Frostbrand : ConfigurableItemRework
+    public class Frostbrand : ConfigurableItemRework<Frostbrand>, IConfigurableContent<Frostbrand>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 15;
         #endregion

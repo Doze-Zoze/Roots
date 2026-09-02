@@ -10,9 +10,10 @@ using Terraria.ID;
 
 namespace RootsBeta.NPCs
 {
-    public class KingSlime(NPC npc) : AIOverride(npc), IConfigurableContent
+    public class KingSlime(NPC npc) : AIOverride(npc), IConfigurableContent<KingSlime>
     {
-        public string? ConfigName => "King Slime";
+        public static ConfigGroup ConfigGroups => ConfigGroup.BossReworks;
+        public string ConfigName => "King Slime";
         #region Balancing Stats
 
         #endregion

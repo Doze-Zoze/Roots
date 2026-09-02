@@ -16,12 +16,12 @@ namespace RootsBeta.NPCs
         {
             foreach (var item in EnemyAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add((_ => RootsModConfig.Instance.EnemyChanges, item.Value));
+                NpcSets.AiOverrides[item.Key].Add((item.Value.predicate, item.Value.aiOverride));
             }
 
             foreach (var item in BossAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add((_ => RootsModConfig.Instance.BossChanges, item.Value));
+                NpcSets.AiOverrides[item.Key].Add((item.Value.predicate, item.Value.aiOverride));
             }
 
             if (RootsModConfig.Instance.EnemyChanges)
@@ -30,22 +30,22 @@ namespace RootsBeta.NPCs
             }
         }
 
-        public static Dictionary<int, Func<NPC, AIOverride>> EnemyAIChanges = new()
+        public static Dictionary<int, (Predicate<NPC> predicate,  Func<NPC, AIOverride> aiOverride)> EnemyAIChanges = new()
         {
-            { NPCID.ManEater, x => new ManEater(x) },
-            { NPCID.Snatcher, x => new Snatcher(x) },
-            { NPCID.AngryTrapper, x => new AngryTrapper(x) }
+            { NPCID.ManEater, (x => ConfigHelpers.ConfigEnabled<ManEater>(),  x => new ManEater(x)) },
+            { NPCID.Snatcher, (x => ConfigHelpers.ConfigEnabled<Snatcher>(), x => new Snatcher(x)) },
+            { NPCID.AngryTrapper, (x => ConfigHelpers.ConfigEnabled<AngryTrapper>(), x => new AngryTrapper(x)) }
         };
 
 
-        public static Dictionary<int, Func<NPC, AIOverride>> BossAIChanges = new()
+        public static Dictionary<int, (Predicate<NPC> predicate, Func<NPC, AIOverride> aiOverride)> BossAIChanges = new()
         {
-            { NPCID.KingSlime, x => new KingSlime(x) },
-            { NPCID.SlimeSpiked, x => new SpikedSlime(x) },
-            { NPCID.WallofFlesh, x => new WoFMouth(x) },
-            { NPCID.WallofFleshEye, x => new WoFEye(x) },
-            { NPCID.TheHungry, x => new HungryAttached(x) },
-            { NPCID.TheHungryII, x => new HungryDetached(x) },
+            { NPCID.KingSlime, (x => ConfigHelpers.ConfigEnabled<KingSlime>(), x => new KingSlime(x)) },
+            { NPCID.SlimeSpiked, (x => ConfigHelpers.ConfigEnabled<KingSlime>(), x => new SpikedSlime(x)) },
+            { NPCID.WallofFlesh, (x => ConfigHelpers.ConfigEnabled<WoFMouth>(), x => new WoFMouth(x)) },
+            { NPCID.WallofFleshEye, (x => ConfigHelpers.ConfigEnabled<WoFMouth>(), x => new WoFEye(x)) },
+            { NPCID.TheHungry, (x => ConfigHelpers.ConfigEnabled<WoFMouth>(), x => new HungryAttached(x)) },
+            { NPCID.TheHungryII, (x => ConfigHelpers.ConfigEnabled<WoFMouth>(), x => new HungryDetached(x)) },
         };
     }
     /// <summary>

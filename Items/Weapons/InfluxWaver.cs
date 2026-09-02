@@ -11,8 +11,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class InfluxWaver : ConfigurableItemRework
+    public class InfluxWaver : ConfigurableItemRework<InfluxWaver>, IConfigurableContent<InfluxWaver>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
 
         public static int ElectrifiedFrames => 60;

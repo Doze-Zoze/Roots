@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -6,8 +7,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class ApprenticeArmor : BaseArmorSet
+    public class ApprenticeArmor : BaseArmorSet<ApprenticeArmor>, IConfigurableContent<ApprenticeArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static float DamageBonusHead => 0.1f;
         public static int SentrySlotsHead => 1;

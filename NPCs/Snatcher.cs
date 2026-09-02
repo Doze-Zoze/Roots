@@ -7,8 +7,9 @@ using Terraria.GameContent;
 
 namespace RootsBeta.NPCs
 {
-    public class Snatcher(NPC npc) : AIOverride(npc), IConfigurableContent
+    public class Snatcher(NPC npc) : AIOverride(npc), IConfigurableContent<Snatcher>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.EnemyReworks;
         #region Balancing Stats
         private static float BeginChargingThreshold => 640;
 

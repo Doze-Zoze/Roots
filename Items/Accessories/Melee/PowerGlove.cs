@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Melee
 {
-    public class PowerGlove : ConfigurableItemRework
+    public class PowerGlove : ConfigurableItemRework<PowerGlove>, IConfigurableContent<PowerGlove>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float ShootSpeedMultiplier => FeralClaws.ShootSpeedMultiplier;
         #endregion

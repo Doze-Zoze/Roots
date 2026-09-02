@@ -9,8 +9,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class DeathSickle : ConfigurableItemRework
+    public class DeathSickle : ConfigurableItemRework<DeathSickle>, IConfigurableContent<DeathSickle>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 12;
         #endregion

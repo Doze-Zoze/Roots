@@ -6,8 +6,10 @@ using Terraria.GameContent;
 
 namespace RootsBeta.NPCs
 {
-    public class AngryTrapper(NPC npc) : AIOverride(npc), IConfigurableContent
+    public class AngryTrapper(NPC npc) : AIOverride(npc), IConfigurableContent<AngryTrapper>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.EnemyReworks;
+
         #region Balancing Stats
         private static float BeginChargingThreshold => 640;
 

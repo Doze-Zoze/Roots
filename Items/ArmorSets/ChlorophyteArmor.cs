@@ -8,8 +8,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class ChlorophyteHelmets : GlobalItem, IConfigurableContent
+    public class ChlorophyteHelmets : GlobalItem, IConfigurableContent<ChlorophyteHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         private static int Defense => 13;
         private static float DamageBonus => 0.16f;
@@ -23,7 +25,6 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.ChlorophyteHelmet,
             ItemID.ChlorophyteMask
         ];
-        public override bool IsLoadingEnabled(Mod mod) => this.ConfigEnabled;
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>

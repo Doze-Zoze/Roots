@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Roots.Config;
+using RootsBeta.Items.Consumables;
 using RootsBeta.Projectiles;
 using RootsBeta.Utilities;
 using System;
@@ -56,7 +57,7 @@ namespace RootsBeta.Players
             Player.manaRegenDelay = Math.Min(Player.manaRegenDelay, ManaRegenDelayMax);
 
             //rework needed
-            if (RootsModConfig.Instance.LifeChanges && !Player.shinyStone)
+            if (ConfigHelpers.ConfigEnabled<HealingPotions>() && !Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it
             ShootSpeedMult = 1;
             AdditiveDamageMultipliersToApplyOnHit = 1;
@@ -126,7 +127,7 @@ namespace RootsBeta.Players
             if (RootsModConfig.Instance.RemoveClasses && Player.kbGlove)
                 Player.GetKnockback(DamageClass.Generic) *= 2f;
 
-            //TODO - Config & Bugfix
+            //TODO - High Priority - Make configurable, make it work properly
             int lostMana = (int)((Player.slotsMinions - Player.maxMinions) * ManaPerMinion);
             Player.maxMinions += Player.statManaMax2 / ManaPerMinion;
             if (lostMana > 0)

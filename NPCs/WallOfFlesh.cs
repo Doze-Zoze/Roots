@@ -87,9 +87,11 @@ public class WoFCameraSystem : ModSystem
     }
 }
 
-public class WoFMouth(NPC npc) : AIOverride(npc), IConfigurableContent
+public class WoFMouth(NPC npc) : AIOverride(npc), IConfigurableContent<WoFMouth>
 {
-    public string? ConfigName => "Wall Of Flesh";   
+    public static ConfigGroup ConfigGroups => ConfigGroup.BossReworks;
+    public static string ConfigName => "BETA - Wall Of Flesh";
+    public static bool DefaultState => false;
     public enum WoFAttackState
     {
         LaserBarrage,

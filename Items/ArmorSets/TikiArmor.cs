@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Config;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class TikiArmor : BaseArmorSet
+    public class TikiArmor : BaseArmorSet<TikiArmor>, IConfigurableContent<TikiArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static float DamageBonusHead => 0.1f;
         public static float DamageBonusChest => 0.1f;

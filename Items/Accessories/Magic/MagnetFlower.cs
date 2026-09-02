@@ -8,10 +8,12 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class MagnetFlower : ConfigurableItemRework
+    public class MagnetFlower : ConfigurableItemRework<MagnetFlower>, IConfigurableContent<MagnetFlower>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
-            public static int ManaStarPickupGraceFrames => 300;
+        public static int ManaStarPickupGraceFrames => 300;
             public static float MagicDamageReduction => ManaFlower.MagicDamageReduction;
             public static int ManaRegen => ManaFlower.ManaRegen;
         #endregion

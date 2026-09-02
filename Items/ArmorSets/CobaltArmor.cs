@@ -8,8 +8,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class CobaltHelmets : GlobalItem, IConfigurableContent
+    public class CobaltHelmets : GlobalItem, IConfigurableContent<CobaltHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int Defense => 5;
         public static float DamageBonus => 0.15f;
@@ -23,7 +25,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.CobaltMask,
             ItemID.CobaltHat
         ];
-        public override bool IsLoadingEnabled(Mod mod) => this.ConfigEnabled;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<CobaltHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
 

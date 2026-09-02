@@ -9,9 +9,9 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class AdamantiteHelmets : GlobalItem, IConfigurableContent
+    public class AdamantiteHelmets : GlobalItem, IConfigurableContent<AdamantiteHelmets>
     {
-        public ConfigGroup ConfigGroups => ConfigGroup.None;
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
 
         #region Parameters
         public static int Defense => 10;
@@ -28,7 +28,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.AdamantiteMask,
             ItemID.AdamantiteHeadgear
         ];
-        public override bool IsLoadingEnabled(Mod mod) => this.ConfigEnabled;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<AdamantiteHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>

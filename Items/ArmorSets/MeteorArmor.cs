@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Config;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class MeteorArmor : BaseArmorSet
+    public class MeteorArmor : BaseArmorSet<MeteorArmor>, IConfigurableContent<MeteorArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static float DamageBonusHead => 0.09f;
         public static float DamageBonusChest => 0.09f;

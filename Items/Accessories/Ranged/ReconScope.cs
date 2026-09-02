@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Ranger
 {
-    public class ReconScope : ConfigurableItemRework
+    public class ReconScope : ConfigurableItemRework<ReconScope>, IConfigurableContent<ReconScope>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float DamageBonus => 0.1f;
         public static int CritChanceBonus => 10;

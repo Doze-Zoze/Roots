@@ -11,7 +11,7 @@ namespace RootsBeta.Projectiles.Weapons
 {
     public class SkyDragonsFuryShot : GlobalProjectile
     {
-        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled(typeof(SkyDragonsFury).Name);
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<SkyDragonsFury>();
         public override bool AppliesToEntity(Projectile entity, bool lateInstantiation) => entity.type == ProjectileID.MonkStaffT3_AltShot;
 
         public override bool PreKill(Projectile projectile, int timeLeft)

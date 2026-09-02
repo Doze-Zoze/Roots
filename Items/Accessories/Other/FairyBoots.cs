@@ -10,8 +10,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Other
 {
-    public class FairyBoots : ConfigurableItemRework
+    public class FairyBoots : ConfigurableItemRework<FairyBoots>, IConfigurableContent<FairyBoots>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static int RunSpeed => 6;
         public static int ManaCost => 10;

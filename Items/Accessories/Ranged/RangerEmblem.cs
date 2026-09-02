@@ -10,8 +10,10 @@ using RootsBeta.Items.Accessories.Other;
 
 namespace RootsBeta.Items.Accessories.Ranger
 {
-    public class RangerEmblem : FairyBoots
+    public class RangerEmblem : ConfigurableItemRework<RangerEmblem>, IConfigurableContent<RangerEmblem>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float DamageBonus => 0.15f;
         #endregion

@@ -23,7 +23,7 @@ namespace RootsBeta
                     }
                 }
 
-                //TODO - Config
+                //TODO - Maybe use item-based configs
                 if (!RootsModConfig.Instance.AmmoChanges) continue;
 
                 #region Arrows

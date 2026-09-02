@@ -9,10 +9,12 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class ManaCloak : ConfigurableItemRework
+    public class ManaCloak : ConfigurableItemRework<ManaCloak>, IConfigurableContent<ManaCloak>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
-            public static int Defense => MagicCuffs.Defense;
+        public static int Defense => MagicCuffs.Defense;
             public static float ManaRegenDelayBonus => MagicCuffs.ManaRegenDelayBonus;
             public static int ManaRegen => MagicCuffs.ManaRegen;
             public static int FramesBetweenStarAttacks => 180;

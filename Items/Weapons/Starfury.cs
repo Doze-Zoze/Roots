@@ -9,8 +9,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class Starfury : ConfigurableItemRework
+    public class Starfury : ConfigurableItemRework<Starfury>, IConfigurableContent<Starfury>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 20;
         public static int StarsSpawned => 2;

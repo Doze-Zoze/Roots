@@ -9,8 +9,10 @@ using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class ChristmasTreeSword : ConfigurableItemRework
+    public class ChristmasTreeSword : ConfigurableItemRework<ChristmasTreeSword>, IConfigurableContent<ChristmasTreeSword>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 12;
         #endregion

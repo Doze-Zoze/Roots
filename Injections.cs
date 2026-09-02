@@ -1,4 +1,6 @@
 using Microsoft.Xna.Framework;
+using Roots.Config;
+using RootsBeta.Items.ArmorSets;
 using RootsBeta.NPCs;
 using RootsBeta.Utilities;
 using RootsCore;
@@ -84,7 +86,11 @@ namespace RootsBeta
 
         private void SpectreHurt(On_Projectile.orig_ghostHurt orig, Projectile self, int dmg, Vector2 position, Entity victim)
         {
-            //TODO - Config
+            if (!ConfigHelpers.ConfigEnabled<SpectreArmor>())
+            {
+                orig(self, dmg, position, victim);
+                return;
+            }
             //Decompiled vanilla code with the Magic check changed to isManaProjectile
             if (!self.Roots().IsManaProjectile || self.damage <= 0)
             {
@@ -140,7 +146,11 @@ namespace RootsBeta
 
         private void SpectreHeal(On_Projectile.orig_ghostHeal orig, Projectile self, int dmg, Vector2 position, Entity victim)
         {
-            //TODO - Config
+            if (!ConfigHelpers.ConfigEnabled<SpectreArmor>())
+            {
+                orig(self, dmg, position, victim);
+                return;
+            }
             //Decompiled vanilla code with the Magic check changed to isManaProjectile
             if (!self.Roots().IsManaProjectile)
                 return;

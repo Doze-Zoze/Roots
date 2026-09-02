@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -6,8 +7,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class SpectreArmor : BaseArmorSet
+    public class SpectreArmor : BaseArmorSet<SpectreArmor>, IConfigurableContent<SpectreArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int ManaMaxBonusMask => 60;
         public static float ManaCostReductionMask => 0.13f;

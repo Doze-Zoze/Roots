@@ -8,14 +8,16 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class FlinxFurCoat : GlobalItem, IConfigurableContent
+    public class FlinxFurCoat : GlobalItem, IConfigurableContent<FlinxFurCoat>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static float SummonDamageBonus => 0.1f;
         public static int MinionSlots => 1;
         #endregion
         
-        public override bool IsLoadingEnabled(Mod mod) => this.ConfigEnabled;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<FlinxFurCoat>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.FlinxFurCoat;
         public override bool InstancePerEntity => true;
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.FlinxFurCoat] = true;

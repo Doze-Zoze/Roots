@@ -1,14 +1,17 @@
-﻿using RootsBeta.Utilities;
-using System.Collections.Generic;
+﻿using Roots.Config;
 using RootsBeta.Players;
+using RootsBeta.Utilities;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class RedRidingArmor : BaseArmorSet
+    public class RedRidingArmor : BaseArmorSet<RedRidingArmor>, IConfigurableContent<RedRidingArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int SentrySlotsHead => 2;
         public static int SentrySlotsSet => 1;

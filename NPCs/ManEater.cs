@@ -6,8 +6,9 @@ using Terraria.GameContent;
 
 namespace RootsBeta.NPCs
 {
-    public class ManEater(NPC npc) : AIOverride(npc), IConfigurableContent
+    public class ManEater(NPC npc) : AIOverride(npc), IConfigurableContent<ManEater>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.EnemyReworks;
         #region Balancing Stats
         private static float BeginChargingThreshold => 640;
 

@@ -8,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class ManaFlower : ConfigurableItemRework
+    public class ManaFlower : ConfigurableItemRework<ManaFlower>, IConfigurableContent<ManaFlower>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float MagicDamageReduction => 0.75f;
         public static int ManaRegen => 40;

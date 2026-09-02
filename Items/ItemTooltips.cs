@@ -23,7 +23,7 @@ namespace RootsBeta.Items
                         + RootsUtils.GetLocalizedTextValue("Tips.SummonManaCost");
             }
             
-            //TODO - Config
+            //TODO - Make configurable
             if (item.type == ItemID.MagmaStone)
                 tooltips.ReplaceTooltipWith("Accessories.MagmaStone.Tooltip");
         }
