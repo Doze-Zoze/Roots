@@ -16,12 +16,12 @@ namespace RootsBeta.NPCs
         {
             foreach (var item in EnemyAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add((item.Value.predicate, item.Value.aiOverride));
+                NpcSets.AIOverrides[item.Key].Add((item.Value.predicate, item.Value.aiOverride));
             }
 
             foreach (var item in BossAIChanges)
             {
-                NpcSets.AiOverrides[item.Key].Add((item.Value.predicate, item.Value.aiOverride));
+                NpcSets.AIOverrides[item.Key].Add((item.Value.predicate, item.Value.aiOverride));
             }
 
             if (RootsModConfig.Instance.EnemyChanges)

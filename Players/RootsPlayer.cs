@@ -39,8 +39,7 @@ namespace RootsBeta.Players
         public List<Func<Player, Item, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCWithItemFuncs = [];
         public List<Action<Player, Projectile, NPC, NPC.HitInfo, int>> OnHitNPCWithProjectileFuncs = [];
         public List<Action<Player, NPC, NPC.HitInfo, int>> OnHitNPCFuncs =[];
-
-
+        
         public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> PhysicalModifyHitNPCFuncs = [];
         public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> MagicalModifyHitNPCFuncs = [];
         public List<Action<Player, NPC, NPC.HitInfo, int>> PhysicalOnHitNPCFuncs = [];
