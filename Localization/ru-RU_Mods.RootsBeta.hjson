@@ -640,9 +640,13 @@ Weapons: {
 		Лучи наносят намного больше урона и не тратят ману, когда вы наэлектризованы
 		Удерживайте ПКМ, чтобы электризовать себя
 		'''
+	// BrandOfTheInferno.Tooltip: While under Striking Moment, does a massive spin attack that deals double damage
 }
 
-Buffs.ManaSickness.Tooltip: Вы не можете использовать зелья маны
+Buffs: {
+	ManaSickness.Tooltip: Вы не можете использовать зелья маны
+	// StrikingMoment.Tooltip: Physical attacks deal 5x damage
+}
 
 Consumables: {
 	Mushroom.Tooltip: Накладывает послезельевую болезнь на 15 секунд
@@ -752,3 +756,5 @@ Configs: {
 
 	// "ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }
+
+// Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout

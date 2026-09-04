@@ -640,9 +640,13 @@ Weapons: {
 		Beams deal much more damage and do not require mana when you are inflicted with Electrified
 		Hold Right Click to inflict Electrified on yourself
 		'''
+	BrandOfTheInferno.Tooltip: While under Striking Moment, does a massive spin attack that deals double damage
 }
 
-Buffs.ManaSickness.Tooltip: Prevents drinking mana potions
+Buffs: {
+	ManaSickness.Tooltip: Prevents drinking mana potions
+	StrikingMoment.Tooltip: Physical attacks deal 5x damage
+}
 
 Consumables: {
 	Mushroom.Tooltip: Inflicts 15 seconds of Potion Sickness
@@ -752,3 +756,5 @@ Configs: {
 
 	"ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }
+
+Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout

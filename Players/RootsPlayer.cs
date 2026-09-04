@@ -26,7 +26,7 @@ namespace RootsBeta.Players
         #endregion
 
         #endregion
-        
+
         #region Balancing Properties
         public static float CloseRangeDistance => 16 * 25; // 16 pixels per tile
         public static int ManaSickFrames => 900;
@@ -38,8 +38,8 @@ namespace RootsBeta.Players
         public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCFuncs = [];
         public List<Func<Player, Item, NPC, NPC.HitModifiers, NPC.HitModifiers>> ModifyHitNPCWithItemFuncs = [];
         public List<Action<Player, Projectile, NPC, NPC.HitInfo, int>> OnHitNPCWithProjectileFuncs = [];
-        public List<Action<Player, NPC, NPC.HitInfo, int>> OnHitNPCFuncs =[];
-        
+        public List<Action<Player, NPC, NPC.HitInfo, int>> OnHitNPCFuncs = [];
+
         public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> PhysicalModifyHitNPCFuncs = [];
         public List<Func<Player, NPC, NPC.HitModifiers, NPC.HitModifiers>> MagicalModifyHitNPCFuncs = [];
         public List<Action<Player, NPC, NPC.HitInfo, int>> PhysicalOnHitNPCFuncs = [];
