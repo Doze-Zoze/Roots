@@ -182,15 +182,15 @@ namespace RootsBeta.Items.Weapons
             const float dustRangeScale = 2f; //Set to 2 to make it stretch a bit past the projectile, to make it look closer to vanilla
             const float dustSpeedScale = 0.2f; //Vanilla
             const float dustScale = 0.7f; //Vanilla
-            const float dustHorizontalDirectionBoost = 3; //Vanilla
+            const float dustSpeedBoost = 3; //Vanilla
             
             Dust dust = Dust.NewDustDirect(
                 Projectile.TopLeft - (Player.direction == -1 ? new Vector2(Projectile.Size.X, 0) : Vector2.Zero) 
                                    - (Projectile.Size * Projectile.scale * (1 / dustRangeScale)),
                 (int)(Projectile.Size.X * Projectile.scale * dustRangeScale),
                 (int)(Projectile.Size.Y * Projectile.scale * dustRangeScale), DustID.Torch,
-                Projectile.velocity.X * dustSpeedScale + (Projectile.direction * dustHorizontalDirectionBoost), 
-                Projectile.velocity.Y * dustSpeedScale, 100,
+                Projectile.velocity.X * dustSpeedScale - (Angle.X * dustSpeedBoost), 
+                Projectile.velocity.Y * dustSpeedScale - (Angle.Y * dustSpeedBoost), 100,
                 Color.Transparent, dustScale);
             dust.noGravity = true;
             dust.velocity *= 2f;
