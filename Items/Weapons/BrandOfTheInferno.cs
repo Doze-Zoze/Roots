@@ -128,6 +128,9 @@ namespace RootsBeta.Items.Weapons
         public override float LineCollisionLength => 100;
         public override int AfterImageCount => 15;
         private bool IsStrongSwing { get => Projectile.ai[0] == 1f; set => Projectile.ai[0] = value ? 1f : 0f; }
+        private Vector2[] _flamePos = new Vector2[7];
+        private const int FlameUpdateFrequency = 5;
+        private int _flameCount;
 
         public override void FakeOnSpawn()
         {
@@ -154,26 +157,30 @@ namespace RootsBeta.Items.Weapons
             Main.EntitySpriteDraw(GlowMask.Value, Projectile.Center - Main.screenPosition, GlowMask.Frame(),
                 Color.White with { A = 0 }, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
                 Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
-
-            //PROBLEM: This does not render in deltatime. This probably renders at your framerate. doze please double check
             
             //Magic numbers taken directly from vanilla
             const int flameStacks = 7;
             Vector2 minFlamePos = new (-10, -10);
             Vector2 maxFlamePos = new (11, 1);
             Vector2 flameScaling = new Vector2(0.15f, 0.35f);
-
-            Vector2[] flamePos = new Vector2[7];
             
-            for (int j = 0; j < flameStacks; j++)
+            if (_flameCount == 0)
             {
-                flamePos[j].X = Main.rand.Next((int)minFlamePos.X, (int)maxFlamePos.X) * flameScaling.X;
-                flamePos[j].Y = Main.rand.Next((int)minFlamePos.Y, (int)maxFlamePos.Y) * flameScaling.Y;
+                _flameCount = FlameUpdateFrequency;
+                for (int j = 0; j < flameStacks; j++)
+                {
+                    _flamePos[j].X = Main.rand.Next((int)minFlamePos.X, (int)maxFlamePos.X) * flameScaling.X;
+                    _flamePos[j].Y = Main.rand.Next((int)minFlamePos.Y, (int)maxFlamePos.Y) * flameScaling.Y;
+                }
             }
-
+            else
+            {
+                _flameCount--;
+            }
+            
             for (int i = 0; i < flameStacks; i++)
             {
-                Vector2 offset = new(flamePos[i].X * Projectile.scale, flamePos[i].Y * Projectile.scale);
+                Vector2 offset = new(_flamePos[i].X * Projectile.scale, _flamePos[i].Y * Projectile.scale);
                 Main.EntitySpriteDraw(GlowMask.Value, Projectile.Center - Main.screenPosition + offset, GlowMask.Frame(),
                     Color.White with { A = 0 }, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
                     Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
