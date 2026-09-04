@@ -152,34 +152,46 @@ namespace RootsBeta.Items.Weapons
         public override void PostDraw(Color lightColor)
         {
             Main.EntitySpriteDraw(GlowMask.Value, Projectile.Center - Main.screenPosition, GlowMask.Frame(),
-                Color.White with { A = 0}, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
+                Color.White with { A = 0 }, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
                 Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
 
-            // PROBLEM: This does not render in deltatime. This probably renders at your framerate. doze please double check
+            //PROBLEM: This does not render in deltatime. This probably renders at your framerate. doze please double check
             
-            const int flameStacks = 7; //Same as vanilla
+            //Magic numbers taken directly from vanilla
+            const int flameStacks = 7;
+            Vector2 minFlamePos = new (-10, -10);
+            Vector2 maxFlamePos = new (11, 1);
+            Vector2 flameScaling = new Vector2(0.15f, 0.35f);
 
             Vector2[] flamePos = new Vector2[7];
             
             for (int j = 0; j < flameStacks; j++)
             {
-                flamePos[j].X = Main.rand.Next(-10, 11) * 0.15f;
-                flamePos[j].Y = Main.rand.Next(-10, 1) * 0.35f;
+                flamePos[j].X = Main.rand.Next((int)minFlamePos.X, (int)maxFlamePos.X) * flameScaling.X;
+                flamePos[j].Y = Main.rand.Next((int)minFlamePos.Y, (int)maxFlamePos.Y) * flameScaling.Y;
             }
 
             for (int i = 0; i < flameStacks; i++)
             {
                 Vector2 offset = new(flamePos[i].X * Projectile.scale, flamePos[i].Y * Projectile.scale);
                 Main.EntitySpriteDraw(GlowMask.Value, Projectile.Center - Main.screenPosition + offset, GlowMask.Frame(),
-                    Color.White with { A = 0}, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
+                    Color.White with { A = 0 }, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
                     Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
+
+            const float dustRangeScale = 2f; //Set to 2 to make it stretch a bit past the projectile, to make it look closer to vanilla
+            const float dustSpeedScale = 0.2f; //Vanilla
+            const float dustScale = 0.7f; //Vanilla
+            const float dustHorizontalDirectionBoost = 3; //Vanilla
             
             Dust dust = Dust.NewDustDirect(
-                Projectile.TopLeft - (Player.direction == -1 ? new Vector2(Projectile.Size.X, 0) : Vector2.Zero) - (Projectile.Size * Projectile.scale * 0.5f),
-                (int)(Projectile.Size.X * Projectile.scale * 2), (int)(Projectile.Size.Y * Projectile.scale * 2), DustID.Torch,
-                Projectile.velocity.X * 0.2f + (Projectile.direction * 3), Projectile.velocity.Y * 0.2f, 100,
-                Color.Transparent, 0.7f);
+                Projectile.TopLeft - (Player.direction == -1 ? new Vector2(Projectile.Size.X, 0) : Vector2.Zero) 
+                                   - (Projectile.Size * Projectile.scale * (1 / dustRangeScale)),
+                (int)(Projectile.Size.X * Projectile.scale * dustRangeScale),
+                (int)(Projectile.Size.Y * Projectile.scale * dustRangeScale), DustID.Torch,
+                Projectile.velocity.X * dustSpeedScale + (Projectile.direction * dustHorizontalDirectionBoost), 
+                Projectile.velocity.Y * dustSpeedScale, 100,
+                Color.Transparent, dustScale);
             dust.noGravity = true;
             dust.velocity *= 2f;
             dust.fadeIn = 0.9f;
