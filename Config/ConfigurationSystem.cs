@@ -20,8 +20,6 @@ namespace Roots.Config
         ArmorReworks = 1 << 2,
         BossReworks = 1 << 3,
         EnemyReworks = 1 << 4
-
-
     }
     public interface IConfigurableContent<T>
     {
@@ -32,34 +30,26 @@ namespace Roots.Config
     }
     public class ConfigurationSystem
     {
-        public class ContentConfigData
+        public class ContentConfigData(Type parentType, string name, bool enabled = true, ConfigGroup groups = ConfigGroup.None)
         {
-            public ContentConfigData(Type parentType, string name, bool enabled = true, ConfigGroup groups = ConfigGroup.None)
-            {
-                Name = name;
-                Enabled = enabled;
-                Groups = groups;
-                ParentType = parentType;
-            }
-            public string Name { get; init; }
-            [ReloadRequired] public bool Enabled { get; set; }
-            [JsonIgnore] internal ConfigGroup Groups { get; init; }
-            [JsonIgnore] internal Type ParentType { get; init; }
+            public string Name { get; init; } = name;
+            [ReloadRequired] public bool Enabled { get; set; } = enabled;
+            [JsonIgnore] internal ConfigGroup Groups { get; init; } = groups;
+            [JsonIgnore] internal Type ParentType { get; init; } = parentType;
+
             public override bool Equals(object obj)
             {
-                if (obj is ContentConfigData other)
-                    return other.Name == Name && other.Enabled == Enabled;
-                return base.Equals(obj);
+                return obj is ContentConfigData other && Name == other.Name && other.Enabled == Enabled;
             }
 
             public override int GetHashCode()
-            {
-             return HashCode.Combine(Name, Enabled);
+            { 
+                return HashCode.Combine(Name, Enabled);
             }
         }
 
         #region Toggleable Content List
-        public static string[] LoadedContentToggleNames;
+        public static string[] LoadedContentToggleNames { get; set; }
         public static ContentConfigData[] DefaultContentToggleData
         {
             get => field ??= LoadContentTable();
@@ -73,7 +63,7 @@ namespace Roots.Config
                 {
                     if (field.Contains(item))
                         continue;
-                    if (!field.Any(x => x.Name == item.Name))
+                    if (field.All(x => x.Name != item.Name))
                     {
                         Debug.Fail("ERROR: Saved config data contains invalid class names");
                         continue;
@@ -93,11 +83,12 @@ namespace Roots.Config
             {
                 if (type.IsAbstract) continue;
                
-                var loadedInterface = type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IConfigurableContent<>));
+                var loadedInterface = type.GetInterfaces().FirstOrDefault(x =>
+                    x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IConfigurableContent<>));
                 if (loadedInterface is null) continue;
 
-                contentList.Add((ContentConfigData)factory.MakeGenericMethod(type).Invoke(null,null));
-
+                if (factory != null)
+                    contentList.Add((ContentConfigData)factory.MakeGenericMethod(type).Invoke(null, null));
             }
 
             LoadedContentToggleNames = [.. contentList.Select(x => x.Name)];
@@ -114,20 +105,16 @@ namespace Roots.Config
             );
         }
         #endregion
-
     }
 
     public static class ConfigHelpers
     {
-        public static bool ConfigEnabled(string ID) 
+        public static bool ConfigEnabled(string id) 
         {
-
-            if (!ConfigurationSystem.LoadedContentToggleNames.Contains(ID))
-            {
-                Debug.Fail("ERROR: ID missing from config list");
-               return true;
-            }
-            return RootsModConfig.Instance.ToggleableContent.FirstOrDefault(x => x.Name == ID,null)?.Enabled ?? true;
+            if (ConfigurationSystem.LoadedContentToggleNames.Contains(id))
+                return RootsModConfig.Instance.ToggleableContent.FirstOrDefault(x => x.Name == id, null)?.Enabled ?? true;
+            Debug.Fail("ERROR: ID missing from config list");
+            return true;
         }
         extension(ConfigGroup group)
         {
@@ -153,7 +140,6 @@ namespace Roots.Config
         public abstract int[] ItemIds { get; }
         public override bool AppliesToEntity(Item entity, bool lateInstantiation) => ItemIds.Contains(entity.type);
         public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<T>();
-
     }
     #endregion
 }

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -15,13 +14,10 @@ namespace Roots.Config
 
         public static RootsModConfig Instance => ModContent.GetInstance<RootsModConfig>();
 
-        
-
         [DefaultValue(true)]
         [ReloadRequired]
         public bool RemoveClasses;
-
-
+        
         [DefaultValue(true)]
         [ReloadRequired]
         public bool AmmoChanges;
@@ -35,7 +31,6 @@ namespace Roots.Config
             set => ConfigGroup.WeaponReworks.SetToggleState(value);
         }
 
-
         [ReloadRequired]
         [JsonIgnore]
         [ShowDespiteJsonIgnore]
@@ -44,8 +39,6 @@ namespace Roots.Config
             get => ConfigGroup.AccessoryReworks.GetToggleState();
             set => ConfigGroup.AccessoryReworks.SetToggleState(value);
         }
-
-
 
         [ReloadRequired]
         [JsonIgnore]
@@ -87,7 +80,7 @@ namespace Roots.Config
                 {
                     if (field.Contains(item))
                         continue;
-                    if (!field.Any(x => x.Name == item.Name))
+                    if (field.All(x => x.Name != item.Name))
                     {
                         Debug.Fail("ERROR: Saved config data contains invalid class names");
                         continue;
