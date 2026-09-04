@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Roots.Config;
 using RootsBeta.Utilities;
 using RootsCore.ContentBaseClasses;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -26,9 +29,10 @@ namespace RootsBeta.Items.Weapons
         public override void SetDefaults(Item item)
         {
             item.shoot = ModContent.ProjectileType<BrandOfTheInfernoHoldout>();
-            item.useTime = item.useAnimation = 25;
+            item.useTime = item.useAnimation = 30;
             item.noMelee = true;
             item.noUseGraphic = true;
+            item.UseSound = null;
 
         }
         public override bool CanUseItem(Item item, Player player)
@@ -51,7 +55,7 @@ namespace RootsBeta.Items.Weapons
             CanDamage = false,
             SwingOffsetAngle = (proj) =>
             {
-                return proj.State.SwingWidth * -0.5f - 0.5f * (1-MathF.Pow(proj.StateCompletion, 0.5f));
+                return proj.State.SwingWidth * -0.5f - 0.5f * (1 - MathF.Pow(proj.StateCompletion, 0.5f));
             },
             OffsetDistance = 48,
             AlternateSwings = true
@@ -63,7 +67,8 @@ namespace RootsBeta.Items.Weapons
             CanDamage = true,
             OffsetDistance = 48,
             SwingOffsetAngle = null,
-            AlternateSwings = true
+            AlternateSwings = true,
+            Sound = SoundID.Item1
         };
         public AttackState Endlag = new()
         {
@@ -98,6 +103,7 @@ namespace RootsBeta.Items.Weapons
             CanDamage = true,
             Loops = true,
             OffsetDistance = 48,
+            Sound = SoundID.DD2_MonkStaffSwing,
             SwingOffsetAngle = (proj) =>
             {
                 return MathHelper.Lerp(-1.75f, proj.SwingWidth - 1.75f, proj.StateCompletion);
@@ -107,6 +113,7 @@ namespace RootsBeta.Items.Weapons
                 if (proj.StateCompletion != 1) return;
                 proj.Projectile.ResetLocalNPCHitImmunity();
                 proj.Projectile.ai[1]++;
+                SoundEngine.PlaySound(proj.State.Sound, proj.Projectile.Center);
                 if (proj.Projectile.ai[1] >= 2)
                     proj.SetState(proj.StrongEndlag);
             }
@@ -119,9 +126,9 @@ namespace RootsBeta.Items.Weapons
             SwingOffsetAngle = (proj) =>
             {
                 return MathHelper.Lerp(
-                MathHelper.Lerp(-1.75f, (MathHelper.TwoPi - 1.75f) * (40f/12), proj.StateCompletion), 
-                MathHelper.Lerp( -1.75f, proj.SwingWidth - 1.75f, proj.StateCompletion),
-                MathF.Pow(proj.StateCompletion,0.45f));
+                MathHelper.Lerp(-1.75f, (MathHelper.TwoPi - 1.75f) * (40f / 12), proj.StateCompletion),
+                MathHelper.Lerp(-1.75f, proj.SwingWidth - 1.75f, proj.StateCompletion),
+                MathF.Pow(proj.StateCompletion, 0.45f));
             },
             OffsetDistance = 48
         };
@@ -145,6 +152,13 @@ namespace RootsBeta.Items.Weapons
             if (IsStrongSwing)
                 modifiers.SourceDamage *= BrandOfTheInferno.StrongSwingBonusDamage;
             base.ModifyHitNPC(target, ref modifiers);
+        }
+        public static Asset<Texture2D> GlowMask => field ??= ModContent.Request<Texture2D>($"Terraria/Images/ItemFlame_{ItemID.DD2SquireDemonSword}");
+        public override void PostDraw(Color lightColor)
+        {
+            Main.EntitySpriteDraw(GlowMask.Value, Projectile.Center - Main.screenPosition, GlowMask.Frame(),
+                Color.White with { A = 0}, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
+                Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
         }
     }
 }
