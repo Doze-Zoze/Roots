@@ -132,7 +132,7 @@ namespace RootsBeta.Items.Weapons
         private const int FlameUpdateFrequency = 5;
         private int _flameCount;
         private int _dustCounter;
-        const int flameStacks = 7;
+        private const int FlameStacks = 7;
 
         public override void FakeOnSpawn()
         {
@@ -152,11 +152,15 @@ namespace RootsBeta.Items.Weapons
             base.ModifyHitNPC(target, ref modifiers);
 
             int dustCount = (IsStrongSwing ? 30 : 20) - Projectile.numHits;
+            const int velocityBoost = 10;
+            const int positionOffset = 16;
+            const int velocityOffset = 8;
+            const float dustScale = 2f;
             for (var i =0; i < dustCount; i++)
             {
-                Vector2 DustAngle = target.DirectionFrom(Player.Center);
-                Dust dust = Dust.NewDustPerfect(target.Center + Main.rand.NextVector2Circular(16, 16),
-                    DustID.Torch, DustAngle * 10 + Main.rand.NextVector2Circular(8, 8), 100, Color.Transparent, 2);
+                Vector2 dustAngle = target.DirectionFrom(Player.Center);
+                Dust dust = Dust.NewDustPerfect(target.Center + Main.rand.NextVector2Circular(positionOffset, positionOffset),
+                    DustID.Torch, dustAngle * velocityBoost + Main.rand.NextVector2Circular(velocityOffset, velocityOffset), 100, Color.Transparent, dustScale);
 
                 dust.noGravity = true;
                 dust.fadeIn = 0.9f;
@@ -180,7 +184,7 @@ namespace RootsBeta.Items.Weapons
                 if (_flameCount == 0)
                 {
                     _flameCount = FlameUpdateFrequency;
-                    for (int j = 0; j < flameStacks; j++)
+                    for (int j = 0; j < FlameStacks; j++)
                     {
                         _flamePos[j].X = Main.rand.Next((int)minFlamePos.X, (int)maxFlamePos.X) * flameScaling.X;
                         _flamePos[j].Y = Main.rand.Next((int)minFlamePos.Y, (int)maxFlamePos.Y) * flameScaling.Y;
@@ -194,16 +198,19 @@ namespace RootsBeta.Items.Weapons
             }
 
             const float dustScale = 0.7f; //Vanilla
-            Vector2 SwordAngle = Projectile.DirectionFrom(Player.Center);
+            const float positionOffset = 0.5f;
+            const int verticalPositionOffsetBoost = 32;
+            const float dustSpeed = 2f;
+            Vector2 swordAngle = Projectile.DirectionFrom(Player.Center);
 
             int updatesPerDust = (State == Attack || State == StrongAttack) ? 1 : 10;
             if (_dustCounter > updatesPerDust)
             {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(LineCollisionLength * Projectile.scale * Main.rand.NextFloat(-0.5f, 0.5f), 32 * Projectile.scale * Main.rand.NextFloat(-0.5f, 0.5f)).RotatedBy(SwordAngle.ToRotation()),
-                    DustID.Torch, SwordAngle, 100, Color.Transparent, dustScale);
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(LineCollisionLength * Projectile.scale * Main.rand.NextFloat(-positionOffset, positionOffset), verticalPositionOffsetBoost * Projectile.scale * Main.rand.NextFloat(-positionOffset, positionOffset)).RotatedBy(swordAngle.ToRotation()),
+                    DustID.Torch, swordAngle, 100, Color.Transparent, dustScale);
 
                 dust.noGravity = true;
-                dust.velocity *= 2f * Projectile.scale;
+                dust.velocity *= dustSpeed * Projectile.scale;
                 dust.fadeIn = 0.9f;
                 _dustCounter = 0;
             }
@@ -211,7 +218,7 @@ namespace RootsBeta.Items.Weapons
         }
         public override void PostDraw(Color lightColor)
         {
-            for (int i = 0; i < flameStacks; i++)
+            for (int i = 0; i < FlameStacks; i++)
             {
                 Vector2 offset = new(_flamePos[i].X * Projectile.scale, _flamePos[i].Y * Projectile.scale);
                 Main.EntitySpriteDraw(GlowMask.Value, Projectile.Center - Main.screenPosition + offset, GlowMask.Frame(),
