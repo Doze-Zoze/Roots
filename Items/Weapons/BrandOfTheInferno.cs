@@ -131,6 +131,8 @@ namespace RootsBeta.Items.Weapons
         private Vector2[] _flamePos = new Vector2[7];
         private const int FlameUpdateFrequency = 5;
         private int _flameCount;
+        private int _dustCounter;
+        const int flameStacks = 7;
 
         public override void FakeOnSpawn()
         {
@@ -148,36 +150,67 @@ namespace RootsBeta.Items.Weapons
                 modifiers.SourceDamage *= BrandOfTheInferno.StrongSwingBonusDamage;
             target.AddBuff(BuffID.OnFire3, 900);
             base.ModifyHitNPC(target, ref modifiers);
+
+            int dustCount = (IsStrongSwing ? 30 : 20) - Projectile.numHits;
+            for (var i =0; i < dustCount; i++)
+            {
+                Vector2 DustAngle = target.DirectionFrom(Player.Center);
+                Dust dust = Dust.NewDustPerfect(target.Center + Main.rand.NextVector2Circular(16, 16),
+                    DustID.Torch, DustAngle * 10 + Main.rand.NextVector2Circular(8, 8), 100, Color.Transparent, 2);
+
+                dust.noGravity = true;
+                dust.fadeIn = 0.9f;
+                _dustCounter = 0;
+
+            }
         }
 
         public static Asset<Texture2D> GlowMask => field ??= ModContent.Request<Texture2D>($"Terraria/Images/ItemFlame_{ItemID.DD2SquireDemonSword}");
 
+        public override void AdditionalAI()
+        {
+            if (Projectile.numUpdates == -1)
+            {
+                //Magic numbers taken directly from vanilla
+
+                Vector2 minFlamePos = new(-10, -10);
+                Vector2 maxFlamePos = new(11, 1);
+                Vector2 flameScaling = new Vector2(0.15f, 0.35f);
+
+                if (_flameCount == 0)
+                {
+                    _flameCount = FlameUpdateFrequency;
+                    for (int j = 0; j < flameStacks; j++)
+                    {
+                        _flamePos[j].X = Main.rand.Next((int)minFlamePos.X, (int)maxFlamePos.X) * flameScaling.X;
+                        _flamePos[j].Y = Main.rand.Next((int)minFlamePos.Y, (int)maxFlamePos.Y) * flameScaling.Y;
+                    }
+                }
+                else
+                {
+                    _flameCount--;
+                }
+
+            }
+
+            const float dustScale = 0.7f; //Vanilla
+            Vector2 SwordAngle = Projectile.DirectionFrom(Player.Center);
+
+            int updatesPerDust = (State == Attack || State == StrongAttack) ? 1 : 10;
+            if (_dustCounter > updatesPerDust)
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(LineCollisionLength * Projectile.scale * Main.rand.NextFloat(-0.5f, 0.5f), 32 * Projectile.scale * Main.rand.NextFloat(-0.5f, 0.5f)).RotatedBy(SwordAngle.ToRotation()),
+                    DustID.Torch, SwordAngle, 100, Color.Transparent, dustScale);
+
+                dust.noGravity = true;
+                dust.velocity *= 2f * Projectile.scale;
+                dust.fadeIn = 0.9f;
+                _dustCounter = 0;
+            }
+            _dustCounter++;
+        }
         public override void PostDraw(Color lightColor)
         {
-            Main.EntitySpriteDraw(GlowMask.Value, Projectile.Center - Main.screenPosition, GlowMask.Frame(),
-                Color.White with { A = 0 }, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
-                Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
-            
-            //Magic numbers taken directly from vanilla
-            const int flameStacks = 7;
-            Vector2 minFlamePos = new (-10, -10);
-            Vector2 maxFlamePos = new (11, 1);
-            Vector2 flameScaling = new Vector2(0.15f, 0.35f);
-            
-            if (_flameCount == 0)
-            {
-                _flameCount = FlameUpdateFrequency;
-                for (int j = 0; j < flameStacks; j++)
-                {
-                    _flamePos[j].X = Main.rand.Next((int)minFlamePos.X, (int)maxFlamePos.X) * flameScaling.X;
-                    _flamePos[j].Y = Main.rand.Next((int)minFlamePos.Y, (int)maxFlamePos.Y) * flameScaling.Y;
-                }
-            }
-            else
-            {
-                _flameCount--;
-            }
-            
             for (int i = 0; i < flameStacks; i++)
             {
                 Vector2 offset = new(_flamePos[i].X * Projectile.scale, _flamePos[i].Y * Projectile.scale);
@@ -185,23 +218,6 @@ namespace RootsBeta.Items.Weapons
                     Color.White with { A = 0 }, Projectile.rotation, GlowMask.Size() * 0.5f, Projectile.scale,
                     Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
-
-            const float dustRangeScale = 2f; //Set to 2 to make it stretch a bit past the projectile, to make it look closer to vanilla
-            const float dustSpeedScale = 0.2f; //Vanilla
-            const float dustScale = 0.7f; //Vanilla
-            const float dustSpeedBoost = 3; //Vanilla
-            
-            Dust dust = Dust.NewDustDirect(
-                Projectile.TopLeft - (Player.direction == -1 ? new Vector2(Projectile.Size.X, 0) : Vector2.Zero) 
-                                   - (Projectile.Size * Projectile.scale * (1 / dustRangeScale)),
-                (int)(Projectile.Size.X * Projectile.scale * dustRangeScale),
-                (int)(Projectile.Size.Y * Projectile.scale * dustRangeScale), DustID.Torch,
-                Projectile.velocity.X * dustSpeedScale - (Angle.X * dustSpeedBoost), 
-                Projectile.velocity.Y * dustSpeedScale - (Angle.Y * dustSpeedBoost), 100,
-                Color.Transparent, dustScale);
-            dust.noGravity = true;
-            dust.velocity *= 2f;
-            dust.fadeIn = 0.9f;
         }
     }
 }
