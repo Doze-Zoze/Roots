@@ -39,9 +39,7 @@ namespace Roots.Config
             [JsonIgnore] internal Type ParentType { get; init; } = parentType;
             public override bool Equals(object obj)
             {
-                if (obj is ContentConfigData other)
-                    return other.Name == Name && other.Enabled == Enabled;
-                return base.Equals(obj);
+                return obj is ContentConfigData other && Name == other.Name && other.Enabled == Enabled;
             }
 
             public override int GetHashCode()
@@ -51,11 +49,9 @@ namespace Roots.Config
         }
 
         #region Toggleable Content List
-        public static string[] LoadedContentToggleNames;
-        public static ContentConfigData[] DefaultContentToggleData
-        {
-            get => LoadContentTable();
-        }
+        public static string[] LoadedContentToggleNames { get; set; }
+        public static ContentConfigData[] DefaultContentToggleData => LoadContentTable();
+
         private static ContentConfigData[] LoadContentTable()
         {
             List<ContentConfigData> contentList = [];
@@ -70,10 +66,10 @@ namespace Roots.Config
                 var loadedInterface = type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IConfigurableContent<>));
                 if (loadedInterface is null) continue;
 
-                contentList.Add((ContentConfigData)factory.MakeGenericMethod(type).Invoke(null,null));
-
+                Debug.Assert(factory != null, "ERROR: Something about the config data was broken, contentList is not getting added to");
+                contentList.Add((ContentConfigData)factory.MakeGenericMethod(type).Invoke(null, null));
             }
-            contentList.Sort((x, y) => x.Name.CompareTo(y.Name));
+            contentList.Sort((x, y) => string.Compare(x.Name, y.Name, StringComparison.Ordinal));
 
             LoadedContentToggleNames = [.. contentList.Select(x => x.Name)];
             return [.. contentList];
@@ -94,15 +90,13 @@ namespace Roots.Config
 
     public static class ConfigHelpers
     {
-        public static bool ConfigEnabled(string ID) 
+        public static bool ConfigEnabled(string id) 
         {
-
-            if (!ConfigurationSystem.LoadedContentToggleNames.Contains(ID))
-            {
-                Debug.Fail("ERROR: ID missing from config list");
-               return true;
-            }
-            return RootsModConfig.Instance.ToggleableContent.FirstOrDefault(x => x.Name == ID,null)?.Enabled ?? true;
+            if (ConfigurationSystem.LoadedContentToggleNames.Contains(id))
+                return RootsModConfig.Instance.ToggleableContent.FirstOrDefault(x => x.Name == id, null)?.Enabled ??
+                       true;
+            Debug.Fail("ERROR: ID missing from config list");
+            return true;
         }
         extension(ConfigGroup group)
         {
