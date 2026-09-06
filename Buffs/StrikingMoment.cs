@@ -27,6 +27,8 @@ namespace RootsBeta.Buffs
                 plr.ClearBuff(BuffID.ParryDamageBuff);
                 return modifiers;
             });
+
+            player.parryDamageBuff = false; //disable vanilla parry buff logic to prevent double scaling
         }
     }
 }
