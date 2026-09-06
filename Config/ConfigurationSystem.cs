@@ -19,7 +19,8 @@ namespace Roots.Config
         AccessoryReworks = 1 << 1,
         ArmorReworks = 1 << 2,
         BossReworks = 1 << 3,
-        EnemyReworks = 1 << 4
+        EnemyReworks = 1 << 4,
+        BetaContent = 1 << 5,
 
 
     }
@@ -32,19 +33,12 @@ namespace Roots.Config
     }
     public class ConfigurationSystem
     {
-        public class ContentConfigData
+        public class ContentConfigData(Type parentType, string name, bool enabled = true, ConfigGroup groups = ConfigGroup.None)
         {
-            public ContentConfigData(Type parentType, string name, bool enabled = true, ConfigGroup groups = ConfigGroup.None)
-            {
-                Name = name;
-                Enabled = enabled;
-                Groups = groups;
-                ParentType = parentType;
-            }
-            public string Name { get; init; }
-            [ReloadRequired] public bool Enabled { get; set; }
-            [JsonIgnore] internal ConfigGroup Groups { get; init; }
-            [JsonIgnore] internal Type ParentType { get; init; }
+            public string Name { get; init; } = name;
+            [ReloadRequired] public bool Enabled { get; set; } = enabled;
+            [JsonIgnore] internal ConfigGroup Groups { get; init; } = groups;
+            [JsonIgnore] internal Type ParentType { get; init; } = parentType;
             public override bool Equals(object obj)
             {
                 if (obj is ContentConfigData other)
@@ -62,25 +56,7 @@ namespace Roots.Config
         public static string[] LoadedContentToggleNames;
         public static ContentConfigData[] DefaultContentToggleData
         {
-            get => field ??= LoadContentTable();
-            
-            set
-            {
-                field ??= LoadContentTable();
-                if (value is null)
-                    return;
-                foreach (ContentConfigData item in value)
-                {
-                    if (field.Contains(item))
-                        continue;
-                    if (!field.Any(x => x.Name == item.Name))
-                    {
-                        Debug.Fail("ERROR: Saved config data contains invalid class names");
-                        continue;
-                    }
-                    field.First(x => x.Name == item.Name).Enabled = item.Enabled;
-                }
-            }
+            get => LoadContentTable();
         }
         private static ContentConfigData[] LoadContentTable()
         {
@@ -99,6 +75,7 @@ namespace Roots.Config
                 contentList.Add((ContentConfigData)factory.MakeGenericMethod(type).Invoke(null,null));
 
             }
+            contentList.Sort((x, y) => x.Name.CompareTo(y.Name));
 
             LoadedContentToggleNames = [.. contentList.Select(x => x.Name)];
             return [.. contentList];

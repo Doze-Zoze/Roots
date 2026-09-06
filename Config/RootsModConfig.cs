@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace Roots.Config
 
         public static RootsModConfig Instance => ModContent.GetInstance<RootsModConfig>();
 
-        
+
 
         [DefaultValue(true)]
         [ReloadRequired]
@@ -89,7 +88,7 @@ namespace Roots.Config
                         continue;
                     if (!field.Any(x => x.Name == item.Name))
                     {
-                        Debug.Fail("ERROR: Saved config data contains invalid class names");
+                        Debug.WriteLine($"WARNING: Saved config data '{item.Name}' does not match any registered configs");
                         continue;
                     }
                     field.First(x => x.Name == item.Name).Enabled = item.Enabled;
