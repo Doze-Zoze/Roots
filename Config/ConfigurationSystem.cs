@@ -20,9 +20,7 @@ namespace Roots.Config
         ArmorReworks = 1 << 2,
         BossReworks = 1 << 3,
         EnemyReworks = 1 << 4,
-        BetaContent = 1 << 5,
-
-
+        BetaContent = 1 << 5
     }
     public interface IConfigurableContent<T>
     {
