@@ -21,7 +21,7 @@ namespace RootsBeta.Items.Accessories.Melee
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) => 
             tooltips.ReplaceTooltipWith("Accessories.FeralClaws.Tooltip");
 
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             player.Roots().ShootSpeedMult *= ShootSpeedMultiplier;
             player.Roots().ForceAutoSwing = true;

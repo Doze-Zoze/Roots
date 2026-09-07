@@ -29,53 +29,58 @@ namespace RootsBeta.Utilities
             return Language.GetText("Mods.RootsBeta." + path);
         }
 
-        public static void ReplaceTooltipWith(this List<TooltipLine> tooltips, string path)
+        extension(List<TooltipLine> tooltips)
         {
-            int tooltipIndex = 0;
-            for (var i = 0; i < tooltips.Count; i++)
+            public void ReplaceTooltipWith(string path, bool rootsPath = true)
             {
-                var tooltip = tooltips[i];
-                if (tooltip.Name.Contains("Consumable"))
+                int tooltipIndex = 0;
+                for (var i = 0; i < tooltips.Count; i++)
                 {
-                    tooltipIndex = i + 1;
+                    var tooltip = tooltips[i];
+                    if (tooltip.Name.Contains("Consumable"))
+                    {
+                        tooltipIndex = i + 1;
+                    }
+                    if (tooltip.Name.Contains("Material"))
+                    {
+                        tooltipIndex = i+1;
+                    }
+                    if (tooltip.Name.Contains("Tooltip"))
+                    {
+                        tooltip.Hide();
+                        tooltipIndex = i;
+                    }
                 }
-                if (tooltip.Name.Contains("Material"))
-                {
-                    tooltipIndex = i+1;
-                }
-                if (tooltip.Name.Contains("Tooltip"))
-                {
-                    tooltip.Hide();
-                    tooltipIndex = i;
-                }
+
+                if (tooltipIndex <= 0) return;
+                if (tooltipIndex < tooltips.Count)
+                    tooltips.Insert(tooltipIndex, new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", rootsPath ? GetLocalizedTextValue(path) : Language.GetTextValue(path)));
+                else
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", rootsPath ? GetLocalizedTextValue(path) : Language.GetTextValue(path)));
             }
 
-            if (tooltipIndex <= 0) return;
-            if (tooltipIndex < tooltips.Count)
-                tooltips.Insert(tooltipIndex, new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", GetLocalizedTextValue(path)));
-            else
-                tooltips.Add(new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", GetLocalizedTextValue(path)));
-        }
-        public static void AppendTooltipWith(this List<TooltipLine> tooltips, string path)
-        {
-            int tooltipIndex = 0;
-            for (var i = 0; i < tooltips.Count; i++)
+            public void AppendTooltipWith(string path, int offset = 0, bool rootsPath = true)
             {
-                var tooltip = tooltips[i];
-                if (tooltip.Name.Contains("Tooltip"))
+                int tooltipIndex = 0;
+                for (var i = 0; i < tooltips.Count; i++)
                 {
-                    tooltipIndex = i+1;
+                    var tooltip = tooltips[i];
+                    if (tooltip.Name.Contains("Tooltip"))
+                    {
+                        tooltipIndex = i+1;
+                    }
+                    if (tooltip.Name.Contains("Prefix") && tooltipIndex == 0)
+                    {
+                        tooltipIndex = i;
+                    }
+                    if (tooltip.Name.Contains("OneDrop") && tooltipIndex == 0)
+                    {
+                        tooltipIndex = i;
+                    }
                 }
-                if (tooltip.Name.Contains("Prefix") && tooltipIndex == 0)
-                {
-                    tooltipIndex = i;
-                }
-                if (tooltip.Name.Contains("OneDrop") && tooltipIndex == 0)
-                {
-                    tooltipIndex = i;
-                }
+                tooltipIndex -= offset;
+                tooltips.Insert(tooltipIndex > 0 ? tooltipIndex : tooltips.Count - 1, new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", rootsPath ? GetLocalizedTextValue(path) : Language.GetTextValue(path)));
             }
-            tooltips.Insert(tooltipIndex > 0 ? tooltipIndex : tooltips.Count - 1, new TooltipLine(ModLoader.GetMod("RootsBeta"), "Tooltip", GetLocalizedTextValue(path)));
         }
     }
 }

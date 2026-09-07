@@ -40,9 +40,8 @@ Accessories: {
 		Enables autoswing and increases knockback dealt
 		Increases size of melee weapons
 		Increases damage and projectile velocity by 10%
-		All attacks inflict Hellfire
 		'''
-	MagmaStone.Tooltip: All attacks inflict Hellfire
+	MagmaStone.Tooltip: Physical attacks inflict Hellfire
 	WarriorEmblem.Tooltip: 15% increased damage to targets within 25 tiles
 	RangerEmblem.Tooltip: 15% increased damage to targets further than 25 tiles away
 	SorcererEmblem.Tooltip: 15% increased damage from Mana attacks

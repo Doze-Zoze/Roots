@@ -25,7 +25,7 @@ namespace RootsBeta.Items.Accessories.Magic
             entity.defense = Defense;
         }
 
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             player.manaRegenDelayBonus += ManaRegenDelayBonus;
             player.manaRegenBonus += ManaRegen;

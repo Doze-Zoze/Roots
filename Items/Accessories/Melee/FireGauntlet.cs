@@ -19,17 +19,27 @@ namespace RootsBeta.Items.Accessories.Melee
 
         public override int[] ItemIds => [ItemID.FireGauntlet];
         public override void SetDefaults(Item entity) => ItemSets.DontUseVanillaEquipEffects[ItemID.FireGauntlet] = true;
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
-            tooltips.ReplaceTooltipWith("Accessories.FireGauntlet.Tooltip");
 
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             player.Roots().ShootSpeedMult *= ShootSpeedMultiplier;
             player.Roots().ForceAutoSwing = true;
-            player.magmaStone = true;
+            if (!ConfigHelpers.ConfigEnabled<MagmaStone>())
+                player.magmaStone = true;
+            else
+                player.Roots().PhysicalOnHitNPCFuncs.Add(MagmaStone.OnHit);
             player.kbGlove = true;
             player.meleeScaleGlove = true;
             player.GetDamage<GenericDamageClass>() += DamageBonus;
+        }
+
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            tooltips.ReplaceTooltipWith("Accessories.FireGauntlet.Tooltip");
+            if (!ConfigHelpers.ConfigEnabled<MagmaStone>())
+                tooltips.AppendTooltipWith("ItemTooltip.MagmaStone", 0, false);
+            else
+                tooltips.AppendTooltipWith("Accessories.MagmaStone.Tooltip");
         }
     }
 }

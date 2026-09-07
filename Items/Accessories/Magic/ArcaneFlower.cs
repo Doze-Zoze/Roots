@@ -23,7 +23,7 @@ namespace RootsBeta.Items.Accessories.Magic
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) => 
             tooltips.ReplaceTooltipWith("Accessories.ArcaneFlower.Tooltip");
 
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             float playerManaRatio = player.statMana / (float)player.statManaMax2;
             player.Roots().ManaFlowerReduction *= MathHelper.Lerp(MinimumManaMagicDamageModifier, MaximumManaMagicDamageModifier, playerManaRatio);
