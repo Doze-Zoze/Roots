@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,14 +8,15 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class SorcererEmblem : GlobalItem
+    public class SorcererEmblem : ConfigurableItemRework<SorcererEmblem>, IConfigurableContent<SorcererEmblem>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float DamageBoost => 0.15f;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.SorcererEmblem;
+        public override int[] ItemIds => [ItemID.SorcererEmblem];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.SorcererEmblem] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.SorcererEmblem.Tooltip");

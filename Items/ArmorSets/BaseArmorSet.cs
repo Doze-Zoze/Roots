@@ -1,15 +1,18 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
+using RootsCore;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
-using RootsCore;
 
 namespace RootsBeta.Items.ArmorSets
 {
     /// <summary>
     /// Overrides the entire stats of a given armor set and allows setting your own.
     /// </summary>
-    public abstract class BaseArmorSet : GlobalItem
+    public abstract class BaseArmorSet<T> : GlobalItem
     {
         public enum ArmorID
         {
@@ -34,8 +37,8 @@ namespace RootsBeta.Items.ArmorSets
         public virtual void LegsEquips(Item item, Player player) { }
 
         public virtual void SetBonusEffect(Player player) { }
-        
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<T>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => HeadsToApplyTo.Contains(item.type) || ChestsToApplyTo.Contains(item.type) || LegsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
 

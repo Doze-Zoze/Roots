@@ -40,9 +40,8 @@ Accessories: {
 		Enables autoswing and increases knockback dealt
 		Increases size of melee weapons
 		Increases damage and projectile velocity by 10%
-		All attacks inflict Hellfire
 		'''
-	MagmaStone.Tooltip: All attacks inflict Hellfire
+	MagmaStone.Tooltip: Physical attacks inflict Hellfire
 	WarriorEmblem.Tooltip: 15% increased damage to targets within 25 tiles
 	RangerEmblem.Tooltip: 15% increased damage to targets further than 25 tiles away
 	SorcererEmblem.Tooltip: 15% increased damage from Mana attacks
@@ -690,4 +689,65 @@ Configs: {
 			Tooltip: ""
 		}
 	}
+
+	RootsModConfig: {
+		DisplayName: Roots Mod Config
+
+		RemoveClasses: {
+			Label: Remove Classes
+			Tooltip: ""
+		}
+
+		LifeChanges: {
+			Label: Life Changes
+			Tooltip: ""
+		}
+
+		ManaChanges: {
+			Label: Mana Changes
+			Tooltip: ""
+		}
+
+		AmmoChanges: {
+			Label: Ammo Changes
+			Tooltip: ""
+		}
+
+		EnemyChanges: {
+			Label: Enemy Changes
+			Tooltip: ""
+		}
+
+		BossChanges: {
+			Label: Boss Changes
+			Tooltip: ""
+		}
+
+		ToggleableItems: {
+			Label: Toggleable Items
+			Tooltip: ""
+		}
+
+		ToggleableContent: {
+			Label: Toggleable Content
+			Tooltip: Allows granular control over what Roots content is enabled or disabled
+		}
+
+		WeaponChanges: {
+			Label: Weapon Changes
+			Tooltip: ""
+		}
+
+		AccessoryChanges: {
+			Label: Accessory Changes
+			Tooltip: ""
+		}
+
+		ArmorReworks: {
+			Label: Armor Reworks
+			Tooltip: ""
+		}
+	}
+
+	"ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }

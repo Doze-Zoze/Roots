@@ -5,17 +5,19 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class DeathSickle : GlobalItem
+    public class DeathSickle : ConfigurableItemRework<DeathSickle>, IConfigurableContent<DeathSickle>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 12;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.DeathSickle;
+        public override int[] ItemIds => [ItemID.DeathSickle];
 
         public override void SetStaticDefaults()
         {

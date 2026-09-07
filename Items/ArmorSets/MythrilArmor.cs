@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class MythrilHelmets : GlobalItem
+    public class MythrilHelmets : GlobalItem, IConfigurableContent<MythrilHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int Defense => 3;
         public static float DamageBonus => 0.14f;
@@ -23,7 +26,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.MythrilHat,
             ItemID.MythrilHood
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<MythrilHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>

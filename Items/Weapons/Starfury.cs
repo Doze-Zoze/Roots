@@ -5,11 +5,14 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class Starfury : GlobalItem
+    public class Starfury : ConfigurableItemRework<Starfury>, IConfigurableContent<Starfury>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 20;
         public static int StarsSpawned => 2;
@@ -21,8 +24,7 @@ namespace RootsBeta.Items.Weapons
         public static int StaticImmunityFrames => 20;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.Starfury;
+        public override int[] ItemIds => [ItemID.Starfury];
 
         public override void SetStaticDefaults()
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsCore;
 using System;
 using System.Linq;
@@ -9,8 +10,10 @@ using Terraria.ID;
 
 namespace RootsBeta.NPCs
 {
-    public class KingSlime(NPC npc) : AIOverride(npc)
+    public class KingSlime(NPC npc) : AIOverride(npc), IConfigurableContent<KingSlime>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.BossReworks;
+        public string ConfigName => "King Slime";
         #region Balancing Stats
 
         #endregion
@@ -189,7 +192,7 @@ namespace RootsBeta.NPCs
 
     }
 
-    public class SpikedSlime(NPC npc) : AIOverride(npc)
+    public class SpikedSlime(NPC npc) : AIOverride(npc) //Spiked Slime config tied to King Slime config
     {
         #region Balancing Stats
 

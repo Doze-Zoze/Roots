@@ -6,11 +6,14 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class TrueNightsEdge : GlobalItem
+    public class TrueNightsEdge : ConfigurableItemRework<TrueNightsEdge>, IConfigurableContent<TrueNightsEdge>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
 
         public static int ManaCost => 15;
@@ -18,8 +21,7 @@ namespace RootsBeta.Items.Weapons
         public static int NoManaProjectileLifetimeFrames => 50;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.TrueNightsEdge;
+        public override int[] ItemIds => [ItemID.TrueNightsEdge];
 
         public override void SetStaticDefaults()
         {

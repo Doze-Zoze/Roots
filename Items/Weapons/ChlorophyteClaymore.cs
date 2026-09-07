@@ -5,17 +5,19 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class ChlorophyteClaymore : GlobalItem
+    public class ChlorophyteClaymore : ConfigurableItemRework<ChlorophyteClaymore>, IConfigurableContent<ChlorophyteClaymore>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 20;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ChlorophyteClaymore;
+        public override int[] ItemIds => [ItemID.ChlorophyteClaymore];
 
         public override void SetStaticDefaults()
         {

@@ -1,4 +1,5 @@
-﻿using RootsBeta.Items.ArmorSets;
+﻿using Roots.Config;
+using RootsBeta.Items.ArmorSets;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,7 +14,7 @@ namespace RootsBeta.Buffs
         
         private const float BeetleMightDamageModifierVanilla = 0.1f;
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool IsLoadingEnabled(Mod mod) => RootsModConfig.Instance.RemoveClasses;
 
         public override void Update(int type, Player player, ref int buffIndex)
         {

@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,20 +8,21 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class ManaFlower : GlobalItem
+    public class ManaFlower : ConfigurableItemRework<ManaFlower>, IConfigurableContent<ManaFlower>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float MagicDamageReduction => 0.75f;
         public static int ManaRegen => 40;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ManaFlower;
+        public override int[] ItemIds => [ItemID.ManaFlower];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.ManaFlower] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.ManaFlower.Tooltip");
         
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             player.Roots().ManaFlowerReduction *= MagicDamageReduction;
             player.manaRegenCount += ManaRegen;

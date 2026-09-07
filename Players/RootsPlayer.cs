@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
+using RootsBeta.Items.Consumables;
 using RootsBeta.Projectiles;
 using RootsBeta.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RootsBeta.Items.Accessories.Melee;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -54,7 +57,7 @@ namespace RootsBeta.Players
             Player.manaRegenDelay = Math.Min(Player.manaRegenDelay, ManaRegenDelayMax);
 
             //rework needed
-            if (Configs.Instance.LifeChanges && !Player.shinyStone)
+            if (ConfigHelpers.ConfigEnabled<HealingPotions>() && !Player.shinyStone)
                 Player.lifeRegenTime--; //keep natural life regen from happening without things to boost it
             ShootSpeedMult = 1;
             AdditiveDamageMultipliersToApplyOnHit = 1;
@@ -121,9 +124,10 @@ namespace RootsBeta.Players
 
         public override void UpdateEquips()
         {
-            if (Configs.Instance.RemoveClasses && Player.kbGlove)
+            if (RootsModConfig.Instance.RemoveClasses && Player.kbGlove)
                 Player.GetKnockback(DamageClass.Generic) *= 2f;
-            
+
+            //TODO - High Priority - Make configurable, make it work properly
             int lostMana = (int)((Player.slotsMinions - Player.maxMinions) * ManaPerMinion);
             Player.maxMinions += Player.statManaMax2 / ManaPerMinion;
             if (lostMana > 0)
@@ -136,8 +140,6 @@ namespace RootsBeta.Players
             {
                 func(Player, target, hit, damageDone);
             }
-            if (Configs.Instance.RemoveClasses && Player.magmaStone)
-                target.AddBuff(BuffID.OnFire3, 120);
         }
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
@@ -145,6 +147,29 @@ namespace RootsBeta.Players
             foreach (var func in OnHitNPCWithProjectileFuncs)
             {
                 func(Player, proj, target, hit, damageDone);
+            }
+
+            if (proj.Roots().IsManaProjectile)
+            {
+                foreach (var func in MagicalOnHitNPCFuncs)
+                {
+                    func(Player, target, hit, damageDone);
+                }
+            } 
+            else if (!proj.IsMinionOrSentryRelated)
+            {
+                foreach (var func in PhysicalOnHitNPCFuncs)
+                {
+                    func(Player, target, hit, damageDone);
+                }
+            }
+        }
+
+        public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            foreach (var func in PhysicalOnHitNPCFuncs)
+            {
+                func(Player, target, hit, damageDone);
             }
         }
 

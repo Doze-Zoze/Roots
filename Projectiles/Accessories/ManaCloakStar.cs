@@ -1,12 +1,15 @@
-﻿using RootsBeta.Items.Accessories.Magic;
+﻿using Roots.Config;
+using RootsBeta.Items.Accessories.Magic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using tModPorter;
 
 namespace RootsBeta.Projectiles.Accessories
 {
     public class ManaCloakStar : GlobalProjectile
     {
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<ManaCloak>();
         public override bool AppliesToEntity(Projectile entity, bool lateInstantiation) => entity.type == ProjectileID.ManaCloakStar;
 
         public override void SetDefaults(Projectile entity)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Roots.Config;
 using RootsBeta.Utilities;
 using RootsCore;
 using System;
@@ -86,8 +87,11 @@ public class WoFCameraSystem : ModSystem
     }
 }
 
-public class WoFMouth(NPC npc) : AIOverride(npc)
+public class WoFMouth(NPC npc) : AIOverride(npc), IConfigurableContent<WoFMouth>
 {
+    public static ConfigGroup ConfigGroups => ConfigGroup.BetaContent;
+    public static string ConfigName => "(BETA) Wall Of Flesh";
+    public static bool DefaultState => false;
     public enum WoFAttackState
     {
         LaserBarrage,

@@ -4,22 +4,24 @@ using RootsCore;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Roots.Config;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class NaturesGift : GlobalItem
+    public class NaturesGift : ConfigurableItemRework<NaturesGift>, IConfigurableContent<NaturesGift>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         private static float ManaCostReduction => 0.15f;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.NaturesGift;
+        public override int[] ItemIds => [ItemID.NaturesGift];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.NaturesGift] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.NaturesGift.Tooltip");
 
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             player.manaCost -= ManaCostReduction;
         }

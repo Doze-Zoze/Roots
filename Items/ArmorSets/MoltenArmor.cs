@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Config;
 using RootsBeta.Players;
 using RootsBeta.Utilities;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class MoltenArmor : BaseArmorSet
+    public class MoltenArmor : BaseArmorSet<MoltenArmor>, IConfigurableContent<MoltenArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int CritChanceBonusHead => 7;
         public static float DamageBonusChest => 0.05f;

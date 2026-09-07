@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class PalladiumHelmets : GlobalItem
+    public class PalladiumHelmets : GlobalItem, IConfigurableContent<PalladiumHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int Defense => 14;
         public static float DamageBonus => 0.1f;
@@ -21,7 +24,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.PalladiumHeadgear,
             ItemID.PalladiumHelmet
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<PalladiumHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
 

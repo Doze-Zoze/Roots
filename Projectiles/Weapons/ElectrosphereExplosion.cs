@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
+using RootsBeta.Items.Weapons;
 using RootsBeta.Utilities;
 using Terraria;
 using Terraria.Audio;
@@ -9,6 +11,7 @@ namespace RootsBeta.Projectiles.Weapons
 {
     public class SkyDragonsFuryShot : GlobalProjectile
     {
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<SkyDragonsFury>();
         public override bool AppliesToEntity(Projectile entity, bool lateInstantiation) => entity.type == ProjectileID.MonkStaffT3_AltShot;
 
         public override bool PreKill(Projectile projectile, int timeLeft)

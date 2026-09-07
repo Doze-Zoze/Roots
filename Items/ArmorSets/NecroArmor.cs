@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Config;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class NecroArmor : BaseArmorSet
+    public class NecroArmor : BaseArmorSet<NecroArmor>, IConfigurableContent<NecroArmor>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static float DamageBonusHead => 0.05f;
         public static float DamageBonusChest => 0.05f;

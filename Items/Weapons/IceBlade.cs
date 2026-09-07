@@ -5,17 +5,19 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class IceBlade : GlobalItem
+    public class IceBlade : ConfigurableItemRework<IceBlade>, IConfigurableContent<IceBlade>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 10;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.IceBlade;
+        public override int[] ItemIds => [ItemID.IceBlade];
 
         public override void SetStaticDefaults()
         {

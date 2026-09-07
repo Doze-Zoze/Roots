@@ -1,14 +1,18 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
+using RootsCore;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using RootsCore;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class AdamantiteHelmets : GlobalItem
+    public class AdamantiteHelmets : GlobalItem, IConfigurableContent<AdamantiteHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int Defense => 10;
         public static float DamageBonus => 0.12f;
@@ -24,7 +28,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.AdamantiteMask,
             ItemID.AdamantiteHeadgear
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<AdamantiteHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>

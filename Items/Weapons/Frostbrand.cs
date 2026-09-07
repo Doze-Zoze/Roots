@@ -5,17 +5,19 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class Frostbrand : GlobalItem
+    public class Frostbrand : ConfigurableItemRework<Frostbrand>, IConfigurableContent<Frostbrand>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 15;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.Frostbrand;
+        public override int[] ItemIds => [ItemID.Frostbrand];
 
         public override void SetStaticDefaults()
         {

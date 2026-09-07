@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Roots.Config;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config.UI;
 
 namespace RootsBeta.Items.Consumables
 {
-    public class HealingPotions : GlobalItem
+    public class HealingPotions : ConfigurableItemRework<HealingPotions>, IConfigurableContent<HealingPotions>
     {
+        public static string ConfigGroupName => "Regen & Healing Potions";
         #region Parameters
-
         public static float HealMultiplier => 2f;
         #endregion
-
-        private static List<int> ItemsToCount =>
+        public override int[] ItemIds =>
         [
             ItemID.LesserHealingPotion,
             ItemID.GreaterHealingPotion,
@@ -25,9 +26,6 @@ namespace RootsBeta.Items.Consumables
             ItemID.Honeyfin,
             ItemID.Eggnog
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.LifeChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => ItemsToCount.Contains(item.type);
-
         public override void SetDefaults(Item entity)
         {
             entity.healLife = (int)(entity.healLife * HealMultiplier);

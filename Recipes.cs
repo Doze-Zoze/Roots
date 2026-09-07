@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using Roots.Config;
+using RootsBeta.Items.Accessories.Magic;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace RootsBeta
             {
                 Recipe recipe = Main.recipe[i];
 
-                if (Configs.Instance.ManaChanges)
+                if (ConfigHelpers.ConfigEnabled(typeof(ManaCloak).Name))
                 {
                     if (recipe.TryGetIngredient(ItemID.ManaFlower, out _) && recipe.TryGetResult(ItemID.ManaCloak, out _))
                     {
@@ -21,7 +23,8 @@ namespace RootsBeta
                     }
                 }
 
-                if (!Configs.Instance.AmmoChanges) continue;
+                //TODO - Maybe use item-based configs
+                if (!RootsModConfig.Instance.AmmoChanges) continue;
 
                 #region Arrows
                 if (recipe.TryGetResult(ItemID.WoodenArrow, out var result))

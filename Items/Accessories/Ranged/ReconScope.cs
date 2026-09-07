@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,16 +8,17 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Ranger
 {
-    public class ReconScope : GlobalItem
+    public class ReconScope : ConfigurableItemRework<ReconScope>, IConfigurableContent<ReconScope>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
         public static float DamageBonus => 0.1f;
         public static int CritChanceBonus => 10;
         public static int AggroReduction => 400;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ReconScope;
+        public override int[] ItemIds => [ItemID.ReconScope];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.ReconScope] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.ReconScope.Tooltip");

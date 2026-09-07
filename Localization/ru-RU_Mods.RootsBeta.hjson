@@ -40,9 +40,8 @@ Accessories: {
 		Даёт автоатаку и увеличивает отбрасывание ваших атак
 		Увеличивает размер ближних оружий
 		Увеличивает скорость снарядов и урон на 10%
-		Атаки поджигают врагов
 		'''
-	MagmaStone.Tooltip: Все атаки поджигают врагов
+	MagmaStone.Tooltip: Физические атаки поджигают врагов
 	WarriorEmblem.Tooltip: Увеличивает урон на 15% по врагам в пределах 25 блоков от вас
 	RangerEmblem.Tooltip: Увеличивает урон на 15% по врагам на расстоянии более 25 блоков от вас
 	SorcererEmblem.Tooltip: Увеличивает урон атак, тратящих ману, на 15%
@@ -690,4 +689,65 @@ Configs: {
 			// Tooltip: ""
 		}
 	}
+
+	RootsModConfig: {
+		// DisplayName: Roots Mod Config
+
+		RemoveClasses: {
+			// Label: Remove Classes
+			// Tooltip: ""
+		}
+
+		LifeChanges: {
+			// Label: Life Changes
+			// Tooltip: ""
+		}
+
+		ManaChanges: {
+			// Label: Mana Changes
+			// Tooltip: ""
+		}
+
+		AmmoChanges: {
+			// Label: Ammo Changes
+			// Tooltip: ""
+		}
+
+		EnemyChanges: {
+			// Label: Enemy Changes
+			// Tooltip: ""
+		}
+
+		BossChanges: {
+			// Label: Boss Changes
+			// Tooltip: ""
+		}
+
+		ToggleableItems: {
+			// Label: Toggleable Items
+			// Tooltip: ""
+		}
+
+		ToggleableContent: {
+			// Label: Toggleable Content
+			// Tooltip: Allows granular control over what Roots content is enabled or disabled
+		}
+
+		WeaponChanges: {
+			// Label: Weapon Changes
+			// Tooltip: ""
+		}
+
+		AccessoryChanges: {
+			// Label: Accessory Changes
+			// Tooltip: ""
+		}
+
+		ArmorReworks: {
+			// Label: Armor Reworks
+			// Tooltip: ""
+		}
+	}
+
+	// "ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }

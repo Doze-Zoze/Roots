@@ -5,17 +5,19 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using RootsCore;
+using Roots.Config;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class Meowmere : GlobalItem
+    public class Meowmere : ConfigurableItemRework<Meowmere>, IConfigurableContent<Meowmere>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 5;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.Meowmere;
+        public override int[] ItemIds => [ItemID.Meowmere];
 
         public override void SetStaticDefaults()
         {

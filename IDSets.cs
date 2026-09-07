@@ -7,6 +7,7 @@ namespace RootsBeta
 {
     public partial class RootsBeta
     {
+        //TODO - Dismantle and move this into the individual items so that it adjusts with config properly.
         private readonly List<int> _projToMarkAsMana =
             [
                 ProjectileID.TerraBlade2Shot,

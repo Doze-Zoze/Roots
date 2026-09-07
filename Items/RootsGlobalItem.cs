@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,6 +8,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items
 {
+
     public partial class RootsGlobalItem : GlobalItem
     {
         #region Parameters
@@ -17,9 +19,10 @@ namespace RootsBeta.Items
 
         public override void SetDefaults(Item item)
         {
-            if (Configs.Instance.RemoveClasses && (item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
+            if (RootsModConfig.Instance.RemoveClasses && (item.ModItem is null || WhitelistedMods.Contains(item.ModItem.FullName.Split('/')[0])))
                 item.DamageType = DamageClass.Generic;
 
+            //TODO - Make configurable
             if (ProjectileID.Sets.MinionTargettingFeature[item.shoot])
                 item.mana = 0;
         }
@@ -33,6 +36,8 @@ namespace RootsBeta.Items
 
         public override void ModifyItemScale(Item item, Player player, ref float scale)
         {
+            if (!RootsModConfig.Instance.RemoveClasses)
+                return;
             if (player.meleeScaleGlove)
                 scale *= TitanGloveScale;
         }

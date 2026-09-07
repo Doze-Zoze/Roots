@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
@@ -8,10 +9,12 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Magic
 {
-    public class ManaCloak : GlobalItem
+    public class ManaCloak : ConfigurableItemRework<ManaCloak>, IConfigurableContent<ManaCloak>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameters
-            public static int Defense => MagicCuffs.Defense;
+        public static int Defense => MagicCuffs.Defense;
             public static float ManaRegenDelayBonus => MagicCuffs.ManaRegenDelayBonus;
             public static int ManaRegen => MagicCuffs.ManaRegen;
             public static int FramesBetweenStarAttacks => 180;
@@ -23,8 +26,7 @@ namespace RootsBeta.Items.Accessories.Magic
             public static int ManaStarConversionCooldownFrames => 60;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.ManaCloak;
+        public override int[] ItemIds => [ItemID.ManaCloak];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.ManaCloak] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.ManaCloak.Tooltip");
@@ -34,7 +36,7 @@ namespace RootsBeta.Items.Accessories.Magic
             entity.defense = Defense;
         }
 
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             player.starCloakItem = item;
             player.starCloakItem_manaCloakOverrideItem = item;

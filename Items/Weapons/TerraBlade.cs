@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Roots.Config;
 using RootsCore;
 using System;
 using Terraria;
@@ -8,14 +9,15 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class TerraBlade : GlobalItem
+    public class TerraBlade : ConfigurableItemRework<TerraBlade>, IConfigurableContent<TerraBlade>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
+
         #region Parameters
         public static int ManaCost => 10;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.ManaChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.TerraBlade;
+        public override int[] ItemIds => [ItemID.TerraBlade];
 
         public override void SetStaticDefaults()
         {

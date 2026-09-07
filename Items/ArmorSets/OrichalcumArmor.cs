@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,8 +8,10 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.ArmorSets
 {
-    public class OrichalcumHelmets : GlobalItem
+    public class OrichalcumHelmets : GlobalItem, IConfigurableContent<OrichalcumHelmets>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.ArmorReworks;
+
         #region Parameters
         public static int Defense => 6;
         public static int CritChanceBonus => 17;
@@ -22,7 +25,7 @@ namespace RootsBeta.Items.ArmorSets
             ItemID.OrichalcumMask,
             ItemID.OrichalcumHeadgear
         ];
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<OrichalcumHelmets>();
         public override bool AppliesToEntity(Item item, bool lateInstantiation) => _itemsToApplyTo.Contains(item.type);
         public override bool InstancePerEntity => true;
 

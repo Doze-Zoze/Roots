@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using RootsCore;
 using System.Collections.Generic;
 using Terraria;
@@ -7,14 +8,15 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Accessories.Summon
 {
-    public class SummonerEmblem : GlobalItem
+    public class SummonerEmblem : ConfigurableItemRework<SummonerEmblem>, IConfigurableContent<SummonerEmblem>
     {
+        public static ConfigGroup ConfigGroups => ConfigGroup.AccessoryReworks;
+
         #region Parameter
         public static float DamageBonus => 0.15f;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.RemoveClasses;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.SummonerEmblem;
+        public override int[] ItemIds => [ItemID.SummonerEmblem];
         public override void SetStaticDefaults() => ItemSets.DontUseVanillaEquipEffects[ItemID.SummonerEmblem] = true;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.SummonerEmblem.Tooltip");

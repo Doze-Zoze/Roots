@@ -1,4 +1,5 @@
-﻿using RootsBeta.Utilities;
+﻿using Roots.Config;
+using RootsBeta.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -6,15 +7,14 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Consumables
 {
-    public class Mushroom : GlobalItem
+    public class Mushroom : ConfigurableItemRework<Mushroom>, IConfigurableContent<Mushroom>
     {
         #region Parameters
         public static int Healing => 20;
         public static int HealingCooldownSeconds => 15;
         #endregion
 
-        public override bool IsLoadingEnabled(Mod mod) => Configs.Instance.LifeChanges;
-        public override bool AppliesToEntity(Item item, bool lateInstantiation) => item.type == ItemID.Mushroom;
+        public override int[] ItemIds => [ItemID.Mushroom];
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Consumables.Mushroom.Tooltip");
 
