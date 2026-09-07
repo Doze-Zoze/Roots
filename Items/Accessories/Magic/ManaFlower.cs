@@ -22,7 +22,7 @@ namespace RootsBeta.Items.Accessories.Magic
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
             tooltips.ReplaceTooltipWith("Accessories.ManaFlower.Tooltip");
         
-        public override void UpdateEquip(Item item, Player player)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             player.Roots().ManaFlowerReduction *= MagicDamageReduction;
             player.manaRegenCount += ManaRegen;

@@ -6,6 +6,7 @@ using RootsBeta.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RootsBeta.Items.Accessories.Melee;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -139,8 +140,6 @@ namespace RootsBeta.Players
             {
                 func(Player, target, hit, damageDone);
             }
-            if (RootsModConfig.Instance.RemoveClasses && Player.magmaStone)
-                target.AddBuff(BuffID.OnFire3, 120);
         }
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
@@ -148,6 +147,29 @@ namespace RootsBeta.Players
             foreach (var func in OnHitNPCWithProjectileFuncs)
             {
                 func(Player, proj, target, hit, damageDone);
+            }
+
+            if (proj.Roots().IsManaProjectile)
+            {
+                foreach (var func in MagicalOnHitNPCFuncs)
+                {
+                    func(Player, target, hit, damageDone);
+                }
+            } 
+            else if (!proj.IsMinionOrSentryRelated)
+            {
+                foreach (var func in PhysicalOnHitNPCFuncs)
+                {
+                    func(Player, target, hit, damageDone);
+                }
+            }
+        }
+
+        public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            foreach (var func in PhysicalOnHitNPCFuncs)
+            {
+                func(Player, target, hit, damageDone);
             }
         }
 
