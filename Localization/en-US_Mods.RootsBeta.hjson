@@ -756,4 +756,8 @@ Configs: {
 	"ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }
 
-Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+Projectiles: {
+	BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+	VampireKnivesHoldout.DisplayName: Vampire Knives Holdout
+	VampireKnife.DisplayName: Vampire Knife
+}
