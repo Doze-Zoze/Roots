@@ -660,40 +660,6 @@ Tips: {
 DamageClasses.PickaxeDamage.DisplayName: Pickaxe Damage
 
 Configs: {
-	Configs: {
-		DisplayName: Configs
-
-		RemoveClasses: {
-			Label: Remove Classes
-			Tooltip: ""
-		}
-
-		LifeChanges: {
-			Label: Life Changes
-			Tooltip: ""
-		}
-
-		ManaChanges: {
-			Label: Mana Changes
-			Tooltip: ""
-		}
-
-		AmmoChanges: {
-			Label: Ammo Changes
-			Tooltip: ""
-		}
-
-		EnemyChanges: {
-			Label: Enemy Changes
-			Tooltip: ""
-		}
-
-		BossChanges: {
-			Label: Boss Changes
-			Tooltip: ""
-		}
-	}
-
 	RootsModConfig: {
 		DisplayName: Roots Mod Config
 

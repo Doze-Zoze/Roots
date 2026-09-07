@@ -639,12 +639,12 @@ Weapons: {
 		Лучи наносят намного больше урона и не тратят ману, когда вы наэлектризованы
 		Удерживайте ПКМ, чтобы электризовать себя
 		'''
-	// BrandOfTheInferno.Tooltip: While under Striking Moment, does a massive spin attack that deals double damage
+	BrandOfTheInferno.Tooltip: Пока на вас наложен «Момент для удара», совершает взмах вокруг, наносящий двойной урон
 }
 
 Buffs: {
 	ManaSickness.Tooltip: Вы не можете использовать зелья маны
-	// StrikingMoment.Tooltip: Physical attacks deal 5x damage
+	StrikingMoment.Tooltip: Физические атаки наносят в 5 раз больше урона
 }
 
 Consumables: {
@@ -660,8 +660,8 @@ Tips: {
 DamageClasses.PickaxeDamage.DisplayName: ед. урона кирки
 
 Configs: {
-	Configs: {
-		DisplayName: Конфигурация
+	RootsModConfig: {
+		DisplayName: Конфигурация Roots
 
 		RemoveClasses: {
 			Label: Убрать классы
@@ -692,68 +692,34 @@ Configs: {
 			Label: Изменения боссов
 			// Tooltip: ""
 		}
-	}
-
-	RootsModConfig: {
-		// DisplayName: Roots Mod Config
-
-		RemoveClasses: {
-			// Label: Remove Classes
-			// Tooltip: ""
-		}
-
-		LifeChanges: {
-			// Label: Life Changes
-			// Tooltip: ""
-		}
-
-		ManaChanges: {
-			// Label: Mana Changes
-			// Tooltip: ""
-		}
-
-		AmmoChanges: {
-			// Label: Ammo Changes
-			// Tooltip: ""
-		}
-
-		EnemyChanges: {
-			// Label: Enemy Changes
-			// Tooltip: ""
-		}
-
-		BossChanges: {
-			// Label: Boss Changes
-			// Tooltip: ""
-		}
 
 		ToggleableItems: {
-			// Label: Toggleable Items
+			Label: Переключаемые предметы
 			// Tooltip: ""
 		}
 
 		ToggleableContent: {
-			// Label: Toggleable Content
-			// Tooltip: Allows granular control over what Roots content is enabled or disabled
+			Label: Переключаемый контент
+			Tooltip: Позвояет точечно изменить, какой контент мода Roots включён или выключен
 		}
 
 		WeaponChanges: {
-			// Label: Weapon Changes
+			Label: Изменения оружий
 			// Tooltip: ""
 		}
 
 		AccessoryChanges: {
-			// Label: Accessory Changes
+			Label: Изменения аксессуаров
 			// Tooltip: ""
 		}
 
 		ArmorReworks: {
-			// Label: Armor Reworks
+			Label: Переработка брони
 			// Tooltip: ""
 		}
 	}
 
-	// "ContentConfigData[].Tooltip": Individual configuration options for Roots content features
+	"ContentConfigData[].Tooltip": Индивидуальные настройки конфигурации для контента Roots
 }
 
-// Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
