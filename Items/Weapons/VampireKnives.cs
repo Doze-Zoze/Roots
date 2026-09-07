@@ -23,10 +23,14 @@ namespace RootsBeta.Items.Weapons
         public static int KnivesShot => 5;
         public static float KnivesDistance => 3f;
         public static float KnivesSpeed => 21f;
-        public static float MaxRotation => 0.4f;
+        public static float MaxRotation => 0.5f;
         public static float RandomRotation => 0.05f;
+        public static float RotationOffset => 0.45f;
         public static int KnivesLifetime => 36;
         public static float KnivesFadeoutPercent => 0.5f;
+        public static float StartupWristSnapback => 0.5f;
+        public static float AttackWristSnap => 0.5f;
+        public static int ManaCost => 40;
         #endregion
 
         public override int[] ItemIds => [ItemID.VampireKnives];
@@ -46,36 +50,40 @@ namespace RootsBeta.Items.Weapons
     public class VampireKnivesHoldout : BaseCustomSwingProjectile<VampireKnivesHoldout>
     {
         public override bool UseMeleeSize => false;
+        
+        private Vector2 KnivesOrigin => new(Projectile.spriteDirection == -1 ? 28 : 4, 28);
+        private static int Offset => 12;
             
         public AttackState PreStartup = new()
         {
-            Time = 8,
-            SwingWidth = 2.0f,
+            Time = 6,
+            SwingWidth = 2f,
             CanDamage = false,
             SwingOffsetAngle = proj =>
-                proj.State.SwingWidth - 0.2f * RootsCoreUtils.Ease.InOutCirc(1 - proj.StateCompletion),
-            OffsetDistance = 24,
-            AlternateSwings = true
+                proj.State.SwingWidth - 0.3f * RootsCoreUtils.Ease.InSine(1 - proj.StateCompletion) + VampireKnives.RotationOffset,
+            OffsetDistance = Offset,
+            AlternateSwings = false
         };
         public AttackState Startup = new()
         {
-            Time = 4,
+            Time = 8,
             SwingWidth = 2.0f,
             RotationSpeed = 0.25f,
             CanDamage = false,
             SwingOffsetAngle = proj =>
-                0.1f + proj.State.SwingWidth * RootsCoreUtils.Ease.InOutCirc(1 - proj.StateCompletion),
-            OffsetDistance = 24,
-            AlternateSwings = true
+                proj.State.SwingWidth * RootsCoreUtils.Ease.InOutCirc(1 - proj.StateCompletion) + VampireKnives.RotationOffset,
+            OffsetDistance = Offset,
+            AlternateSwings = false
         };
         public AttackState Attack = new()
         {
             Time = 8,
-            SwingWidth = -0.2f,
+            SwingWidth = 0f,
             CanDamage = true,
-            OffsetDistance = 24,
-            SwingOffsetAngle = null,
-            AlternateSwings = true,
+            SwingOffsetAngle = proj =>
+                VampireKnives.RotationOffset,
+            OffsetDistance = Offset,
+            AlternateSwings = false,
             Sound = SoundID.Item1,
             AdditionalAI = proj =>
             {
@@ -84,8 +92,7 @@ namespace RootsBeta.Items.Weapons
                 {
                     if (!(proj.StateCompletion >= (i + 1) / (float)(VampireKnives.KnivesShot + 1))) continue;
                     if (proj._daggersShot[i]) continue;
-                    bool alternating = proj.ModPlayer.SwingCounter % 2 != 0;
-                    int index = alternating ? i : VampireKnives.KnivesShot - i;
+                    int index = proj.Projectile.spriteDirection != 1 ? i : VampireKnives.KnivesShot - i;
                     
                     Vector2 direction = proj.Projectile.DirectionTo(proj.Player.Center).RotatedBy(MathHelper.PiOver2);
                     Vector2 offset = direction * (VampireKnives.KnivesShot * 0.5f - index) * VampireKnives.KnivesDistance;
@@ -110,73 +117,116 @@ namespace RootsBeta.Items.Weapons
         };
         public AttackState Endlag = new()
         {
-            Time = 24,
-            SwingWidth = 1.0f,
+            Time = 18,
+            SwingWidth = -0.1f,
             CanDamage = false,
             RotationSpeed = 0.25f,
             SwingOffsetAngle = proj =>
-                -0.1f - proj.State.SwingWidth * RootsCoreUtils.Ease.InOutCirc(proj.StateCompletion),
-            OffsetDistance = 24,
-            AlternateSwings = true
+                proj.State.SwingWidth * RootsCoreUtils.Ease.Linear(proj.StateCompletion) + VampireKnives.RotationOffset,
+            OffsetDistance = Offset,
+            AlternateSwings = false
         };
-        public override List<AttackState> StateList => [PreStartup, Startup, Attack, Endlag];
+
+        public AttackState PostEndlag = new()
+        {
+            Time = 6,
+            SwingWidth = 1.8f,
+            CanDamage = false,
+            SwingOffsetAngle = proj =>
+                -0.1f + proj.State.SwingWidth * RootsCoreUtils.Ease.InOutCirc(proj.StateCompletion) + VampireKnives.RotationOffset,
+            OffsetDistance = Offset,
+            AlternateSwings = false
+        };
+        public override List<AttackState> StateList => [PreStartup, Startup, Attack, Endlag, PostEndlag];
         public override Item BaseItem => ContentSamples.ItemsByType[ItemID.VampireKnives];
         public override string Texture => "RootsBeta/Items/Weapons/VampireKnivesBald";
         public override float LineCollisionLength => 0;
-        public override int AfterImageCount => 24;
+        public override int AfterImageCount => 16;
         private bool[] _daggersShot = new bool[VampireKnives.KnivesShot];
         public static Asset<Texture2D> VampireKnives1 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives1");
         public static Asset<Texture2D> VampireKnives2 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives2");
         public static Asset<Texture2D> VampireKnives3 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives3");
         public static Asset<Texture2D> VampireKnives4 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives4");
 
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        public override bool PreDraw(ref Color lightColor)
         {
-            // later
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            if (AfterImageCount > 0)
+            {
+                for (int i = 0; i < OldProjectileRot.Count; i++)
+                {
+                    var col = Projectile.Opacity * (i / (float)AfterImageCount) * 0.1f;
+                    Main.EntitySpriteDraw(texture, OldProjectilePos[i] - Main.screenPosition, null,
+                        AfterImageColor * col, OldProjectileRot[i], KnivesOrigin, OldScale[i],
+                        Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+                }
+            }
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(),
+                lightColor, Projectile.rotation, KnivesOrigin, Projectile.scale,
+                Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+            return false;
         }
 
         public override void AdditionalAI()
         {
-            // later
+            if (State == PreStartup || State == Startup)
+            {
+                Projectile.rotation += VampireKnives.StartupWristSnapback * Projectile.spriteDirection;
+            }
+            else if (State == Attack)
+            {
+                Projectile.rotation += MathHelper.Lerp(VampireKnives.StartupWristSnapback, -VampireKnives.AttackWristSnap, RootsCoreUtils.Ease.OutCirc(StateCompletion)) * Projectile.spriteDirection;
+            }
+            else if (State == Endlag)
+            {
+                Projectile.rotation -= VampireKnives.AttackWristSnap * Projectile.spriteDirection;
+            }
+            else if (State == PostEndlag)
+            {
+                Projectile.rotation +=
+                    MathHelper.Lerp(-VampireKnives.AttackWristSnap, VampireKnives.StartupWristSnapback, RootsCoreUtils.Ease.InOutCirc(StateCompletion)) * Projectile.spriteDirection;
+            }
         }
         public override void PostDraw(Color lightColor)
         {
             if (State == Endlag) return;
             float progress = (float)Timer / ((PreStartup.Time + Startup.Time) * Projectile.MaxUpdates);
-            Color color = Color.Lerp(lightColor, Color.White with { A = (byte)((255 - Projectile.alpha) / 3f)}, RootsCoreUtils.Ease.InQuad(progress));
-            bool[] shown = Enumerable.Repeat(true, 4).ToArray();
-            if (State == Attack)
+            Color color = lightColor;
+            if (State != PostEndlag)
+                color = Color.Lerp(lightColor, Color.White with { A = (byte)((255 - Projectile.alpha) / 3f)}, RootsCoreUtils.Ease.InQuad(progress));
+            bool[] shown = Enumerable.Repeat(State != PostEndlag, 4).ToArray();
+            if (State == Attack || State == PostEndlag)
             {
                 for (int i = 0; i < shown.Length; i++)
                 {
                     if (StateCompletion >= (i+1)/(float)(shown.Length + 1))
                     {
-                        shown[^(i + 1)] = false;
+                        shown[^(i + 1)] = State != Attack;
                     }
                 }
             }
             if (shown[0])
             {
                 Main.EntitySpriteDraw(VampireKnives1.Value, Projectile.Center - Main.screenPosition, VampireKnives1.Frame(),
-                    color, Projectile.rotation, VampireKnives1.Size() * 0.5f, Projectile.scale,
+                    color, Projectile.rotation, KnivesOrigin, Projectile.scale,
                     Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
             if (shown[1])
             {
                 Main.EntitySpriteDraw(VampireKnives2.Value, Projectile.Center - Main.screenPosition, VampireKnives2.Frame(),
-                    color, Projectile.rotation, VampireKnives2.Size() * 0.5f, Projectile.scale,
+                    color, Projectile.rotation, KnivesOrigin, Projectile.scale,
                     Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
             if (shown[2])
             {
                 Main.EntitySpriteDraw(VampireKnives3.Value, Projectile.Center - Main.screenPosition, VampireKnives3.Frame(),
-                    color, Projectile.rotation, VampireKnives3.Size() * 0.5f, Projectile.scale,
+                    color, Projectile.rotation, KnivesOrigin, Projectile.scale,
                     Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
             if (shown[3])
             {
                 Main.EntitySpriteDraw(VampireKnives4.Value, Projectile.Center - Main.screenPosition, VampireKnives4.Frame(),
-                    color, Projectile.rotation, VampireKnives4.Size() * 0.5f, Projectile.scale,
+                    color, Projectile.rotation, KnivesOrigin, Projectile.scale,
                     Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
         }
@@ -189,6 +239,7 @@ namespace RootsBeta.Items.Weapons
         public int Timer;
         private Vector2 _initVelocity;
         private int _dieDirection = Main.rand.NextBool() ? -1 : 1;
+        private Player Player => Main.player[Projectile.owner];
 
         public override void SetDefaults()
         {
@@ -247,7 +298,8 @@ namespace RootsBeta.Items.Weapons
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Projectile.vampireHeal(damageDone, target.Center, target);
+            if (Player.CheckMana((int)(VampireKnives.ManaCost * Player.manaCost), true))
+                Projectile.vampireHeal(damageDone, target.Center, target);
         }
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
