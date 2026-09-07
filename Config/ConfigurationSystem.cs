@@ -4,7 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using RootsCore.ContentBaseClasses;
 using Terraria;
+using Terraria.GameContent.Prefixes;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Core;
@@ -123,6 +126,45 @@ namespace Roots.Config
         public override bool AppliesToEntity(Item entity, bool lateInstantiation) => ItemIds.Contains(entity.type);
         public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<T>();
 
+    }
+    public abstract class ConfigurableCustomSwing<T> : GlobalItem
+    {
+        public abstract int[] ItemIds { get; }
+        public override bool AppliesToEntity(Item entity, bool lateInstantiation) => ItemIds.Contains(entity.type);
+        public override bool IsLoadingEnabled(Mod mod) => ConfigHelpers.ConfigEnabled<T>();
+        
+        public virtual int ProjectileType { get; set; }
+        public virtual bool SizeModifiers { get; set; } = true;
+        public virtual bool RClickAutoswing { get; set; } = false;
+
+        public override void SetStaticDefaults()
+        {
+            if (!RClickAutoswing) return;
+            foreach (int id in ItemIds)
+            {
+                ItemID.Sets.ItemsThatAllowRepeatedRightClick[id] = true;
+                PrefixLegacy.ItemSets.SwordsHammersAxesPicks[id] = SizeModifiers;
+            }
+        }
+
+        public override void SetDefaults(Item item)
+        {
+            item.noMelee = true;
+            item.noUseGraphic = true;
+            item.shoot = ProjectileType;
+            item.autoReuse = true;
+            item.useTurn = false;
+            item.UseSound = null;
+            item.useStyle = ItemUseStyleID.Shoot;
+        }
+        public override bool CanUseItem(Item item, Player player)
+        {
+            if (player.itemTime > 0 || player.ownedProjectileCounts[ProjectileType] > 0)
+            {
+                return false;
+            }
+            return base.CanUseItem(item, player);
+        }
     }
     #endregion
 }

@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RootsBeta.Items.Weapons
 {
-    public class BrandOfTheInferno : ConfigurableItemRework<BrandOfTheInferno>, IConfigurableContent<BrandOfTheInferno>
+    public class BrandOfTheInferno : ConfigurableCustomSwing<BrandOfTheInferno>, IConfigurableContent<BrandOfTheInferno>
     {
         public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
 
@@ -28,21 +28,10 @@ namespace RootsBeta.Items.Weapons
 
         public override void SetDefaults(Item item)
         {
+            base.SetDefaults(item);
             item.shoot = ModContent.ProjectileType<BrandOfTheInfernoHoldout>();
             item.useTime = item.useAnimation = 30;
-            item.noMelee = true;
-            item.noUseGraphic = true;
-            item.UseSound = null;
             item.flame = true;
-        }
-
-        public override bool CanUseItem(Item item, Player player)
-        {
-            if (player.itemTime > 0 || player.ownedProjectileCounts[item.shoot] > 0)
-            {
-                return false;
-            }
-            return base.CanUseItem(item, player);
         }
     }
 
