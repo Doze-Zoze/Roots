@@ -639,7 +639,7 @@ Weapons: {
 		Лучи наносят намного больше урона и не тратят ману, когда вы наэлектризованы
 		Удерживайте ПКМ, чтобы электризовать себя
 		'''
-	BrandOfTheInferno.Tooltip: Пока на вас наложен «Момент для удара», совершает взмах вокруг, наносящий двойной урон
+	BrandOfTheInferno.Tooltip: Пока на вас наложен «Момент для удара», совершает взмах вокруг вас, наносящий двойной урон
 }
 
 Buffs: {
@@ -722,4 +722,4 @@ Configs: {
 	"ContentConfigData[].Tooltip": Индивидуальные настройки конфигурации для контента Roots
 }
 
-Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+Projectiles.BrandOfTheInfernoHoldout.DisplayName: Адское лезвие
