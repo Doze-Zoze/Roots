@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RootsCore;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,7 +23,7 @@ namespace RootsBeta.Items.Weapons
         #region Parameters
         public static int KnivesShot => 5;
         public static float KnivesDistance => 3f;
-        public static float KnivesSpeed => 21f;
+        public static float KnivesSpeed => 23f;
         public static float MaxRotation => 0.5f;
         public static float RandomRotation => 0.05f;
         public static float RotationOffset => 0.45f;
@@ -31,6 +32,7 @@ namespace RootsBeta.Items.Weapons
         public static float StartupWristSnapback => 0.5f;
         public static float AttackWristSnap => 0.5f;
         public static int ManaCost => 40;
+        public static int Damage => 44;
         #endregion
 
         public override int[] ItemIds => [ItemID.VampireKnives];
@@ -44,6 +46,7 @@ namespace RootsBeta.Items.Weapons
             base.SetDefaults(item);
             item.shoot = ModContent.ProjectileType<VampireKnivesHoldout>();
             item.useTime = item.useAnimation = 30;
+            item.damage = Damage;
         }
     }
 
@@ -66,7 +69,7 @@ namespace RootsBeta.Items.Weapons
         };
         public AttackState Startup = new()
         {
-            Time = 8,
+            Time = 6,
             SwingWidth = 2.0f,
             RotationSpeed = 0.25f,
             CanDamage = false,
@@ -84,14 +87,14 @@ namespace RootsBeta.Items.Weapons
                 VampireKnives.RotationOffset,
             OffsetDistance = Offset,
             AlternateSwings = false,
-            Sound = SoundID.Item1,
+            Sound = SoundID.DD2_MonkStaffSwing with {Volume = 0.5f, Pitch = 0.2f},
             AdditionalAI = proj =>
             {
                 if (proj.Projectile.numUpdates != -1) return;
                 for (int i = 0; i < VampireKnives.KnivesShot; i++)
                 {
                     if (!(proj.StateCompletion >= (i + 1) / (float)(VampireKnives.KnivesShot + 1))) continue;
-                    if (proj._daggersShot[i]) continue;
+                    if (proj._knivesShot[i]) continue;
                     int index = proj.Projectile.spriteDirection != 1 ? i : VampireKnives.KnivesShot - i;
                     
                     Vector2 direction = proj.Projectile.DirectionTo(proj.Player.Center).RotatedBy(MathHelper.PiOver2);
@@ -108,16 +111,17 @@ namespace RootsBeta.Items.Weapons
                         (-VampireKnives.KnivesSpeed * Main.rand.NextFloat(0.98f, 1.02f)) + relativePlayerSpeed, ModContent.ProjectileType<VampireKnife>(),
                         proj.Projectile.damage, proj.Projectile.knockBack,
                         proj.Projectile.owner);
+                    SoundEngine.PlaySound(SoundID.Item39 with {MaxInstances = 10, Pitch = 0.2f + -0.3f * ((float)i/(VampireKnives.KnivesShot-1)), PitchVariance = 0.1f}, proj.Projectile.Center + offset);
 
                     knife.ai[0] = 30 - VampireKnives.KnivesLifetime;
                     
-                    proj._daggersShot[i] = true;
+                    proj._knivesShot[i] = true;
                 }
             }
         };
         public AttackState Endlag = new()
         {
-            Time = 18,
+            Time = 15,
             SwingWidth = -0.1f,
             CanDamage = false,
             RotationSpeed = 0.25f,
@@ -142,7 +146,7 @@ namespace RootsBeta.Items.Weapons
         public override string Texture => "RootsBeta/Items/Weapons/VampireKnivesBald";
         public override float LineCollisionLength => 0;
         public override int AfterImageCount => 16;
-        private bool[] _daggersShot = new bool[VampireKnives.KnivesShot];
+        private bool[] _knivesShot = new bool[VampireKnives.KnivesShot];
         public static Asset<Texture2D> VampireKnives1 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives1");
         public static Asset<Texture2D> VampireKnives2 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives2");
         public static Asset<Texture2D> VampireKnives3 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives3");
