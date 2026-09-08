@@ -639,6 +639,13 @@ Weapons: {
 		Beams deal much more damage and do not require mana when you are inflicted with Electrified
 		Hold Right Click to inflict Electrified on yourself
 		'''
+	ScourgeOfTheCorruptor:
+		'''
+		Throws a corrupt javelin that splits into 4 tiny eater minions on impact
+		Each tiny eater takes 0.25 minion slots and attaches to enemies, dealing damage
+		<right> to parry, reducing incoming projectile damage by 50% and providing immunity to melee attacks
+		Successful parries cause all tiny eaters to explode for massive damage
+		'''
 	BrandOfTheInferno.Tooltip: While under Striking Moment, does a massive spin attack that deals double damage
 }
 
@@ -756,4 +763,10 @@ Configs: {
 	"ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }
 
-Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+Projectiles: {
+	BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+	ScourgeOfTheCorruptorHoldout.DisplayName: Scourge Of The Corruptor
+	ScourgeOfTheCorruptor_Minion.DisplayName: Tiny Eater
+	ScourgeOfTheCorruptor_ThrownProjectile.DisplayName: Eater's Bite
+	ScourgeOfTheCorruptorParry.DisplayName: Scourge Of The Corruptor
+}

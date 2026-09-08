@@ -756,4 +756,10 @@ Configs: {
 	// "ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }
 
-// Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+Projectiles: {
+	// BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+	// ScourgeOfTheCorruptorHoldout.DisplayName: Scourge Of The Corruptor Holdout
+	// ScourgeOfTheCorruptor_Minion.DisplayName: Scourge Of The Corruptor_ Minion
+	// ScourgeOfTheCorruptor_ThrownProjectile.DisplayName: Scourge Of The Corruptor_ Thrown Projectile
+	// ScourgeOfTheCorruptorParry.DisplayName: Scourge Of The Corruptor Parry
+}

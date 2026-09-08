@@ -26,6 +26,10 @@ namespace RootsBeta.Players
         public float AdditiveManaDamage;
         #endregion
 
+        #region Weapons
+        public int ScourgeParryCooldownTime;
+        #endregion
+
         #endregion
 
         #region Balancing Properties
@@ -70,7 +74,12 @@ namespace RootsBeta.Players
             AdditiveManaDamage = 0;
             #endregion
 
-            ModifyHitNPCWithProjectileFuncs = [];
+            #region Weapons
+            if (ScourgeParryCooldownTime > 0)
+                ScourgeParryCooldownTime--;
+            #endregion
+
+        ModifyHitNPCWithProjectileFuncs = [];
             ModifyHitNPCFuncs = [];
             ModifyHitNPCWithItemFuncs = [];
             OnHitNPCFuncs = [];
