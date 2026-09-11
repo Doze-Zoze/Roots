@@ -3,14 +3,16 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Roots.Config;
 using RootsBeta.Utilities;
+using RootsCore;
 using RootsCore.ContentBaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RootsCore;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -53,10 +55,10 @@ namespace RootsBeta.Items.Weapons
     public class VampireKnivesHoldout : BaseCustomSwingProjectile<VampireKnivesHoldout>
     {
         public override bool UseMeleeSize => false;
-        
+
         private Vector2 KnivesOrigin => new(Projectile.spriteDirection == -1 ? 28 : 4, 28);
         private static int Offset => 12;
-            
+
         public AttackState PreStartup = new()
         {
             Time = 6,
@@ -87,7 +89,7 @@ namespace RootsBeta.Items.Weapons
                 VampireKnives.RotationOffset,
             OffsetDistance = Offset,
             AlternateSwings = false,
-            Sound = SoundID.DD2_MonkStaffSwing with {Volume = 0.5f, Pitch = 0.2f},
+            Sound = SoundID.DD2_MonkStaffSwing with { Volume = 0.5f, Pitch = 0.2f },
             AdditionalAI = proj =>
             {
                 if (proj.Projectile.numUpdates != -1) return;
@@ -96,7 +98,7 @@ namespace RootsBeta.Items.Weapons
                     if (!(proj.StateCompletion >= (i + 1) / (float)(VampireKnives.KnivesShot + 1))) continue;
                     if (proj._knivesShot[i]) continue;
                     int index = proj.Projectile.spriteDirection != 1 ? i : VampireKnives.KnivesShot - i;
-                    
+
                     Vector2 direction = proj.Projectile.DirectionTo(proj.Player.Center).RotatedBy(MathHelper.PiOver2);
                     Vector2 offset = direction * (VampireKnives.KnivesShot * 0.5f - index) * VampireKnives.KnivesDistance;
 
@@ -105,16 +107,16 @@ namespace RootsBeta.Items.Weapons
                     relativePlayerSpeed.Y = proj.Angle.Y < 0 ? Math.Max(relativePlayerSpeed.Y, 0) : Math.Min(relativePlayerSpeed.Y, 0);
 
                     float rotation = (index - VampireKnives.KnivesShot * 0.5f) * (VampireKnives.MaxRotation / VampireKnives.KnivesShot);
-                    
+
                     var knife = Projectile.NewProjectileDirect(proj.Projectile.GetSource_FromThis(), proj.Projectile.Center + offset,
                         proj.Angle.RotatedBy(rotation).RotatedByRandom(VampireKnives.RandomRotation) *
                         (-VampireKnives.KnivesSpeed * Main.rand.NextFloat(0.98f, 1.02f)) + relativePlayerSpeed, ModContent.ProjectileType<VampireKnife>(),
                         proj.Projectile.damage, proj.Projectile.knockBack,
                         proj.Projectile.owner);
-                    SoundEngine.PlaySound(SoundID.Item39 with {MaxInstances = 10, Pitch = 0.2f + -0.3f * ((float)i/(VampireKnives.KnivesShot-1)), PitchVariance = 0.1f}, proj.Projectile.Center + offset);
+                    SoundEngine.PlaySound(SoundID.Item39 with { MaxInstances = 10, Pitch = 0.2f + -0.3f * ((float)i / (VampireKnives.KnivesShot - 1)), PitchVariance = 0.1f }, proj.Projectile.Center + offset);
 
                     knife.ai[0] = 30 - VampireKnives.KnivesLifetime;
-                    
+
                     proj._knivesShot[i] = true;
                 }
             }
@@ -145,16 +147,22 @@ namespace RootsBeta.Items.Weapons
         public override Item BaseItem => ContentSamples.ItemsByType[ItemID.VampireKnives];
         public override string Texture => "RootsBeta/Items/Weapons/VampireKnivesBald";
         public override float LineCollisionLength => 0;
-        public override int AfterImageCount => 16;
+        public override int AfterImageCount => 0;
         private bool[] _knivesShot = new bool[VampireKnives.KnivesShot];
         public static Asset<Texture2D> VampireKnives1 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives1");
         public static Asset<Texture2D> VampireKnives2 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives2");
         public static Asset<Texture2D> VampireKnives3 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives3");
         public static Asset<Texture2D> VampireKnives4 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives4");
-
+        /// <summary>
+        /// Used instead of Projectile.oldPos so we can remove the player position when storing it and re-add it when drawing</br>
+        /// This means that it'll stay tied to the player position in motion instead of the sword world position
+        /// </summary>
+        public List<Vector2> OldPositionPlayerOffset { get; set; } = new();
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
+            if (State == Startup || State == Attack)
+                default(VampireKnivesSwordTrailDrawer).Draw(Projectile);
             if (AfterImageCount > 0)
             {
                 for (int i = 0; i < OldProjectileRot.Count; i++)
@@ -191,19 +199,26 @@ namespace RootsBeta.Items.Weapons
                     MathHelper.Lerp(-VampireKnives.AttackWristSnap, VampireKnives.StartupWristSnapback, RootsCoreUtils.Ease.InOutCirc(StateCompletion)) * Projectile.spriteDirection;
             }
         }
+
+        public override void PostAI()
+        {
+            OldPositionPlayerOffset.Insert(0, Projectile.Center - Player.Center);
+            if (OldPositionPlayerOffset.Count > ProjectileID.Sets.TrailCacheLength[Type])
+                OldPositionPlayerOffset.RemoveAt(OldPositionPlayerOffset.Count - 1);
+        }
         public override void PostDraw(Color lightColor)
         {
             if (State == Endlag) return;
             float progress = (float)Timer / ((PreStartup.Time + Startup.Time) * Projectile.MaxUpdates);
             Color color = lightColor;
             if (State != PostEndlag)
-                color = Color.Lerp(lightColor, Color.White with { A = (byte)((255 - Projectile.alpha) / 3f)}, RootsCoreUtils.Ease.InQuad(progress));
+                color = Color.Lerp(lightColor, Color.White with { A = (byte)((255 - Projectile.alpha) / 3f) }, RootsCoreUtils.Ease.InQuad(progress));
             bool[] shown = Enumerable.Repeat(State != PostEndlag, 4).ToArray();
             if (State == Attack || State == PostEndlag)
             {
                 for (int i = 0; i < shown.Length; i++)
                 {
-                    if (StateCompletion >= (i+1)/(float)(shown.Length + 1))
+                    if (StateCompletion >= (i + 1) / (float)(shown.Length + 1))
                     {
                         shown[^(i + 1)] = State != Attack;
                     }
@@ -256,9 +271,9 @@ namespace RootsBeta.Items.Weapons
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            
+
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(),
-                (Color.White * Projectile.Opacity) with { A = (byte)((255 - Projectile.alpha) / 3f)}, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale,
+                (Color.White * Projectile.Opacity) with { A = (byte)((255 - Projectile.alpha) / 3f) }, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale,
                 Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             return false;
         }
@@ -281,7 +296,7 @@ namespace RootsBeta.Items.Weapons
                 _initVelocity = Projectile.velocity;
                 Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             }
-            
+
             if (Timer == VampireKnives.KnivesLifetime)
             {
                 Projectile.active = false;
@@ -289,7 +304,7 @@ namespace RootsBeta.Items.Weapons
             }
             Projectile.timeLeft = 5;
             if (Projectile.numUpdates != -1) return;
-            
+
             if ((float)Timer / VampireKnives.KnivesLifetime >= VampireKnives.KnivesFadeoutPercent)
             {
                 var percentageFade = Utils.Remap(Timer, (int)(VampireKnives.KnivesLifetime * VampireKnives.KnivesFadeoutPercent), VampireKnives.KnivesLifetime, 1, 0);
@@ -311,6 +326,55 @@ namespace RootsBeta.Items.Weapons
             width = 10;
             height = 10;
             return true;
+        }
+    }
+
+    public struct VampireKnivesSwordTrailDrawer
+    {
+        private static VertexStrip _vertexStrip = new VertexStrip();
+
+        public Color ColorStart;
+
+        public Color ColorEnd;
+
+        public void Draw(Projectile proj)
+        {
+            if (proj.ModProjectile is not VampireKnivesHoldout v)
+                return;
+
+            int amountOfFrames = amountOfFrames = Math.Min(15 * proj.MaxUpdates, v.StateTimer);
+            if (amountOfFrames < 1)
+                return;
+
+            ColorStart = Color.Red;
+            ColorEnd = Color.DarkRed;
+            MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
+            miscShaderData.UseShaderSpecificData(new Vector4(1, 0, 0, 0.6f)); //idk what this does i'm just following vanilla
+            miscShaderData.Apply();
+
+            var posToDraw = v.OldPositionPlayerOffset.Take(amountOfFrames).ToArray();
+            var rotToDraw = proj.oldRot.Take(amountOfFrames).ToArray();
+
+            //Pushing the draw position towards the tip of the knives & re-adding player position
+            //might be able to use linq here, but idk how
+            float OffsetAmount = 8;
+            for (var i = 0; i < posToDraw.Length; i++)
+            {
+                posToDraw[i] += v.Player.Center + (rotToDraw[i] + (proj.spriteDirection == 0 ? MathHelper.PiOver4 : -MathHelper.PiOver2)).ToRotationVector2() * OffsetAmount;
+            }
+            _vertexStrip.PrepareStrip(posToDraw, rotToDraw, StripColors, StripWidth, -Main.screenPosition, posToDraw.Length, true);
+            _vertexStrip.DrawTrail();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
+        private Color StripColors(float progressOnStrip)
+        {
+            return Color.Lerp(ColorStart, ColorEnd, progressOnStrip);
+        }
+
+        private float StripWidth(float progressOnStrip)
+        {
+            return 24;
         }
     }
 }
