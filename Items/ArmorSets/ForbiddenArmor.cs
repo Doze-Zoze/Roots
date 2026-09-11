@@ -37,7 +37,7 @@ namespace RootsBeta.Items.ArmorSets
         public override void LegsEquips(Item item, Player player)
         {
             player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
-            player.slotsMinions += MinionSlotsLegs;
+            player.maxMinions += MinionSlotsLegs;
 
         }
 

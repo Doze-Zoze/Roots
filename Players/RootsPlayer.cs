@@ -6,9 +6,7 @@ using RootsBeta.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RootsBeta.Items.Accessories.Melee;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RootsBeta.Players
@@ -126,12 +124,11 @@ namespace RootsBeta.Players
         {
             if (RootsModConfig.Instance.RemoveClasses && Player.kbGlove)
                 Player.GetKnockback(DamageClass.Generic) *= 2f;
-
-            //TODO - High Priority - Make configurable, make it work properly
+            //TODO - Make configurable
             int lostMana = (int)((Player.slotsMinions - Player.maxMinions) * ManaPerMinion);
             Player.maxMinions += Player.statManaMax2 / ManaPerMinion;
             if (lostMana > 0)
-                Player.statManaMax2 -= lostMana;
+                Player.statManaMax2 -= Math.Min(lostMana, Player.statManaMax2);
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -155,7 +152,7 @@ namespace RootsBeta.Players
                 {
                     func(Player, target, hit, damageDone);
                 }
-            } 
+            }
             else if (!proj.IsMinionOrSentryRelated)
             {
                 foreach (var func in PhysicalOnHitNPCFuncs)
