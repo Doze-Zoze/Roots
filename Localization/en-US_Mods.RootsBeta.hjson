@@ -639,7 +639,7 @@ Weapons: {
 		Beams deal much more damage and do not require mana when you are inflicted with Electrified
 		Hold Right Click to inflict Electrified on yourself
 		'''
-	ScourgeOfTheCorruptor:
+	ScourgeOfTheCorruptor.Tooltip:
 		'''
 		Throws a corrupt javelin that splits into 4 tiny eater minions on impact
 		Each tiny eater takes 0.25 minion slots and attaches to enemies, dealing damage

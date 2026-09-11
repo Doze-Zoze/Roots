@@ -23,15 +23,13 @@ namespace RootsBeta.Items.Weapons
 
         #region Parameters
 
-        public static int SpearDamage => 500;
+        public static int SpearDamage => 250;
         public static int EaterDmg => 30;
-        public static int EaterHitrate => 30;
+        public static int EaterHitrate => 120;
         public static int EaterExplodeMult => 10;
         public static int EaterCountPerSpear => 4;
-
         public static float EaterMinionSlotCount => 0.25f;
         public static int ParryCooldown => 90;
-
         public static float ParryProjectileDmgMult => 0.5f;
 
 
@@ -39,7 +37,7 @@ namespace RootsBeta.Items.Weapons
 
         public override int[] ItemIds => [ItemID.ScourgeoftheCorruptor];
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) =>
-            tooltips.ReplaceTooltipWith("Weapons.ScourgeoftheCorruptor.Tooltip");
+            tooltips.ReplaceTooltipWith("Weapons.ScourgeOfTheCorruptor.Tooltip");
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemsThatAllowRepeatedRightClick[ItemID.ScourgeoftheCorruptor] = true;
@@ -289,6 +287,7 @@ namespace RootsBeta.Items.Weapons
             Projectile.tileCollide = false;
             Projectile.MaxUpdates = 4;
             Projectile.ArmorPenetration = 100;
+            Projectile.DamageType = DamageClass.Summon;
             for (int i = 0; i < Projectile.localNPCImmunity.Length; i++)
             {
                 Projectile.localNPCImmunity[i] = 60;
@@ -305,7 +304,7 @@ namespace RootsBeta.Items.Weapons
                 if (!Main.npc.IndexInRange((int)Projectile.ai[0] - 1))
                     return null;
                 var npc = Main.npc[(int)Projectile.ai[0] - 1];
-                if (!npc.active || (!npc.CanBeChasedBy(Projectile) && npc.type != NPCID.DukeFishron))
+                if (!npc.active || !(npc.CanBeChasedBy(Projectile) || npc.type is NPCID.DukeFishron or NPCID.TargetDummy))
                 {
                     Projectile.ai[0] = 0;
                     return null;
@@ -349,6 +348,9 @@ namespace RootsBeta.Items.Weapons
 
         }
 
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.netUpdate = true;

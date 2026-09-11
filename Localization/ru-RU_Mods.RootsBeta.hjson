@@ -639,6 +639,13 @@ Weapons: {
 		Лучи наносят намного больше урона и не тратят ману, когда вы наэлектризованы
 		Удерживайте ПКМ, чтобы электризовать себя
 		'''
+	/* ScourgeOfTheCorruptor.Tooltip:
+		'''
+		Throws a corrupt javelin that splits into 4 tiny eater minions on impact
+		Each tiny eater takes 0.25 minion slots and attaches to enemies, dealing damage
+		<right> to parry, reducing incoming projectile damage by 50% and providing immunity to melee attacks
+		Successful parries cause all tiny eaters to explode for massive damage
+		''' */
 	// BrandOfTheInferno.Tooltip: While under Striking Moment, does a massive spin attack that deals double damage
 }
 
@@ -758,8 +765,8 @@ Configs: {
 
 Projectiles: {
 	// BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
-	// ScourgeOfTheCorruptorHoldout.DisplayName: Scourge Of The Corruptor Holdout
-	// ScourgeOfTheCorruptor_Minion.DisplayName: Scourge Of The Corruptor_ Minion
-	// ScourgeOfTheCorruptor_ThrownProjectile.DisplayName: Scourge Of The Corruptor_ Thrown Projectile
-	// ScourgeOfTheCorruptorParry.DisplayName: Scourge Of The Corruptor Parry
+	// ScourgeOfTheCorruptorHoldout.DisplayName: Scourge Of The Corruptor
+	// ScourgeOfTheCorruptor_Minion.DisplayName: Tiny Eater
+	// ScourgeOfTheCorruptor_ThrownProjectile.DisplayName: Eater's Bite
+	// ScourgeOfTheCorruptorParry.DisplayName: Scourge Of The Corruptor
 }
