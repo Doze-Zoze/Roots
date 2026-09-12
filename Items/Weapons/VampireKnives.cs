@@ -23,18 +23,27 @@ namespace RootsBeta.Items.Weapons
         public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
 
         #region Parameters
+        #region Balancing
         public static int KnivesShot => 5;
-        public static float KnivesDistance => 3f;
+        public static int ManaCost => 40;
+        public static int Damage => 44;
         public static float KnivesSpeed => 23f;
+        public static int KnivesLifetime => 36;
+        public static float KnivesFadeoutPercent => 0.5f;
+        #endregion
+        #region Visuals
+        public static float KnivesDistance => 3f;
         public static float MaxRotation => 0.5f;
         public static float RandomRotation => 0.05f;
         public static float RotationOffset => 0.45f;
-        public static int KnivesLifetime => 36;
-        public static float KnivesFadeoutPercent => 0.5f;
         public static float StartupWristSnapback => 0.5f;
         public static float AttackWristSnap => 0.5f;
-        public static int ManaCost => 40;
-        public static int Damage => 44;
+        public static int TrailFrames => 15;
+        public static int TrailWidth => 24;
+        public static int TrailOffsetAmount => 4;
+        public static Color TrailColorStart => Color.Red;
+        public static Color TrailColorEnd => Color.DarkRed;
+        #endregion
         #endregion
 
         public override int[] ItemIds => [ItemID.VampireKnives];
@@ -74,7 +83,7 @@ namespace RootsBeta.Items.Weapons
             Time = 6,
             SwingWidth = 2.0f,
             RotationSpeed = 0.25f,
-            CanDamage = false,
+            CanDamage = true,
             SwingOffsetAngle = proj =>
                 proj.State.SwingWidth * RootsCoreUtils.Ease.InOutCirc(1 - proj.StateCompletion) + VampireKnives.RotationOffset,
             OffsetDistance = Offset,
@@ -84,8 +93,8 @@ namespace RootsBeta.Items.Weapons
         {
             Time = 8,
             SwingWidth = 0f,
-            CanDamage = true,
-            SwingOffsetAngle = proj =>
+            CanDamage = false,
+            SwingOffsetAngle = _ =>
                 VampireKnives.RotationOffset,
             OffsetDistance = Offset,
             AlternateSwings = false,
@@ -154,15 +163,14 @@ namespace RootsBeta.Items.Weapons
         public static Asset<Texture2D> VampireKnives3 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives3");
         public static Asset<Texture2D> VampireKnives4 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives4");
         /// <summary>
-        /// Used instead of Projectile.oldPos so we can remove the player position when storing it and re-add it when drawing</br>
+        /// Used instead of Projectile.oldPos so we can remove the player position when storing it and re-add it when drawing<br/>
         /// This means that it'll stay tied to the player position in motion instead of the sword world position
         /// </summary>
         public List<Vector2> OldPositionPlayerOffset { get; set; } = new();
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            if (State == Startup || State == Attack)
-                default(VampireKnivesSwordTrailDrawer).Draw(Projectile);
+
             if (AfterImageCount > 0)
             {
                 for (int i = 0; i < OldProjectileRot.Count; i++)
@@ -176,6 +184,8 @@ namespace RootsBeta.Items.Weapons
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(),
                 lightColor, Projectile.rotation, KnivesOrigin, Projectile.scale,
                 Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+            if (State == Startup || State == Attack)
+                VampireKnivesSwordTrailDrawer.Draw(Projectile);
             return false;
         }
 
@@ -331,23 +341,20 @@ namespace RootsBeta.Items.Weapons
 
     public struct VampireKnivesSwordTrailDrawer
     {
-        private static VertexStrip _vertexStrip = new VertexStrip();
+        private static readonly VertexStrip VertexStrip = new();
+        
+        private static Color StripColors(float progressOnStrip) =>
+            Color.Lerp(VampireKnives.TrailColorStart, VampireKnives.TrailColorEnd, progressOnStrip);
 
-        public Color ColorStart;
-
-        public Color ColorEnd;
-
-        public void Draw(Projectile proj)
+        public static void Draw(Projectile proj)
         {
             if (proj.ModProjectile is not VampireKnivesHoldout v)
                 return;
 
-            int amountOfFrames = amountOfFrames = Math.Min(15 * proj.MaxUpdates, v.StateTimer);
+            int amountOfFrames = Math.Min(VampireKnives.TrailFrames * proj.MaxUpdates, v.StateTimer);
             if (amountOfFrames < 1)
                 return;
-
-            ColorStart = Color.Red;
-            ColorEnd = Color.DarkRed;
+            
             MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
             miscShaderData.UseShaderSpecificData(new Vector4(1, 0, 0, 0.6f)); //idk what this does i'm just following vanilla
             miscShaderData.Apply();
@@ -356,25 +363,13 @@ namespace RootsBeta.Items.Weapons
             var rotToDraw = proj.oldRot.Take(amountOfFrames).ToArray();
 
             //Pushing the draw position towards the tip of the knives & re-adding player position
-            //might be able to use linq here, but idk how
-            float OffsetAmount = 8;
-            for (var i = 0; i < posToDraw.Length; i++)
-            {
-                posToDraw[i] += v.Player.Center + (rotToDraw[i] + (proj.spriteDirection == 0 ? MathHelper.PiOver4 : -MathHelper.PiOver2)).ToRotationVector2() * OffsetAmount;
-            }
-            _vertexStrip.PrepareStrip(posToDraw, rotToDraw, StripColors, StripWidth, -Main.screenPosition, posToDraw.Length, true);
-            _vertexStrip.DrawTrail();
+            posToDraw = posToDraw.Select((pos, idx) =>
+                pos + v.Player.Center +
+                (rotToDraw[idx] + (proj.spriteDirection == 0 ? MathHelper.PiOver4 : -MathHelper.PiOver2))
+                .ToRotationVector2() * VampireKnives.TrailOffsetAmount).ToArray();
+            VertexStrip.PrepareStrip(posToDraw, rotToDraw, StripColors, _ => VampireKnives.TrailWidth, -Main.screenPosition, posToDraw.Length, true);
+            VertexStrip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        }
-
-        private Color StripColors(float progressOnStrip)
-        {
-            return Color.Lerp(ColorStart, ColorEnd, progressOnStrip);
-        }
-
-        private float StripWidth(float progressOnStrip)
-        {
-            return 24;
         }
     }
 }

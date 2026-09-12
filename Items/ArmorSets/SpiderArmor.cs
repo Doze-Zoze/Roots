@@ -29,19 +29,19 @@ namespace RootsBeta.Items.ArmorSets
         public override void HeadEquips(Item item, Player player)
         {
             player.GetDamage<GenericDamageClass>() += DamageBonusHead;
-            player.slotsMinions += MinionSlotsHead;
+            player.maxMinions += MinionSlotsHead;
         }
 
         public override void ChestEquips(Item item, Player player)
         {
             player.GetDamage<GenericDamageClass>() += DamageBonusChest;
-            player.slotsMinions += MinionSlotsChest;
+            player.maxMinions += MinionSlotsChest;
         }
 
         public override void LegsEquips(Item item, Player player)
         {
             player.GetDamage<GenericDamageClass>() += DamageBonusLegs;
-            player.slotsMinions += MinionSlotsLegs;
+            player.maxMinions += MinionSlotsLegs;
 
         }
         public override void SetBonusEffect(Player player)
