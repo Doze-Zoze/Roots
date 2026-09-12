@@ -8,6 +8,7 @@ using RootsCore.ContentBaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Daybreak.Common.Rendering;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -27,6 +28,8 @@ namespace RootsBeta.Items.Weapons
         public static int KnivesShot => 5;
         public static int ManaCost => 40;
         public static int Damage => 44;
+        public static float TrueMeleeDamageModifier => 4f;
+        public static float TrueMeleeRange => 60f;
         public static float KnivesSpeed => 23f;
         public static int KnivesLifetime => 36;
         public static float KnivesFadeoutPercent => 0.5f;
@@ -39,8 +42,8 @@ namespace RootsBeta.Items.Weapons
         public static float StartupWristSnapback => 0.5f;
         public static float AttackWristSnap => 0.5f;
         public static int TrailFrames => 15;
-        public static int TrailWidth => 24;
-        public static int TrailOffsetAmount => 4;
+        public static int TrailWidth => 16;
+        public static int TrailOffsetSize => 12;
         public static Color TrailColorStart => Color.Red;
         public static Color TrailColorEnd => Color.DarkRed;
         #endregion
@@ -155,7 +158,7 @@ namespace RootsBeta.Items.Weapons
         public override List<AttackState> StateList => [PreStartup, Startup, Attack, Endlag, PostEndlag];
         public override Item BaseItem => ContentSamples.ItemsByType[ItemID.VampireKnives];
         public override string Texture => "RootsBeta/Items/Weapons/VampireKnivesBald";
-        public override float LineCollisionLength => 0;
+        public override float LineCollisionLength => VampireKnives.TrueMeleeRange;
         public override int AfterImageCount => 0;
         private bool[] _knivesShot = new bool[VampireKnives.KnivesShot];
         public static Asset<Texture2D> VampireKnives1 => field ??= ModContent.Request<Texture2D>($"RootsBeta/Items/Weapons/VampireKnives1");
@@ -216,6 +219,12 @@ namespace RootsBeta.Items.Weapons
             if (OldPositionPlayerOffset.Count > ProjectileID.Sets.TrailCacheLength[Type])
                 OldPositionPlayerOffset.RemoveAt(OldPositionPlayerOffset.Count - 1);
         }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.SourceDamage *= VampireKnives.TrueMeleeDamageModifier;
+        }
+
         public override void PostDraw(Color lightColor)
         {
             if (State == Endlag) return;
@@ -342,34 +351,101 @@ namespace RootsBeta.Items.Weapons
     public struct VampireKnivesSwordTrailDrawer
     {
         private static readonly VertexStrip VertexStrip = new();
-        
+
         private static Color StripColors(float progressOnStrip) =>
-            Color.Lerp(VampireKnives.TrailColorStart, VampireKnives.TrailColorEnd, progressOnStrip);
+            Color.Lerp(VampireKnives.TrailColorStart, VampireKnives.TrailColorEnd,
+                RootsCoreUtils.Ease.OutQuint(progressOnStrip));
+            
 
         public static void Draw(Projectile proj)
         {
+            // TODO: Make generic for anything that uses a custom swing
             if (proj.ModProjectile is not VampireKnivesHoldout v)
                 return;
 
-            int amountOfFrames = Math.Min(VampireKnives.TrailFrames * proj.MaxUpdates, v.StateTimer);
+            // TODO: figure out how to make this start smoothly even though we're starting 1 state in (fade out better early in the animation)
+            int amountOfFrames = Math.Min(VampireKnives.TrailFrames * proj.MaxUpdates, v.Timer - v.PreStartup.Time);
             if (amountOfFrames < 1)
                 return;
             
-            MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
-            miscShaderData.UseShaderSpecificData(new Vector4(1, 0, 0, 0.6f)); //idk what this does i'm just following vanilla
-            miscShaderData.Apply();
+            using (Main.spriteBatch.Scope())
+            {
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
+                MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
+                miscShaderData.UseShaderSpecificData(new Vector4(1, 0, 0, 0.6f)); //idk what this does i'm just following vanilla
+                miscShaderData.Apply();
 
-            var posToDraw = v.OldPositionPlayerOffset.Take(amountOfFrames).ToArray();
-            var rotToDraw = proj.oldRot.Take(amountOfFrames).ToArray();
+                // TODO: Rotation smoothing
+                #region RotationComent
+                /*0, 7.454014
+                1, 7.456395
+                2, 7.463572
+                3, 7.475651
+                4, 7.492817
+                5, 7.515348
+                6, 7.543643
+                7, 1.2950752
+                8, 1.336802
+                9, 1.3867724
+                10, 1.4466908
+                11, 1.5192962
+                12, 1.6094899
+                13, 1.7278898
+                14, 1.9104898
+                15, 2.4311676
+                16, 2.6137679
+                17, 2.7321675
+                18, 2.8223612
+                19, 2.8949666
+                20, 2.9548852
+                21, 3.0048554
+                22, 3.0465822
+                23, 3.0811996
+                24, 3.1094947
+                25, 3.1320257
+                26, 3.1491916
+                27, 3.1612706
+                28, 3.1684477
+                29, 3.1708288
+                30, 3.1708288
+                31, 3.1703887
+                32, 3.1690702
+                33, 3.1668768
+                34, 3.163815
+                35, 3.1598935
+                36, 3.1551247
+                37, 3.1495218
+                38, 3.1431015
+                39, 3.1358824
+                40, 3.1278858
+                41, 3.1191354
+                42, 3.1096566
+                43, 3.0994773
+                44, 3.0886273
+                45, 3.0771384
+                46, 3.0650446
+                47, 3.052381
+                48, 3.0391846
+                49, 3.0254948
+                50, 3.0113513
+                51, 2.9967954
+                52, 2.9818702
+                53, 2.9666193*/
+                #endregion
+                Vector2[] posToDraw = v.OldPositionPlayerOffset.Take(amountOfFrames).ToArray();
+                float[] rotToDraw = proj.oldRot.Take(amountOfFrames).ToArray();
 
-            //Pushing the draw position towards the tip of the knives & re-adding player position
-            posToDraw = posToDraw.Select((pos, idx) =>
-                pos + v.Player.Center +
-                (rotToDraw[idx] + (proj.spriteDirection == 0 ? MathHelper.PiOver4 : -MathHelper.PiOver2))
-                .ToRotationVector2() * VampireKnives.TrailOffsetAmount).ToArray();
-            VertexStrip.PrepareStrip(posToDraw, rotToDraw, StripColors, _ => VampireKnives.TrailWidth, -Main.screenPosition, posToDraw.Length, true);
-            VertexStrip.DrawTrail();
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+                //Pushing the draw position towards the tip of the knives & re-adding player position
+                posToDraw = posToDraw.Select((pos, idx) =>
+                    pos + v.Player.Center +
+                    (rotToDraw[idx] + (proj.spriteDirection == 0 ? MathHelper.PiOver4 : -MathHelper.PiOver2))
+                    .ToRotationVector2() * VampireKnives.TrailOffsetSize).ToArray();
+                // TODO: backface culling removal but make it work when facing left
+                VertexStrip.PrepareStrip(posToDraw, rotToDraw, StripColors, _ => VampireKnives.TrailWidth, -Main.screenPosition, posToDraw.Length, true);
+                VertexStrip.DrawTrail();
+                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+                Main.spriteBatch.End();
+            }
         }
     }
 }
