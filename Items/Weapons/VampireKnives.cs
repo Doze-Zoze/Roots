@@ -374,66 +374,16 @@ namespace RootsBeta.Items.Weapons
                 MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
                 miscShaderData.UseShaderSpecificData(new Vector4(1, 0, 0, 0.6f)); //idk what this does i'm just following vanilla
                 miscShaderData.Apply();
-
-                // TODO: Rotation smoothing
-                #region RotationComent
-                /*0, 7.454014
-                1, 7.456395
-                2, 7.463572
-                3, 7.475651
-                4, 7.492817
-                5, 7.515348
-                6, 7.543643
-                7, 1.2950752
-                8, 1.336802
-                9, 1.3867724
-                10, 1.4466908
-                11, 1.5192962
-                12, 1.6094899
-                13, 1.7278898
-                14, 1.9104898
-                15, 2.4311676
-                16, 2.6137679
-                17, 2.7321675
-                18, 2.8223612
-                19, 2.8949666
-                20, 2.9548852
-                21, 3.0048554
-                22, 3.0465822
-                23, 3.0811996
-                24, 3.1094947
-                25, 3.1320257
-                26, 3.1491916
-                27, 3.1612706
-                28, 3.1684477
-                29, 3.1708288
-                30, 3.1708288
-                31, 3.1703887
-                32, 3.1690702
-                33, 3.1668768
-                34, 3.163815
-                35, 3.1598935
-                36, 3.1551247
-                37, 3.1495218
-                38, 3.1431015
-                39, 3.1358824
-                40, 3.1278858
-                41, 3.1191354
-                42, 3.1096566
-                43, 3.0994773
-                44, 3.0886273
-                45, 3.0771384
-                46, 3.0650446
-                47, 3.052381
-                48, 3.0391846
-                49, 3.0254948
-                50, 3.0113513
-                51, 2.9967954
-                52, 2.9818702
-                53, 2.9666193*/
-                #endregion
+                
+                // TODO: if player flips around, the rotations get all fucky wucky. Flip the rotations before a flip 
                 Vector2[] posToDraw = v.OldPositionPlayerOffset.Take(amountOfFrames).ToArray();
                 float[] rotToDraw = proj.oldRot.Take(amountOfFrames).ToArray();
+                for (int i = 1; i < rotToDraw.Length; i++)
+                {
+                    float delta = MathHelper.WrapAngle(rotToDraw[i] - rotToDraw[i - 1]);
+                    rotToDraw[i] = rotToDraw[i - 1] + delta;
+                }
+                SmoothSpike(rotToDraw, 6);
 
                 //Pushing the draw position towards the tip of the knives & re-adding player position
                 posToDraw = posToDraw.Select((pos, idx) =>
@@ -445,6 +395,34 @@ namespace RootsBeta.Items.Weapons
                 VertexStrip.DrawTrail();
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
                 Main.spriteBatch.End();
+            }
+        }
+
+        private static void SmoothSpike(float[] values, int radius)
+        {
+            int spikeIndex = -1;
+            float spikeSize = 0f;
+
+            for (int i = 1; i < values.Length - 2; i++)
+            {
+                float distance = Math.Abs(values[i + 1] - values[i]);
+
+                if (!(distance > spikeSize)) continue;
+                spikeSize = distance;
+                spikeIndex = i;
+
+            }
+
+            if (spikeIndex == -1) return;
+            
+            int lo = Math.Max(1, spikeIndex - radius);
+            int hi = Math.Min(spikeIndex + radius, values.Length - 2);
+            if (hi - lo < 2) return;
+
+            for (int i = lo; i <= hi; i++)
+            {
+                float s = (float)(i - lo) / (hi - lo);
+                values[i] = MathHelper.CatmullRom(values[lo - 1], values[lo], values[hi], values[hi + 1], s);
             }
         }
     }
