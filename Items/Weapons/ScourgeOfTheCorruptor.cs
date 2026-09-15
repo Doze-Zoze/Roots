@@ -5,6 +5,7 @@ using RootsBeta.Utilities;
 using RootsCore;
 using RootsCore.ContentBaseClasses;
 using RootsCore.Extensions;
+using RootsCore.ParticleSystem;
 using RootsCore.ParticleTextures;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static RootsCore.ParticleSystem;
+using static RootsCore.ParticleSystem.ParticleSystem;
 
 namespace RootsBeta.Items.Weapons
 {
@@ -73,7 +74,7 @@ namespace RootsBeta.Items.Weapons
             GameShaders.Misc["RootsCore:QuantizeShader"].Apply();
         }
 
-        public static ParticleSystem.ParticleDrawBatch ParticleDrawBatch { get; } = new(true, ParticleDrawEffects);
+        public static ParticleDrawBatch ParticleDrawBatch { get; } = new(true, ParticleDrawEffects);
     }
 
     public class ScourgeOfTheCorruptorHoldout : BaseCustomSwingProjectile<ScourgeOfTheCorruptorHoldout>
@@ -236,21 +237,21 @@ namespace RootsBeta.Items.Weapons
             foreach (var item in eaterMinions)
             {
                 float rot = Main.rand.NextFloat(MathHelper.TwoPi);
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 20, ParticlePresets.ExplodeAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 20, ParticlePreset.ExplodeAndFade)
                 {
                     Color = Color.Black,
                     Scale = new(0.5f),
                     Rotation = rot,
                     DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 18, ParticlePresets.ExplodeAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 18, ParticlePreset.ExplodeAndFade)
                 {
                     Color = new Color(88, 104, 66),
                     Scale = new(0.3f),
                     Rotation = rot,
                     DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 17, ParticlePresets.ExplodeAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 17, ParticlePreset.ExplodeAndFade)
                 {
                     Color = new Color(35, 40, 28),
                     Scale = new(0.2f),
@@ -316,7 +317,7 @@ namespace RootsBeta.Items.Weapons
 
             if (Projectile.numUpdates % 2 == 0)
             {
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 8, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 8, ParticlePreset.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterNPCs,
                     Color = ApplyLightingColorToColor(Projectile.Center, new Color(35, 40, 28)),
@@ -325,7 +326,7 @@ namespace RootsBeta.Items.Weapons
                     Rotation = Projectile.rotation - MathHelper.PiOver4 * 3,
                     DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 5, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 5, ParticlePreset.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterProjectiles,
                     Color = new Color(117, 145, 73) with { A = 125 },
@@ -349,21 +350,21 @@ namespace RootsBeta.Items.Weapons
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextVector2CircularEdge(4, 4), ModContent.ProjectileType<ScourgeOfTheCorruptor_Minion>(), (int)(Projectile.damage * (ScourgeOfTheCorruptor.EaterDmg / (float)ScourgeOfTheCorruptor.SpearDamage)), 0, Projectile.owner);
             }
             float rot = Main.rand.NextFloat(MathHelper.TwoPi);
-            ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 20, ParticlePresets.ExplodeAndFade)
+            ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 20, ParticlePreset.ExplodeAndFade)
             {
                 Color = Color.Black,
                 Scale = new(0.375f),
                 Rotation = rot,
                 DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
             });
-            ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 18, ParticlePresets.ExplodeAndFade)
+            ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 18, ParticlePreset.ExplodeAndFade)
             {
                 Color = new Color(88, 104, 66),
                 Scale = new(0.225f),
                 Rotation = rot,
                 DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
             });
-            ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 17, ParticlePresets.ExplodeAndFade)
+            ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 17, ParticlePreset.ExplodeAndFade)
             {
                 Color = new Color(35, 40, 28),
                 Scale = new(0.15f),
@@ -451,7 +452,7 @@ namespace RootsBeta.Items.Weapons
 
             if (Projectile.numUpdates % 2 == 0)
             {
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 7, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 7, ParticlePreset.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterNPCs,
                     Color = ApplyLightingColorToColor(Projectile.Center, new Color(35, 40, 28)),
@@ -460,7 +461,7 @@ namespace RootsBeta.Items.Weapons
                     Rotation = Projectile.rotation,
                     DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 4, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 4, ParticlePreset.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterProjectiles,
                     Color = new Color(117, 145, 73) with { A = 125 },
@@ -503,7 +504,7 @@ namespace RootsBeta.Items.Weapons
 
             var pos = Main.rand.NextVector2FromRectangle(target.Hitbox);
             for (var i = 0; i < 5; i++)
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Star[5], pos, 30, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Star[5], pos, 30, ParticlePreset.LinearShrinkAndFade)
                 {
                     Color = new Color(117, 145, 73) with { A = 0 },
                     Velocity = Main.rand.NextVector2Circular(2, 2),
