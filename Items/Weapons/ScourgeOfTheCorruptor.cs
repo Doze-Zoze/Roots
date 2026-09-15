@@ -12,8 +12,10 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static RootsCore.ParticleSystem;
 
 namespace RootsBeta.Items.Weapons
 {
@@ -60,15 +62,25 @@ namespace RootsBeta.Items.Weapons
                 Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<ScourgeOfTheCorruptorParry>(), damage, knockback, player.whoAmI);
                 return false;
             }
+            ParticleDrawBatch.ApplyEffectsToDraw = ParticleDrawEffects;
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
+
+        private static void ParticleDrawEffects()
+        {
+            GameShaders.Misc["RootsCore:QuantizeShader"].UseSaturation(8);
+            GameShaders.Misc["RootsCore:QuantizeShader"].UseOpacity(5);
+            GameShaders.Misc["RootsCore:QuantizeShader"].Apply();
+        }
+
+        public static ParticleSystem.ParticleDrawBatch ParticleDrawBatch { get; } = new(true, ParticleDrawEffects);
     }
 
     public class ScourgeOfTheCorruptorHoldout : BaseCustomSwingProjectile<ScourgeOfTheCorruptorHoldout>
     {
         public AttackState Startup = new()
         {
-            Time = 20,
+            Time = 16,
             SwingWidth = 3f,
             RotationSpeed = 1f,
             CanDamage = false,
@@ -151,18 +163,46 @@ namespace RootsBeta.Items.Weapons
                     proj.TriggerParry();
                     break;
                 }
+
+                proj.Projectile.rotation -= MathHelper.PiOver2 * proj.Projectile.spriteDirection;
+
+                if (proj.StateCompletion >= 1)
+                    proj.Projectile.Kill();
             },
+            Sound = SoundID.Item1
+        };
+        public AttackState Startup = new()
+        {
+            Time = 10,
+            IsTransitionedTo = true,
+            SwingWidth = 3f,
+            CanDamage = false,
+            OffsetDistance = 16,
+            RotationSpeed = 0.04f,
+            SwingOffsetAngle = proj =>
+                MathHelper.Lerp(0, proj.State.SwingWidth * (-0.5f), proj.StateCompletion),
+            Startup = proj =>
+            {
+                //proj.Angle = -proj.Player.DirectionTo(proj.Player.MouseWorld);
+            },
+            AdditionalAI = proj =>
+            {
+
+                proj.Projectile.rotation -= MathHelper.PiOver2 * proj.Projectile.spriteDirection * (1 - proj.StateCompletion);
+                proj.OffsetDistance = (int)MathHelper.Lerp(16, 36, proj.StateCompletion);
+            },
+            AlternateSwings = false,
             Sound = SoundID.Item1
         };
         public AttackState Attack = new()
         {
             Time = 10,
-            IsTransitionedTo = false,
+            IsTransitionedTo = true,
             SwingWidth = 3f,
-            CanDamage = false,
+            CanDamage = true,
             OffsetDistance = 36,
             SwingOffsetAngle = proj =>
-                -proj.State.SwingWidth * (-0.5f + (proj.StateCompletion)),
+                proj.State.SwingWidth * (-0.5f + (proj.StateCompletion)),
             Startup = proj =>
             {
                 proj.Angle = -proj.Player.DirectionTo(proj.Player.MouseWorld);
@@ -170,7 +210,7 @@ namespace RootsBeta.Items.Weapons
             AlternateSwings = false,
             Sound = SoundID.Item1
         };
-        public override List<AttackState> StateList => [Parry, Attack];
+        public override List<AttackState> StateList => [Parry, Startup, Attack];
         public override Item BaseItem => ContentSamples.ItemsByType[ItemID.ScourgeoftheCorruptor];
         public override string Texture => $"Terraria/Images/Item_{ItemID.ScourgeoftheCorruptor}";
         public override bool UseMeleeSize => false;
@@ -187,7 +227,7 @@ namespace RootsBeta.Items.Weapons
 
         public void TriggerParry()
         {
-            SetState(Attack);
+            SetState(Startup);
             Projectile.netUpdate = true;
             Projectile.ResetLocalNPCHitImmunity();
             var eaterMinions = (from p in Main.projectile
@@ -200,21 +240,22 @@ namespace RootsBeta.Items.Weapons
                 {
                     Color = Color.Black,
                     Scale = new(0.5f),
-                    Rotation = rot
+                    Rotation = rot,
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
                 ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 18, ParticlePresets.ExplodeAndFade)
                 {
-                    Color = new Color(88, 104, 66) with { A = 255 },
-                    UseTileLighting = false,
+                    Color = new Color(88, 104, 66),
                     Scale = new(0.3f),
-                    Rotation = rot
+                    Rotation = rot,
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
                 ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], item.Center, 17, ParticlePresets.ExplodeAndFade)
                 {
                     Color = new Color(35, 40, 28),
-                    UseTileLighting = false,
                     Scale = new(0.2f),
-                    Rotation = rot
+                    Rotation = rot,
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
                 SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact with { MaxInstances = 1 }, Projectile.Center);
                 item.Resize(64, 64);
@@ -275,28 +316,31 @@ namespace RootsBeta.Items.Weapons
 
             if (Projectile.numUpdates % 2 == 0)
             {
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 10, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 8, ParticlePresets.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterNPCs,
-                    Color = new Color(35, 40, 28),
-                    UseTileLighting = true,
-                    Opacity = 0.15f,
+                    Color = ApplyLightingColorToColor(Projectile.Center, new Color(35, 40, 28)),
+                    Opacity = 0.5f,
                     Scale = new(0.15f),
-                    Rotation = Projectile.rotation - MathHelper.PiOver4 * 3
+                    Rotation = Projectile.rotation - MathHelper.PiOver4 * 3,
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
                 ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 5, ParticlePresets.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterProjectiles,
                     Color = new Color(117, 145, 73) with { A = 125 },
-                    UseTileLighting = false,
                     Opacity = 0.5f,
-                    Scale = new(0.05f),
-                    Rotation = Projectile.rotation - MathHelper.PiOver4 * 3
+                    Scale = new(0.06f),
+                    Rotation = Projectile.rotation - MathHelper.PiOver4 * 3,
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
             }
-            //Dust.NewDustPerfect(Projectile.Center, DustID.ScourgeOfTheCorruptor, Vector2.Zero, Scale: 0.75f);
         }
-
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            width = height = 16;
+            return true;
+        }
         public override void OnKill(int timeLeft)
         {
             if (Main.myPlayer == Projectile.owner)
@@ -308,24 +352,27 @@ namespace RootsBeta.Items.Weapons
             ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 20, ParticlePresets.ExplodeAndFade)
             {
                 Color = Color.Black,
-                UseTileLighting = false,
                 Scale = new(0.375f),
-                Rotation = rot
+                Rotation = rot,
+                DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
             });
             ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 18, ParticlePresets.ExplodeAndFade)
             {
                 Color = new Color(88, 104, 66),
-                UseTileLighting = false,
                 Scale = new(0.225f),
-                Rotation = rot
+                Rotation = rot,
+                DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
             });
             ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Scorch[1], Projectile.Center, 17, ParticlePresets.ExplodeAndFade)
             {
                 Color = new Color(35, 40, 28),
-                UseTileLighting = false,
                 Scale = new(0.15f),
-                Rotation = rot
+                Rotation = rot,
+                DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
             });
+
+            SoundEngine.PlaySound(SoundID.NPCDeath9 with { Pitch = -1, Volume = 1 }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_OgreSpit with { Pitch = 0, Volume = 1 }, Projectile.Center);
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -349,9 +396,9 @@ namespace RootsBeta.Items.Weapons
             Projectile.minion = true;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
             Projectile.MaxUpdates = 4;
-            Projectile.ArmorPenetration = 100;
+            Projectile.ArmorPenetration = 1000;
             Projectile.DamageType = DamageClass.Summon;
             for (int i = 0; i < Projectile.localNPCImmunity.Length; i++)
             {
@@ -371,6 +418,11 @@ namespace RootsBeta.Items.Weapons
                 var npc = Main.npc[(int)Projectile.ai[0] - 1];
                 if (!npc.active || !(npc.CanBeChasedBy(Projectile) || npc.type is NPCID.DukeFishron or NPCID.TargetDummy))
                 {
+                    for (int i = 0; i < Projectile.localNPCImmunity.Length; i++)
+                    {
+                        Projectile.localNPCImmunity[i] = 60;
+                    }
+                    Projectile.timeLeft += 60;
                     Projectile.ai[0] = 0;
                     return null;
                 }
@@ -399,23 +451,23 @@ namespace RootsBeta.Items.Weapons
 
             if (Projectile.numUpdates % 2 == 0)
             {
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 10, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 7, ParticlePresets.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterNPCs,
-                    Color = new Color(35, 40, 28),
-                    UseTileLighting = true,
+                    Color = ApplyLightingColorToColor(Projectile.Center, new Color(35, 40, 28)),
                     Opacity = 0.5f,
-                    Scale = new(0.075f),
-                    Rotation = Projectile.rotation
+                    Scale = new(0.1f),
+                    Rotation = Projectile.rotation,
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 5, ParticlePresets.LinearShrinkAndFade)
+                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Muzzle[3], Projectile.Center, 4, ParticlePresets.LinearShrinkAndFade)
                 {
                     DrawLayer = DrawLayerSystem.DrawLayer.AfterProjectiles,
                     Color = new Color(117, 145, 73) with { A = 125 },
-                    UseTileLighting = false,
                     Opacity = 0.75f,
                     Scale = new(0.035f),
-                    Rotation = Projectile.rotation
+                    Rotation = Projectile.rotation,
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
             }
             int attackTarget = -1;
@@ -423,16 +475,23 @@ namespace RootsBeta.Items.Weapons
             if (attackTarget >= 0)
             {
                 var target = Main.npc[attackTarget];
-                Projectile.velocity += Projectile.DirectionTo(target.Center) * 0.25f;
+                Projectile.velocity += Projectile.DirectionTo(target.Center) * (0.2f + 0.3f * (1 - Projectile.timeLeft / (600f * Projectile.MaxUpdates)));
                 Projectile.velocity *= 0.95f;
             }
             else
             {
                 Projectile.timeLeft -= 3;
             }
-
         }
 
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            if (oldVelocity.X != Projectile.velocity.X)
+                Projectile.velocity.X = -oldVelocity.X;
+            if (oldVelocity.Y != Projectile.velocity.Y)
+                Projectile.velocity.Y = -oldVelocity.Y;
+            return false;
+        }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
         }
@@ -448,9 +507,9 @@ namespace RootsBeta.Items.Weapons
                 {
                     Color = new Color(117, 145, 73) with { A = 0 },
                     Velocity = Main.rand.NextVector2Circular(2, 2),
-                    UseTileLighting = false,
                     Scale = new(Main.rand.NextFloat(0.025f, 0.075f)),
-                    Rotation = Main.rand.NextFloat(MathHelper.TwoPi)
+                    Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+                    DrawBatch = ScourgeOfTheCorruptor.ParticleDrawBatch
                 });
         }
         public override bool PreDraw(ref Color lightColor)
