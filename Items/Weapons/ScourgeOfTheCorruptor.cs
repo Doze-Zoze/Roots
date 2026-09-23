@@ -63,7 +63,6 @@ namespace RootsBeta.Items.Weapons
                 Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<ScourgeOfTheCorruptorParry>(), damage, knockback, player.whoAmI);
                 return false;
             }
-            ParticleDrawBatch.ApplyEffectsToDraw = ParticleDrawEffects;
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
 
