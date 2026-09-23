@@ -12,7 +12,7 @@ namespace Roots.Graphics.Shaders
         public override void PostSetupContent()
         {
             RainbowShader ??= ModContent.GetInstance<RootsBeta.RootsBeta>().Assets.Request<Effect>("Graphics/Shaders/Rainbow", AssetRequestMode.ImmediateLoad);
-            GameShaders.Misc["Roots:RainbowShader"] = new(RainbowShader, "RainbowPass");
+            GameShaders.Misc["Roots:RainbowShader"] = new MiscShaderData(RainbowShader, "RainbowPass");
         }
     }
 }

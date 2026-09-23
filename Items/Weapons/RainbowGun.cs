@@ -1,5 +1,4 @@
 ﻿using Daybreak.Common.Rendering;
-using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Roots.Config;
@@ -37,7 +36,6 @@ namespace Roots.Items.Weapons
             entity.shoot = ModContent.ProjectileType<RainbowGunRainbow>();
             entity.UseSound = null;
         }
-
         public override bool AltFunctionUse(Item item, Player player) => true;
         public override bool CanUseItem(Item item, Player player)
         {
@@ -45,12 +43,10 @@ namespace Roots.Items.Weapons
         }
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.altFunctionUse == 2)
-            {
-                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<RainbowGunBurst>(), damage, knockback, player.whoAmI);
-                return false;
-            }
-            return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
+            if (player.altFunctionUse != 2)
+                return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
+            Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<RainbowGunBurst>(), damage, knockback, player.whoAmI);
+            return false;
         }
     }
 
@@ -66,21 +62,22 @@ namespace Roots.Items.Weapons
             ProjectileID.Sets.DrawScreenCheckFluff[Type] = 1600;
             Projectile.Opacity = 0;
         }
-        bool init;
+
+        private bool _init;
         public List<Vector2> ArcPositions { get; set; } = [];
 
-        public float Completion = 0;
+        public float Completion;
         public Player Owner => Main.player[Projectile.owner];
 
-        float opacity2;
+        private float _opacity2;
 
-        int frameCounter2;
-        int frame2;
+        private int _frameCounter2;
+        private int _frame2;
         public override void AI()
         {
-            if (!init)
+            if (!_init)
             {
-                init = true;
+                _init = true;
 
                 foreach (var item in Main.projectile)
                 {
@@ -94,7 +91,7 @@ namespace Roots.Items.Weapons
                 var endPos = Owner.MouseWorld;
                 if (startPos.Distance(endPos) < 80)
                     endPos = startPos + startPos.DirectionTo(endPos) * 80;
-                float segments = 20;
+                const float segments = 20;
                 Projectile.velocity = Vector2.Zero;
                 float maxHeight = Math.Abs(startPos.X - endPos.X) * 0.25f;
                 for (int i = 0; i < segments; i++)
@@ -113,10 +110,10 @@ namespace Roots.Items.Weapons
             {
                 Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), ArcPositions.MultiLerp(Main.rand.NextFloat(0.05f, 0.95f)) + Main.rand.NextVector2Circular(16, 16), Vector2.UnitY * 0 /*+ new Vector2(Main.windSpeedCurrent*11,0)*/, ModContent.ProjectileType<RainbowGunRain>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 
-                if (frameCounter2++ % 12 == 0)
-                    frame2 = (frame2 + 1) % 3;
-                if (opacity2 < 1)
-                    opacity2 += 0.125f;
+                if (_frameCounter2++ % 12 == 0)
+                    _frame2 = (_frame2 + 1) % 3;
+                if (_opacity2 < 1)
+                    _opacity2 += 0.125f;
             }
             else
                 Completion += 0.05f;
@@ -174,16 +171,13 @@ namespace Roots.Items.Weapons
           Color.White * Projectile.Opacity, 0, frame.Size() * 0.5f, Projectile.scale,
           SpriteEffects.None);
 
-            frame = texture.Frame(1, 3, 0, frame2);
+            frame = texture.Frame(1, 3, 0, _frame2);
 
             Main.EntitySpriteDraw(texture, ArcPositions[^1] - Main.screenPosition, frame,
-          Color.White * opacity2, 0, frame.Size() * 0.5f, Projectile.scale,
+          Color.White * _opacity2, 0, frame.Size() * 0.5f, Projectile.scale,
           SpriteEffects.FlipHorizontally);
             return false;
         }
-
-
-
     }
 
     public class RainbowGunRain : ModProjectile
@@ -204,7 +198,7 @@ namespace Roots.Items.Weapons
         }
         public override void SetStaticDefaults()
         {
-            DrawLayerSystem.DrawToLayer += DrawStarBatch;
+            DrawToLayer += DrawStarBatch;
             ProjectileID.Sets.TrailCacheLength[Type] = 10;
             ProjectileID.Sets.TrailingMode[Type] = 2;
         }
@@ -227,11 +221,8 @@ namespace Roots.Items.Weapons
         ];
         public Player Owner => Main.player[Projectile.owner];
 
-        public Color? color
-        {
-            get => field ??= Colors[Main.rand.Next(Colors.Length)];
-        }
-        public bool isHoming;
+        public Color? Color => field ??= Colors[Main.rand.Next(Colors.Length)];
+        public bool IsHoming;
 
         public ref float TwinkleSpeed => ref Projectile.localAI[0];
         public ref float TwinkleTimer => ref Projectile.localAI[1];
@@ -242,29 +233,30 @@ namespace Roots.Items.Weapons
                 TwinkleSpeed = Main.rand.NextFloat(0.75f, 1.25f);
             }
             TwinkleTimer += TwinkleSpeed;
-            Projectile.Opacity = isHoming ? 1 : 0.5f + 0.5f * RootsUtils.Sine0To1(TwinkleTimer * 0.1f);
-            int fadeTime = 60;
+            Projectile.Opacity = IsHoming ? 1 : 0.5f + 0.5f * RootsUtils.Sine0To1(TwinkleTimer * 0.1f);
+            const int fadeTime = 60;
             float fadeIntensity = MathHelper.Clamp(1 - (Projectile.timeLeft - (1200 - fadeTime)) / (float)fadeTime, 0, 1);
             Projectile.Opacity *= MathHelper.Clamp(fadeIntensity * 4, 0, 1);
             Projectile.velocity += VelocityChange() * fadeIntensity;
-            Projectile.velocity *= attackTarget > -1 ? 0.95f : 0.99f;
-            Projectile.tileCollide = attackTarget == -1;
+            Projectile.velocity *= _attackTarget > -1 ? 0.95f : 0.99f;
+            Projectile.tileCollide = _attackTarget == -1;
         }
-        int attackTarget = -1;
-        Vector2 VelocityChange()
+
+        private int _attackTarget = -1;
+
+        private Vector2 VelocityChange()
         {
-            if (!isHoming)
+            if (!IsHoming)
                 return Vector2.UnitY * 0.15f;
 
-            attackTarget = -1;
-            Projectile.Minion_FindTargetInRange(1200, ref attackTarget, true, (enty, _) => enty is NPC nPC && Projectile.localNPCImmunity[enty.whoAmI] == 0 && nPC.CanBeChasedBy(Projectile));
-            if (attackTarget < 0)
+            _attackTarget = -1;
+            Projectile.Minion_FindTargetInRange(1200, ref _attackTarget, true, (enty, _) => enty is NPC nPC && Projectile.localNPCImmunity[enty.whoAmI] == 0 && nPC.CanBeChasedBy(Projectile));
+            if (_attackTarget < 0)
                 return Vector2.UnitY * 0.15f;
-            var target = Main.npc[attackTarget];
-            return Projectile.DirectionTo(target.Center) * 0.75f;
+            var targetNPC = Main.npc[_attackTarget];
+            return Projectile.DirectionTo(targetNPC.Center) * 0.75f;
         }
-
-        void SplashUpdate(Particle p)
+        private void SplashUpdate(Particle p)
         {
             p.Velocity.Y += 0.2f;
         }
@@ -272,17 +264,17 @@ namespace Roots.Items.Weapons
         {
             for (var i = 0; i < 3; i++)
             {
-                ParticleSystem.SpawnParticle(new(TextureAssets.BlackTile, Projectile.Center + Projectile.velocity, Main.rand.Next(20, 40))
+                ParticleSystem.SpawnParticle(new Particle(TextureAssets.BlackTile, Projectile.Center + Projectile.velocity, Main.rand.Next(20, 40))
                 {
-                    Scale = new(0.125f),
-                    Color = color!.Value,
+                    Scale = new Vector2(0.125f),
+                    Color = Color!.Value,
                     UpdateLogic = SplashUpdate,
                     Velocity = Vector2.UnitY.RotatedByRandom(1) * Main.rand.NextFloat(-4, -1)
                 });
             }
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        public override void OnHitNPC(NPC targetNPC, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.numHits > 0 || Owner.statMana >= Owner.statManaMax2 || !Main.rand.NextBool(10))
                 return;
@@ -296,23 +288,23 @@ namespace Roots.Items.Weapons
         {
             return false;
         }
-        private static RenderTargetLease? target;
+        private static RenderTargetLease? _target;
 
         public override void Load()
         {
-            if (!Main.dedServ) Main.RunOnMainThread(() => target = ScreenspaceTargetPool.Shared.Rent(Main.graphics.GraphicsDevice, (w, h) => (w / 2, h / 2)));
+            if (!Main.dedServ) Main.RunOnMainThread(() => _target = ScreenspaceTargetPool.Shared.Rent(Main.graphics.GraphicsDevice, (w, h) => (w / 2, h / 2)));
         }
 
         public override void Unload()
         {
-            Main.RunOnMainThread(() => target?.Dispose());
+            Main.RunOnMainThread(() => _target?.Dispose());
         }
-        public static void DrawStarBatch(DrawLayerSystem.DrawLayer layer)
+        public static void DrawStarBatch(DrawLayer layer)
         {
             if (layer != DrawLayer.BeforeProjectiles)
                 return;
 
-            using (target!.Scope(clearColor: Color.Transparent))
+            using (_target!.Scope(clearColor: Microsoft.Xna.Framework.Color.Transparent))
             {
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(0.5f, 0.5f, 1.0f));
                 foreach (var item in Main.projectile)
@@ -324,34 +316,33 @@ namespace Roots.Items.Weapons
                 Main.spriteBatch.End();
             }
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Main.Transform);
-            Main.spriteBatch.Draw(target!.Target, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 2, 0, 0);
+            Main.spriteBatch.Draw(_target!.Target, Vector2.Zero, null, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 2, 0, 0);
             Main.spriteBatch.End();
         }
         public static void DrawSingleStar(RainbowGunRain mp)
         {
-            var Projectile = mp.Projectile;
+            var projectile = mp.Projectile;
             Texture2D texture = ParticleTextures.Transparent.Circle[4].Value;
 
-            int trailCount = Math.Min((int)(Projectile.velocity.Length() * 4), 30);
+            int trailCount = Math.Min((int)(projectile.velocity.Length() * 4), 30);
             if (trailCount < 2)
                 trailCount = 2;
             for (int i = trailCount - 1; i >= 0; i--)
             {
                 float completion = 1 - (i / (float)(trailCount - 1));
                 Vector2 scaleMult = new(0.03f);
-                float opacityMult = true ? 0.6f : 0.4f;
+                float opacityMult = 0.6f;
                 if (i == 0)
                 {
                     texture = TextureAssets.Projectile[mp.Type].Value;
                     scaleMult = new Vector2(0.4f, 0.4f);
                     opacityMult = 1;
                 }
-                Vector2 pos = Projectile.oldPos.MultiLerp(1 - completion);
+                Vector2 pos = projectile.oldPos.MultiLerp(1 - completion);
 
-                Main.EntitySpriteDraw(texture, pos + Projectile.Size * 0.5f - Main.screenPosition, texture.Frame(),
-              ((mp.color!.Value with { A = 200 }) * Projectile.Opacity * opacityMult * completion), Projectile.velocity.ToRotation() + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.5f), Projectile.scale * mp.TwinkleSpeed * completion * scaleMult,
-              Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
-
+                Main.EntitySpriteDraw(texture, pos + projectile.Size * 0.5f - Main.screenPosition, texture.Frame(),
+              ((mp.Color!.Value with { A = 200 }) * projectile.Opacity * opacityMult * completion), projectile.velocity.ToRotation() + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.5f), projectile.scale * mp.TwinkleSpeed * completion * scaleMult,
+              projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
         }
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
@@ -375,12 +366,13 @@ namespace Roots.Items.Weapons
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Magic;
         }
-        bool release;
-        bool init;
-        float maxCharge;
-        float charge;
-        float attemptToCharge;
-        bool extraLongDection;
+
+        private bool _release;
+        private bool _init;
+        private float _maxCharge;
+        private float _charge;
+        private float _attemptToCharge;
+        private bool _extraLongDetection;
         public static Color[] Colors =>
         [
             Color.Red,
@@ -392,51 +384,51 @@ namespace Roots.Items.Weapons
         ];
         public override void AI()
         {
-            if (!init)
+            if (!_init)
             {
-                init = true;
-                maxCharge = Owner.statManaMax2;
-                charge += (int)(Owner.HeldItem.mana * Owner.manaCost);
+                _init = true;
+                _maxCharge = Owner.statManaMax2;
+                _charge += (int)(Owner.HeldItem.mana * Owner.manaCost);
             }
-            float chargeCompletion = charge / maxCharge;
-            if (!Owner.controlUseTile || release)
+            float chargeCompletion = _charge / _maxCharge;
+            if (!Owner.controlUseTile || _release)
             {
                 Lighting.AddLight(Projectile.Center, new Vector3(2f, 2f, 2) * chargeCompletion);
-                if (release) return;
-                release = true;
+                if (_release) return;
+                _release = true;
                 var dir = Owner.DirectionTo(Owner.MouseWorld).ToRotation();
                 SoundEngine.PlaySound(chargeCompletion >= 1 ? SoundID.DD2_ExplosiveTrapExplode : SoundID.DD2_PhantomPhoenixShot);
                 Owner.velocity -= Owner.DirectionTo(Owner.MouseWorld) * 10 * chargeCompletion;
                 var tex = ParticleTextures.Transparent.Muzzle[chargeCompletion >= 1 ? 0 : 1];
 
-                extraLongDection = true;
+                _extraLongDetection = true;
                 foreach (var item in Main.projectile)
                 {
                     var hitbox = item.Hitbox;
-                    if (item.active && item.type == ModContent.ProjectileType<RainbowGunRain>() && (Colliding(new(), hitbox) ?? false) && item.ModProjectile is RainbowGunRain rain)
-                    {
-                        item.velocity = item.DirectionFrom(Projectile.Center) * (6 + 8 * chargeCompletion);
-                        rain.isHoming = true;
-                        for (int i = 0; i < item.localNPCImmunity.Length; i++)
-                            item.localNPCImmunity[i] = 30;
-                    }
+                    if (!item.active || item.type != ModContent.ProjectileType<RainbowGunRain>() ||
+                        (!(Colliding(new Rectangle(), hitbox) ?? false)) ||
+                        item.ModProjectile is not RainbowGunRain rain) continue;
+                    item.velocity = item.DirectionFrom(Projectile.Center) * (6 + 8 * chargeCompletion);
+                    rain.IsHoming = true;
+                    for (int i = 0; i < item.localNPCImmunity.Length; i++)
+                        item.localNPCImmunity[i] = 30;
                 }
-                extraLongDection = false;
+                _extraLongDetection = false;
 
                 for (int i = 0; i < Colors.Length; i++)
                 {
-                    ParticleSystem.SpawnParticle(new(tex,
+                    ParticleSystem.SpawnParticle(new Particle(tex,
                     Projectile.Center + chargeCompletion * 16 * Vector2.UnitX.RotatedBy(dir + MathHelper.Pi + MathHelper.TwoPi * (i / (float)Colors.Length)), 15, ParticlePreset.ExplodeAndFade)
                     {
-                        Scale = new(0.5f * chargeCompletion),
+                        Scale = new Vector2(0.5f * chargeCompletion),
                         Color = Colors[i],
                         Rotation = dir + MathHelper.PiOver2,
                         Origin = tex.Size() * new Vector2(0.5f, chargeCompletion >= 1 ? 0.9f : 0.8f)
                     });
                 }
-                ParticleSystem.SpawnParticle(new(tex, Projectile.Center, 15, ParticlePreset.ExplodeAndFade)
+                ParticleSystem.SpawnParticle(new Particle(tex, Projectile.Center, 15, ParticlePreset.ExplodeAndFade)
                 {
-                    Scale = new(0.5f * chargeCompletion),
+                    Scale = new Vector2(0.5f * chargeCompletion),
                     Color = Color.White,
                     Rotation = dir + MathHelper.PiOver2,
                     Origin = tex.Size() * new Vector2(0.5f, chargeCompletion >= 1 ? 0.9f : 0.8f)
@@ -450,45 +442,43 @@ namespace Roots.Items.Weapons
             Owner.direction = Owner.Center.X - Owner.MouseWorld.X > 0 ? -1 : 1;
             Owner.itemRotation = (Owner.DirectionTo(Owner.MouseWorld) * Owner.direction).ToRotation() + Main.rand.NextFloat(-0.03f, 0.03f) * MathF.Pow(chargeCompletion, 3);
 
-            if (charge < maxCharge)
+            if (_charge < _maxCharge)
             {
-                attemptToCharge += (Owner.statManaMax2 * 0.005f) / Owner.manaCost;
-                while (attemptToCharge >= 1)
+                _attemptToCharge += (Owner.statManaMax2 * 0.005f) / Owner.manaCost;
+                while (_attemptToCharge >= 1)
                 {
-                    attemptToCharge--;
+                    _attemptToCharge--;
                     var a = Owner.statMana;
-                    if (Owner.CheckMana((int)Math.Ceiling(1 / Owner.manaCost), true))
-                    {
-                        charge += 1;
-                        if (charge >= maxCharge)
-                            SoundEngine.PlaySound(SoundID.DD2_DarkMageCastHeal);
-                    }
+                    if (!Owner.CheckMana((int)Math.Ceiling(1 / Owner.manaCost), true)) continue;
+                    _charge += 1;
+                    if (_charge >= _maxCharge)
+                        SoundEngine.PlaySound(SoundID.DD2_DarkMageCastHeal);
                 }
             }
-            chargeCompletion = charge / maxCharge;
+            chargeCompletion = _charge / _maxCharge;
             float rotOff = -Owner.miscCounter / 150f * MathHelper.TwoPi;
             for (int i = 0; i < Colors.Length; i++)
             {
-                ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Circle[4],
+                ParticleSystem.SpawnParticle(new Particle(ParticleTextures.Transparent.Circle[4],
                     Projectile.Center + chargeCompletion * 10 * Vector2.UnitX.RotatedBy(rotOff + MathHelper.TwoPi * (i / (float)Colors.Length)),
                     1)
                 {
-                    Scale = new(0.05f + 0.1f * (chargeCompletion)),
+                    Scale = new Vector2(0.05f + 0.1f * (chargeCompletion)),
                     Color = Colors[i],
                 });
 
                 if (chargeCompletion >= 1)
-                    ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Star[7],
+                    ParticleSystem.SpawnParticle(new Particle(ParticleTextures.Transparent.Star[7],
                     Projectile.Center + 1 * Vector2.UnitX.RotatedBy(rotOff + MathHelper.TwoPi * (i / (float)Colors.Length)),
                     1)
                     {
-                        Scale = new(0.2f),
+                        Scale = new Vector2(0.2f),
                         Color = Colors[i] with { A = 0 },
                     });
             }
-            ParticleSystem.SpawnParticle(new(ParticleTextures.Transparent.Circle[4], Projectile.Center, 1)
+            ParticleSystem.SpawnParticle(new Particle(ParticleTextures.Transparent.Circle[4], Projectile.Center, 1)
             {
-                Scale = new(0.05f + 0.1f * (chargeCompletion)),
+                Scale = new Vector2(0.05f + 0.1f * (chargeCompletion)),
                 Color = Color.White,
             });
             Lighting.AddLight(Projectile.Center, new Vector3(1.5f, 1.5f, 1.5f) * chargeCompletion);
@@ -496,17 +486,17 @@ namespace Roots.Items.Weapons
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            modifiers.SourceDamage *= charge * 0.2f;
-            if (charge >= maxCharge)
+            modifiers.SourceDamage *= _charge * 0.2f;
+            if (_charge >= _maxCharge)
                 modifiers.SourceDamage *= 1.1f;
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (!release)
+            if (!_release)
                 return false;
-            float maxRange = extraLongDection ? 300 : 200;
-            float maxAngle = extraLongDection ? 1.25f : 1f;
-            return targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, maxRange * charge / maxCharge, Owner.DirectionTo(Owner.MouseWorld).ToRotation(), 1);
+            float maxRange = _extraLongDetection ? 300 : 200;
+            float maxAngle = _extraLongDetection ? 1.25f : 1f;
+            return targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, maxRange * _charge / _maxCharge, Owner.DirectionTo(Owner.MouseWorld).ToRotation(), maxAngle);
         }
     }
 }

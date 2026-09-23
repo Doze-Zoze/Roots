@@ -18,10 +18,11 @@ struct VertexShaderOutput
     float2 TextureCoordinates : TEXCOORD0;
 };
 
-static const float3 rainbowColors[8] =
+static const float3 rainbowColors[9] =
 {
     float3(1.00, 0.00, 0.00), // Red
     float3(1.00, 0.35, 0.00), // Orange
+    float3(1.00, 0.65, 0.00), // Orange-Yellow
     float3(1.00, 1.00, 0.00), // Yellow
     float3(0.00, 1.00, 0.00), // Green
     float3(0.00, 0.55, 1.00), // Cyan-Blue
@@ -32,7 +33,7 @@ static const float3 rainbowColors[8] =
 
 float3 getRainbowColor(float progress)
 {
-    float scaled = smoothstep(0,1,progress) * 7;
+    float scaled = smoothstep(0,1,progress) * 8;
     int index = int(scaled);
     float fraction = frac(scaled);
     return lerp(rainbowColors[index], rainbowColors[index + 1], fraction);
