@@ -1,9 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Tomat.Terraria.ModLoader.Sdk/2.1.1">
 	<Import Project="..\tModLoader.targets" />
 
 	<PropertyGroup>
 		<AssemblyName>RootsBeta</AssemblyName>
 		<LangVersion>14.0</LangVersion>
+		<TomatEnableMod>true</TomatEnableMod>
+		<PpebNetcoredbg>true</PpebNetcoredbg>
+		<Lolxd87Splashskip>true</Lolxd87Splashskip>
+		<TomatEnvironmentModlist>true</TomatEnvironmentModlist>
+		<TomatAssetHotReloading>true</TomatAssetHotReloading>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,6 +19,26 @@
 	  <Reference Include="Daybreak">
 	    <HintPath>lib\Daybreak.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<!-- Taken from: <https://github.com/krafs/Publicizer/pull/128>.  This is
+         used to fix an annoying warning because the publicizer we're using
+         emits a type also included by MonoMod.Utils. -->
+	<Target Name="RemoveIgnoresAccessChecksToAttributeCs" AfterTargets="PublicizeAssemblies">
+		<ItemGroup>
+			<FilesToRemove Include="@(Compile)" Condition="'%(Filename)' == 'IgnoresAccessChecksToAttribute'" />
+		</ItemGroup>
+		<ItemGroup>
+			<Compile Remove="@(FilesToRemove)" />
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+		<Publicize Include="tModLoader" IncludeCompilerGeneratedMembers="false" IncludeVirtualMembers="false" />
+		<DoNotPublicize Include="tModLoader:Terraria.Tile" />
+
+		<Publicize Include="FNA" IncludeCompilerGeneratedMembers="false" IncludeVirtualMembers="false" />
+		<Publicize Include="ReLogic" IncludeCompilerGeneratedMembers="false" IncludeVirtualMembers="false" />
 	</ItemGroup>
 
 </Project>
