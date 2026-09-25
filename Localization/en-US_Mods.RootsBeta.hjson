@@ -722,4 +722,9 @@ Configs: {
 	"ContentConfigData[].Tooltip": Individual configuration options for Roots content features
 }
 
-Projectiles.BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+Projectiles: {
+	BrandOfTheInfernoHoldout.DisplayName: Brand Of The Inferno Holdout
+	RainbowGunBurst.DisplayName: Rainburst
+	RainbowGunRain.DisplayName: Bowrain
+	RainbowGunRainbow.DisplayName: Rainbow
+}

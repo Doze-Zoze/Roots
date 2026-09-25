@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Roots.Config;
 using Roots.Graphics;
-using Roots.Graphics.Shaders;
 using RootsBeta.Utilities;
 using RootsCore;
 using RootsCore.Extensions;
@@ -22,8 +21,9 @@ using static RootsCore.DrawLayerSystem;
 
 namespace Roots.Items.Weapons;
 
-public class RainbowGun : ConfigurableItemRework<RainbowGun>
+public class RainbowGun : ConfigurableItemRework<RainbowGun>, IConfigurableContent<RainbowGun>
 {
+    public static ConfigGroup ConfigGroups => ConfigGroup.WeaponReworks;
     #region Parameters
     #region Balancing
     public static int RainHomingRange => 1600;
@@ -36,6 +36,7 @@ public class RainbowGun : ConfigurableItemRework<RainbowGun>
     public static float MaxBurstRangeRaindrops => 300;
     public static float MaxBurstAngle => 1f;
     public static float MaxBurstAngleRaindrops => 1.25f;
+    public static int RainbowLifetimeFrames => 2400;
     #endregion
 
     #region Visuals
@@ -94,6 +95,7 @@ public class RainbowGunRainbow : ModProjectile
         Projectile.penetrate = -1;
         Projectile.DamageType = DamageClass.Magic;
         Projectile.Opacity = 0;
+        Projectile.timeLeft = RainbowGun.RainbowLifetimeFrames;
     }
     public override void AI()
     {
@@ -145,6 +147,16 @@ public class RainbowGunRainbow : ModProjectile
             Projectile.Opacity += 0.125f;
 
     }
+    public static readonly BlendState Screen = new()
+    {
+        ColorSourceBlend = Blend.InverseDestinationColor,
+        ColorDestinationBlend = Blend.One,
+        ColorBlendFunction = BlendFunction.Add,
+
+        AlphaSourceBlend = Blend.InverseDestinationColor,
+        AlphaDestinationBlend = Blend.One,
+        AlphaBlendFunction = BlendFunction.Add
+    };
     public override bool PreDraw(ref Color lightColor)
     {
         var device = Main.instance.GraphicsDevice;
@@ -163,7 +175,7 @@ public class RainbowGunRainbow : ModProjectile
                 from item in ArcPositions.Select((x, indx) => new { x, indx }) where (item.indx <= Completion * ArcPositions.Count || item.indx <= 1)
                 select new Vector3(item.x.X - Main.screenPosition.X, item.x.Y - Main.screenPosition.Y, 1f)
             ];
-        var shader = Shaders.RainbowShader!.Value;
+        var shader = Core.AssetReferences.Graphics.Shaders.Rainbow.Asset.Value;
         Matrix world = Matrix.Identity;
         Matrix view = Matrix.Identity;
         Matrix projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, -200f, 200f);
@@ -175,7 +187,7 @@ public class RainbowGunRainbow : ModProjectile
             using var scope = PrimitiveRenderer.BeginShaderScope(shader, world, view, projection, samplerState: SamplerState.LinearWrap);
             using var mesh = TriangleStripBuilder.BuildStripPooled(
                         path,
-                        10 + 30 * MathF.Pow(Completion, 4),
+                        15 + 45 * MathF.Pow(Completion, 4),
                         Color.White,
                         PrimitiveMeshCache.Shared,
                         upHint: ArcPositions[0].X - ArcPositions[^1].X > 0 ? -Vector3.UnitZ : Vector3.UnitZ);
@@ -183,23 +195,25 @@ public class RainbowGunRainbow : ModProjectile
             scope.Draw(mesh.View);
         }
 
+        var timeLeftOpacity = MathHelper.Clamp(Projectile.timeLeft / 60f, 0, 1);
+
         //Draw the target at 2x scale; combined with the half-size screen target this gives pixelation
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, Screen, SamplerState.PointClamp,
             DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-        Main.spriteBatch.Draw(lease.Target, Vector2.Zero, null, Color.White with { A = 127 }, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+        Main.spriteBatch.Draw(lease.Target, Vector2.Zero, null, Color.White * timeLeftOpacity, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(ss);
 
         Texture2D texture = TextureAssets.Projectile[Type].Value;
         var frame = texture.Frame(1, 3, 0, Projectile.frame);
         Main.EntitySpriteDraw(texture, ArcPositions[0] - Main.screenPosition, frame,
-      Color.White * Projectile.Opacity, 0, frame.Size() * 0.5f, Projectile.scale,
+      Color.White * timeLeftOpacity * Projectile.Opacity, 0, frame.Size() * 0.5f, Projectile.scale,
       SpriteEffects.None);
 
         frame = texture.Frame(1, 3, 0, _frame2);
 
         Main.EntitySpriteDraw(texture, ArcPositions[^1] - Main.screenPosition, frame,
-      Color.White * _opacity2, 0, frame.Size() * 0.5f, Projectile.scale,
+      Color.White * timeLeftOpacity * _opacity2, 0, frame.Size() * 0.5f, Projectile.scale,
       SpriteEffects.FlipHorizontally);
         return false;
     }
@@ -211,7 +225,7 @@ public class RainbowGunRain : ModProjectile
     private static int MaxLifetime => 1200;
     private static int FadeTime => 60;
     private Player Owner => Main.player[Projectile.owner];
-    private Color? Color => field ??= Colors[Main.rand.Next(Colors.Length)];
+    private Color? DrawColor => field ??= Colors[Main.rand.Next(Colors.Length)];
     private ref float TwinkleSpeed => ref Projectile.localAI[0];
     private ref float TwinkleTimer => ref Projectile.localAI[1];
     private int _attackTarget = -1;
@@ -236,6 +250,7 @@ public class RainbowGunRain : ModProjectile
         new Color(252, 109, 130),
     ];
     public bool IsHoming;
+    private int _rotDir = 1;
     public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.RainbowRodBullet}";
     public override void SetDefaults()
     {
@@ -261,8 +276,12 @@ public class RainbowGunRain : ModProjectile
         if (TwinkleSpeed == 0)
         {
             TwinkleSpeed = Main.rand.NextFloat(0.75f, 1.25f);
+            Projectile.rotation += Main.rand.NextFloat(MathHelper.TwoPi);
+            if (Main.rand.NextBool())
+                _rotDir = -1;
         }
         TwinkleTimer += TwinkleSpeed;
+        Projectile.rotation += TwinkleSpeed * _rotDir * 0.02f;
         Projectile.Opacity = IsHoming ? 1 : 0.5f + 0.5f * RootsUtils.Sine0To1(TwinkleTimer * 0.1f);
 
         float fadeIntensity = MathHelper.Clamp(1 - (Projectile.timeLeft - (MaxLifetime - FadeTime)) / (float)FadeTime, 0, 1);
@@ -307,7 +326,7 @@ public class RainbowGunRain : ModProjectile
             ParticleSystem.SpawnParticle(new Particle(TextureAssets.BlackTile, Projectile.Center + Projectile.velocity, Main.rand.Next(20, 40))
             {
                 Scale = new Vector2(0.125f), //one 2x2 pixel in size
-                Color = Color!.Value,
+                Color = DrawColor!.Value,
                 UpdateLogic = SplashUpdate,
                 Velocity = Vector2.UnitY.RotatedByRandom(1) * Main.rand.NextFloat(-4, -1)
             });
@@ -361,16 +380,18 @@ public class RainbowGunRain : ModProjectile
             float completion = 1 - (i / (float)(trailCount - 1));
             Vector2 scaleMult = new(0.03f);
             float opacityMult = 0.6f;
+            var color = Color.Lerp(Color.Transparent, mp.DrawColor!.Value, completion);
+            Vector2 pos = projectile.oldPos.MultiLerp(1 - completion);
             if (i == 0)
             {
                 texture = TextureAssets.Projectile[mp.Type].Value;
-                scaleMult = new Vector2(0.4f, 0.4f);
+                scaleMult = new Vector2(0.5f);
                 opacityMult = 1;
+                color = (mp.DrawColor!.Value);
             }
-            Vector2 pos = projectile.oldPos.MultiLerp(1 - completion);
 
             Main.EntitySpriteDraw(texture, pos + projectile.Size * 0.5f - Main.screenPosition, texture.Frame(),
-          ((mp.Color!.Value with { A = 200 }) * projectile.Opacity * opacityMult * completion), projectile.velocity.ToRotation() + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.5f), projectile.scale * mp.TwinkleSpeed * completion * scaleMult,
+          (color * projectile.Opacity * opacityMult * completion), projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.5f), projectile.scale * mp.TwinkleSpeed * completion * scaleMult,
           projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
         }
     }
@@ -400,6 +421,10 @@ public class RainbowGunBurst : ModProjectile
         Color.Violet,
     ];
     public override string Texture => RootsCoreUtils.InvisiblePixelPath;
+    public override void SetStaticDefaults()
+    {
+        ProjSets.ManaSpawnedProjectile[Type] = true;
+    }
     public override void SetDefaults()
     {
         Projectile.width = Projectile.height = 16;
